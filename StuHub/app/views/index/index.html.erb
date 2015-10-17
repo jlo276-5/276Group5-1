@@ -1,17 +1,43 @@
 <% content_for :title, "Welcome" %>
-<div class="row">
-  <div class="col-sm-8" style="background-color: lightgray; height: 600px;">
+<div class="row" style="text-align: center;">
+  <div class="col-sm-8" id="index_about_content">
     <h1>About</h1>
   </div>
-  <div class="col-sm-4">
-    <div class="row" style="background-color: gray; height: 300px;">
-      <div class="col-xs-12">
+  <div class="col-sm-4" id="index_user_column">
+    <div class="row" id="index_login_content">
+      <div class="col-xs-12" id="index_login_form_container">
         <h1>Login</h1>
-        </div>
+        <form id="index_login_form">
+          <div class="form-group">
+            <input type="email" class="form-control" id="email" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="password" placeholder="Password">
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Remember my login
+            </label>
+          </div>
+          <button type="submit" form="index_login_form" class="btn btn-default">Login</button>
+        </form>
+      </div>
     </div>
-    <div class="row" style="background-color: darkgray; height: 300px;">
-      <div class="col-xs-12">
+    <div class="row" id="index_register_content">
+      <div class="col-xs-12" id="index_register_form_container">
         <h1>Register</h1>
+        <form id="index_register_form">
+          <div class="form-group">
+            <input type="email" class="form-control" id="email" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="password" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="password_verify" placeholder="Verify Password">
+          </div>
+          <button type="submit" form="index_register_form" class="btn btn-default">Register</button>
+        </form>
       </div>
     </div>
   </div>
