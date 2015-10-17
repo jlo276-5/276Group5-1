@@ -1,4 +1,23 @@
 <% content_for :title, "Welcome" %>
+<%= javascript_tag do %>
+  <!-- Script for enabling the register button -->
+  <!-- Investigate native Rails solution? -->
+  VerifyTOSAccept = function() {
+    var submitBtn = document.getElementById("register_submit");
+    var acceptCM = document.getElementById("register_tos_agree");
+    if (acceptCM.checked == true) {
+      submitBtn.removeAttribute("disabled");
+    }
+    else {
+      var disable = document.createAttribute("disabled");
+      disable.value = "disabled";
+      submitBtn.setAttributeNode(disable);
+    }
+  }
+<% end %>
+<!-- For any Errors when logging in or registering? -->
+<div class="alert alert-danger" role="alert">...</div>
+<!-- End -->
 <div class="row" style="text-align: center;">
   <div class="col-sm-8" id="index_about_content">
     <h1>Welcome</h1>
@@ -11,17 +30,25 @@
         <h1>Login</h1>
         <form id="index_login_form">
           <div class="form-group">
-            <input type="email" form="index_login_form" class="form-control" id="email" placeholder="Email">
+            <input type="email" form="index_login_form" class="form-control" id="login_email" placeholder="Email">
           </div>
           <div class="form-group">
-            <input type="password" form="index_login_form" class="form-control" id="password" placeholder="Password">
+            <input type="password" form="index_login_form" class="form-control" id="login_password" placeholder="Password">
           </div>
           <div class="checkbox">
             <label>
-              <input type="checkbox" form="index_login_form" id="remember"> Remember my login
+              <input type="checkbox" form="index_login_form" id="login_remember"> Remember my login
             </label>
           </div>
-          <button type="submit" form="index_login_form" class="btn btn-default">Login</button>
+          <div class="row">
+            <div class="col-xs-6">
+              <%= link_to 'Forgot Password', forgot_password_path, class: 'btn btn-default btn-block', role: 'button', id: 'login_forgot_btn' %>
+            </div>
+            <div class="col-xs-6">
+              <!-- Check for User -->
+              <button type="submit" form="index_login_form" class="btn btn-primary btn-block" id="login_submit">Login</button>
+            </div>
+          </div>
         </form>
       </div>
       <div class="col-xs-2"></div>
@@ -32,20 +59,27 @@
         <h1>Register</h1>
         <form id="index_register_form">
           <div class="form-group">
-            <input type="email" form="index_register_form" class="form-control" id="email" placeholder="Email">
+            <input type="email" form="index_register_form" class="form-control" id="register_email" placeholder="Email">
           </div>
           <div class="form-group">
-            <input type="password" form="index_register_form" class="form-control" id="password" placeholder="Password">
+            <input type="password" form="index_register_form" class="form-control" id="register_password" placeholder="Password">
           </div>
           <div class="form-group">
-            <input type="password" form="index_register_form" class="form-control" id="password_verify" placeholder="Verify Password">
+            <input type="password" form="index_register_form" class="form-control" id="register_password_verify" placeholder="Verify Password">
           </div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" form="index_login_form" id="agree"> I agree to the <%= link_to 'Terms of Use', terms_path %> of this website.
-            </label>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" form="index_register_form" id="register_tos_agree" onClick="VerifyTOSAccept()"> I agree to the <%= link_to 'Terms', terms_path %>.
+                </label>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <!-- Create User -->
+              <button type="submit" form="index_register_form" class="btn btn-primary btn-block" id="register_submit" disabled="disabled">Register</button>
+            </div>
           </div>
-          <button type="submit" form="index_register_form" class="btn btn-default">Register</button>
         </form>
       </div>
       <div class="col-xs-2"></div>
