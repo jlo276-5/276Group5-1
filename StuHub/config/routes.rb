@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'index#index'
 
+  # Home page for logged in Users
+  get 'home' => 'home#home'
+
   # Routes for Static Pages
   get 'about' => 'static_pages#about'
   get 'terms' => 'static_pages#terms'
