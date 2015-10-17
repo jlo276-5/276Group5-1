@@ -1,39 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title><%= yield(:title) + ' - StuHub' %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
 </head>
 <body>
+  <%# if current_page?(controller: 'index', action: 'index') %>
+  <div id="banner_image" style="height: 100px; text-align: center;">
+    <span style="font-size: 68px; font-weight: bold;">StuHub</span>
+  </div>
+  <%# end %>
   <div id="wrapper">
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-content" aria-expanded="false">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <%= link_to 'StuHub', root_path, class: "navbar-brand" %>
-        </div>
-        <div class="collapse navbar-collapse" id="navbar-content">
-          <ul class="nav navbar-nav">
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <%= render "shared/nav" %>
 
-    <div class="container main-container">
+    <div class="container" id="main_container">
         <%= yield %>
     </div>
 
@@ -41,11 +26,7 @@
 
   </div>
 
-  <footer class="footer">
-    <div class="container">
-      <p class="footer-text">&copy; 2015 CMPT276 - Fall 2015 - Group 5. <a href="https://github.com/twbs/bootstrap-sass" target="_blank">Theme by Bootstrap</a>.</p>
-    </div>
-  </footer>
+  <%= render "shared/footer" %>
 
   <script type="text/javascript">
       var title = '<%= yield(:title) %>';

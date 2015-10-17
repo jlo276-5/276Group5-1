@@ -1,0 +1,54 @@
+<% content_for :title, "Home" %>
+
+<%# IF NOT LOGGED IN, Redirect to home_path %>
+
+<!-- For any information messages -->
+<div class="alert alert-info" role="alert">...</div>
+<!-- End -->
+
+<div class="row">
+  <div class="col-xs-3" id="home_left_sidebar">
+    <!-- Left Sidebar, order middle on mobile -->
+    <div class="row">
+      <div class="col-xs-12" id="home_course_list">
+        <h1>Courses</h1>
+        <ul>
+          <li><a href="#">CMPT 120</a></li>
+          <li><a href="#">CMPT 125</a></li>
+          <li><a href="#">CMPT 150</a></li>
+          <li><a href="#">CMPT 225</a></li>
+          <li><a href="#">CMPT 276</a></li>
+          <li><a href="#">CMPT 295</a></li>
+        <ul>
+      </div>
+      <div class="col-xs-12" id="home_group_list">
+        <h1>Groups</h1>
+        <ul>
+          <li><a href="#">CMPT 276 Group 1</a></li>
+          <li><a href="#">CMPT 276 Group 2</a></li>
+          <li><a href="#">CMPT 276 Group 3</a></li>
+          <li><a href="#">CMPT 276 Group 4</a></li>
+          <li><a href="#">CMPT 276 Group 5</a></li>
+        <ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-6" id="home_main_column" style="height: 600px;">
+    <!-- Main Content, order top on mobile -->
+    <h1>// Content //<h1>
+  </div>
+  <div class="col-xs-3" id="home_right_sidebar">
+    <!-- Right Sidebar, order bottom on mobile -->
+    <div class="row">
+      <div class="col-xs-12" id="home_user_panel">
+        <h1>// User Name //</h1>
+        <h4>Last Logged In : // ???// </h4>
+        // Something Else. //
+      </div>
+      <div class="col-xs-12" id="home_schedule_panel">
+        <h1>Schedule</h1>
+        // Insert Calendar/Schedule List //
+      </div>
+    </div>
+  </div>
+</div>

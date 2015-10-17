@@ -1,3 +1,30 @@
 // Place all the styles related to the index controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+$standard_border : 1px solid gray;
+
+#index_about_content {
+  height: 600px;
+  border-right: $standard_border;
+}
+
+#index_login_content, #index_register_content {
+  height: 300px;
+}
+@media (max-width: 767px) {
+  #index_login_content, #index_register_content {
+    border-top: $standard_border
+  }
+}
+@media (min-width: 768px) {
+  #index_login_content {
+    border-bottom: $standard_border
+  }
+}
+#index_login_form, #index_register_form {
+  padding-top: 20px;
+}
+
+#index_user_column {
+}

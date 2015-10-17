@@ -1,2 +1,103 @@
 <% content_for :title, "Welcome" %>
-<h1>Hello, world!</h1>
+
+<%# IF LOGGED IN, Redirect to home_path %>
+
+<!-- Script for enabling the register button -->
+<%= javascript_tag do %>
+  <!-- Investigate native Rails solution? -->
+  VerifyTOSAccept = function() {
+    var submitBtn = document.getElementById("register_submit");
+    var acceptCM = document.getElementById("register_tos_agree");
+    if (acceptCM.checked == true) {
+      submitBtn.removeAttribute("disabled");
+    }
+    else {
+      var disable = document.createAttribute("disabled");
+      disable.value = "disabled";
+      submitBtn.setAttributeNode(disable);
+    }
+  }
+<% end %>
+
+<!-- For any Errors when logging in or registering? -->
+<div class="alert alert-danger" role="alert">...</div>
+<!-- End -->
+
+<div class="row" style="text-align: center;">
+  <div class="col-sm-8" id="index_about_content">
+    <div class="center jumbotron">
+      <h1>Welcome to the StuHub</h1>
+
+      <h2>
+        This is the home page
+      </h2>
+
+      <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
+    </div>
+  </div>
+  <!-- All Forms are Placeholders until User is finished -->
+  <div class="col-sm-4" id="index_user_column">
+    <div class="row" id="index_login_content">
+      <div class="col-xs-2"></div>
+      <div class="col-xs-8 col-sm-12" id="index_login_form_container">
+        <h1>Login</h1>
+        <form id="index_login_form">
+          <div class="form-group">
+            <input type="email" form="index_login_form" class="form-control" id="login_email" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="password" form="index_login_form" class="form-control" id="login_password" placeholder="Password">
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" form="index_login_form" id="login_remember"> Remember my login
+            </label>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <%= link_to 'Forgot Password', forgot_password_path, class: 'btn btn-default btn-block', role: 'button', id: 'login_forgot_btn' %>
+            </div>
+            <div class="col-xs-6">
+              <!-- Check for User (in controller/model), redirect to home_path -->
+              <%= link_to 'Login', home_path, class: 'btn btn-primary btn-block', role: 'button', id: 'login_submit' %>
+              <!--<button type="submit" form="index_login_form" class="btn btn-primary btn-block" id="login_submit">Login</button>-->
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-2"></div>
+    </div>
+    <div class="row" id="index_register_content">
+      <div class="col-xs-2"></div>
+      <div class="col-xs-8 col-sm-12" id="index_register_form_container">
+        <h1>Register</h1>
+        <form id="index_register_form">
+          <div class="form-group">
+            <input type="email" form="index_register_form" class="form-control" id="register_email" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="password" form="index_register_form" class="form-control" id="register_password" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <input type="password" form="index_register_form" class="form-control" id="register_password_verify" placeholder="Verify Password">
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" form="index_register_form" id="register_tos_agree" onClick="VerifyTOSAccept()"> I agree to the <%= link_to 'Terms', terms_path %>.
+                </label>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <!-- Create User, redirect to verify_registration_path if success. -->
+              <%= link_to 'Register', verify_registration_path, class: 'btn btn-primary btn-block', role: 'button', id: 'register_submit', disabled: 'disabled' %>
+              <!--<button type="submit" form="index_register_form" class="btn btn-primary btn-block" id="register_submit" disabled="disabled">Register</button>-->
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-2"></div>
+    </div>
+  </div>
+</div>
