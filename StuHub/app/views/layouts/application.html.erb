@@ -6,20 +6,13 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <% if current_page?(controller: 'index', action: 'index') %>
-  <style type="text/css">
-    body {
-      padding-top: 0 !important;
-    }
-  </style>
-  <% end %>
 </head>
 <body>
-  <% if current_page?(controller: 'index', action: 'index') %>
+  <%# if current_page?(controller: 'index', action: 'index') %>
   <div id="banner_image" style="height: 100px; text-align: center;">
     <span style="font-size: 68px; font-weight: bold;">StuHub</span>
   </div>
-  <% end %>
+  <%# end %>
   <div id="wrapper">
     <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container">
