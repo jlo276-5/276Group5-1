@@ -5,10 +5,22 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <% if current_page?(controller: 'index', action: 'index') %>
+  <style type="text/css">
+    body {
+      padding-top: 0 !important;
+    }
+  </style>
+  <% end %>
 </head>
 <body>
+  <% if current_page?(controller: 'index', action: 'index') %>
+  <div id="banner_image" style="height: 100px; text-align: center;">
+    <span style="font-size: 68px; font-weight: bold;">StuHub</span>
+  </div>
+  <% end %>
   <div id="wrapper">
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-content" aria-expanded="false">
@@ -43,7 +55,7 @@
 
   <footer class="footer">
     <div class="container">
-      <p class="footer-text">&copy; 2015 CMPT276 - Fall 2015 - Group 5. <a href="https://github.com/twbs/bootstrap-sass" target="_blank">Theme by Bootstrap</a>.</p>
+      <p class="footer-text">&copy; 2015 CMPT276 - Fall 2015 - Group 5.</p>
     </div>
   </footer>
 
