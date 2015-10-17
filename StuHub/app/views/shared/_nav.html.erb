@@ -1,0 +1,24 @@
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-content" aria-expanded="false">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <% if current_page?(controller: 'index', action: 'index') %>
+        <%= link_to 'Welcome', root_path, class: "navbar-brand" %>
+      <% else %>
+        <%= link_to 'StuHub', root_path, class: "navbar-brand" %>
+      <% end %>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar-content">
+      <ul class="nav navbar-nav">
+        <!-- Insert Links -->
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to 'About Us', about_path %></li>
+      </ul>
+    </div>
+  </div>
+</nav>
