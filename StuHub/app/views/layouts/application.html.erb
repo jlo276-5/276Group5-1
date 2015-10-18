@@ -19,7 +19,14 @@
     <%= render "shared/nav" %>
 
     <div class="container" id="main_container">
+      <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+      <% end %>
         <%= yield %>
+        
+        <%# debug information show on development pages %>
+        <%= debug(params) if Rails.env.development? %>
+
     </div>
 
     <div class="footer_spacer"></div>
