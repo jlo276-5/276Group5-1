@@ -38,10 +38,10 @@
         <h1>Login</h1>
         <%= form_for(:session, url: login_path, id: 'index_login_form') do |f| %>
           <div class="form-group">
-            <%= f.text_field :email, class: 'form-control', placeholder: 'Email' %>
+            <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
           </div>
           <div class="form-group">
-            <%= f.text_field :password, class: 'form-control', placeholder: 'Password' %>
+            <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
           </div>
           <div class="checkbox">
             <%= f.label :remember_me do %>
@@ -69,13 +69,13 @@
             <%= f.text_field :name, class: 'form-control', placeholder: 'Name' %>
           </div>
           <div class="form-group">
-            <%= f.text_field :email, class: 'form-control', placeholder: 'Email' %>
+            <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
           </div>
           <div class="form-group">
-            <%= f.text_field :password, class: 'form-control', placeholder: 'Password' %>
+            <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
           </div>
           <div class="form-group">
-            <%= f.text_field :password_confirmation, class: 'form-control', placeholder: 'Confirm Password' %>
+            <%= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Confirm Password' %>
           </div>
           <div class="checkbox">
             <label>
