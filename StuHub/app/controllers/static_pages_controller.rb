@@ -9,10 +9,4 @@ class StaticPagesController < ApplicationController
 
   def terms
   end
-
-  def forgot_password
-  end
-
-  def verify_registration
-  end
 end
