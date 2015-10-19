@@ -27,14 +27,15 @@ class UsersController < ApplicationController
       redirect_to root_url
       # if Register succeed
     else
-      flash[:danger] = "Please check your registration details for errors."
+      flash.now[:danger] = "Please check your registration for errors."
+      # This really should get @user.errors and list them.
       render 'new'
     end
   end
 
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "User deleted"
+    flash[:success] = "User Deleted"
     redirect_to users_url
   end
 
@@ -45,7 +46,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
-      flash[:success] = "Profile updated"
+      flash[:success] = "Profile Updated"
       redirect_to @user
       # update succeed
     else

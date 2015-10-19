@@ -18,7 +18,15 @@
               <span>Remember me on this computer</span>
             <% end %>
           </div>
-          <%= f.submit "Login", class: 'btn btn-primary btn-block', role: 'button', id: 'register_submit' %>
+          <div class="row">
+            <div class="col-xs-6">
+              <%= link_to 'Forgot Password', new_password_reset_path, class: 'btn btn-default btn-block', role: 'button', id: 'login_forgot_btn' %>
+            </div>
+            <div class="col-xs-6">
+              <!-- Check for User (in controller/model), redirect to home_path -->
+              <%= f.submit 'Login', class: 'btn btn-primary btn-block', role: 'button', id: 'login_submit' %>
+            </div>
+          </div>
         <% end %>
       </div>
     </div>
