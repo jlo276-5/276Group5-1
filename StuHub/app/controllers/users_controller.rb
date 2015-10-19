@@ -4,7 +4,6 @@ class UsersController < ApplicationController
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
 
-
   ## Use 'find' method to show certain user
   def show
     @user = User.find(params[:id])
@@ -12,7 +11,6 @@ class UsersController < ApplicationController
 
   def index
     @users = User.paginate(page: params[:page])
-
   end
 
   def new
@@ -25,7 +23,6 @@ class UsersController < ApplicationController
       @user.send_activation_email
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
-      # if Register succeed
     else
       flash.now[:danger] = "Please check your registration for errors."
       # This really should get @user.errors and list them.

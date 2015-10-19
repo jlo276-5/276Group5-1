@@ -5,6 +5,9 @@ class PasswordResetsController < ApplicationController
   before_action :check_expiration, only: [:edit, :update]
 
   def new
+    if current_user # Redirect to user page when already logged in
+      redirect_to current_user
+    end
   end
 
   def create
@@ -21,6 +24,9 @@ class PasswordResetsController < ApplicationController
   end
 
   def edit
+    if current_user # Redirect to user page when already logged in
+      redirect_to current_user
+    end
   end
 
   def update
@@ -28,7 +34,8 @@ class PasswordResetsController < ApplicationController
       flash.now[:danger] = "Passwords cannot be empty."
       render 'edit'
     elsif @user.update_attributes(user_params)
-      flash[:success] = "Your password has been reset. Please log in now to verify."
+      @user.reset_reset_digest
+      flash[:success] = "Your password has been reset. Please login to verify."
       UserMailer.password_reset_success(@user).deliver_now
       redirect_to login_url
     else
@@ -51,7 +58,8 @@ class PasswordResetsController < ApplicationController
     # make sure valid user
     def valid_user
       unless (@user && @user.activated? &&
-              !@user.authenticated?(:reset, params[:id]))
+              @user.authenticated?(:reset, params[:id]))
+        flash[:danger] = "This password reset link is invalid."
         redirect_to root_url
       end
     end
