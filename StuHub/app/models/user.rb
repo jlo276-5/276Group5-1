@@ -17,8 +17,9 @@ class User < ActiveRecord::Base
 
     ##activate
     def activate
-      update_attribute(:activated,    true)
-      update_attribute(:activated_at, Time.zone.now)
+      update_attribute(:activation_digest, nil)
+      update_attribute(:activated,           true)
+      update_attribute(:activated_at,        Time.zone.now)
     end
 
     # send activation email
@@ -33,6 +34,11 @@ class User < ActiveRecord::Base
       update_attribute(:reset_sent_at, Time.zone.now)
     end
 
+    def reset_reset_digest
+      update_attribute(:reset_digest, nil)
+      update_attribute(:reset_sent_at, nil)
+    end
+
     # Sends password reset email.
     def send_password_reset_email
       UserMailer.password_reset(self).deliver_now
@@ -44,9 +50,9 @@ class User < ActiveRecord::Base
     #check length of password
     validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
     def User.digest(string)
-    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
-                                                  BCrypt::Engine.cost
-    BCrypt::Password.create(string, cost: cost)
+      cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
+                                                    BCrypt::Engine.cost
+      BCrypt::Password.create(string, cost: cost)
     end
 
     ## return a radom password token
@@ -72,6 +78,7 @@ class User < ActiveRecord::Base
       BCrypt::Password.new(digest).is_password?(token)
     end
 
+    # returns true if not expired
     def password_reset_expired?
       reset_sent_at < 2.hours.ago
     end
