@@ -29,9 +29,11 @@
    padding-top: 5px;
    border-top: 1px solid darkgray;
    color: gray;
-   height: 40px;
  }
 
+ #footer_nav_links {
+   height: 40px;
+ }
  @media (max-width: 767px) {
    footer #footer_text {
      text-align: center;
