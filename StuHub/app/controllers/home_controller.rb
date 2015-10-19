@@ -1,8 +1,6 @@
 class HomeController < ApplicationController
   def home
-    if !(logged_in?)
-      redirect_to root_path
-    else
+    if current_user
       @user = current_user
     end
   end

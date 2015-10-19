@@ -1,4 +1,5 @@
 class PasswordResetsController < ApplicationController
+  skip_before_filter :require_login
   before_action :get_user,   only: [:edit, :update]
   before_action :valid_user, only: [:edit, :update]
   before_action :check_expiration, only: [:edit, :update]
@@ -21,7 +22,7 @@ class PasswordResetsController < ApplicationController
 
   def edit
   end
-  
+
   def update
     if params[:user][:password].empty?
       flash.now[:danger] = "Password can't be empty"
@@ -34,15 +35,15 @@ class PasswordResetsController < ApplicationController
       render 'edit'
     end
   end
-  
+
    private
-    
+
     def user_params
       params.require(:user).permit(:password, :password_confirmation)
     end
-    
+
     #filter before action
-    
+
     def get_user
       @user = User.find_by(email: params[:email])
     end
@@ -50,11 +51,11 @@ class PasswordResetsController < ApplicationController
     # make sure valid user
     def valid_user
       unless (@user && @user.activated? &&
-              @user.authenticated?(:reset, params[:id]))
+              !@user.authenticated?(:reset, params[:id]))
         redirect_to root_url
       end
     end
-    
+
     # see if password expires
     def check_expiration
       if @user.password_reset_expired?

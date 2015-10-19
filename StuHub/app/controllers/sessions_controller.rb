@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  skip_before_filter :require_login, except: [:destroy]
 
   def new
   end
@@ -6,21 +7,24 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
-      log_in user
-      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-      
-
-      redirect_back_or user
-      # login and redirect
+      if user.activated?
+        log_in user
+        params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+        redirect_back_or user
+      else
+        message  = "Account not activated. "
+        message += "Check your email for the activation link."
+        flash[:warning] = message
+        redirect_to root_url
+      end
     else
-      # error warning
-      flash[:danger] = 'Invalid email/password combination' # 不完全正确
+      flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
     end
   end
 
   def destroy
-    log_out
+    log_out if logged_in?
     redirect_to root_url
   end
 end

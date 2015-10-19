@@ -1,12 +1,4 @@
 Rails.application.routes.draw do
-  get 'password_resets/new'
-
-  get 'password_resets/edit'
-
-  get 'sessions/new'
-
-  get 'sessins/new'
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -19,22 +11,17 @@ Rails.application.routes.draw do
   # Routes for Static Pages
   get 'about' => 'static_pages#about'
   get 'terms' => 'static_pages#terms'
-  get 'help' => 'static_pages#help'
-  get 'forgot_password' => 'user#forgot_password'
-  get 'verify_registration' => 'user#verify_registration'
+  get 'help'  => 'static_pages#help'
 
   # Routes for Users
-  get 'users/new'
-  get 'user/new'
-  get 'signup' => 'user#new'
-  
-  get    'login'   => 'sessions#new'
-  post   'login'   => 'sessions#create'
-  delete 'logout'  => 'sessions#destroy'
   resources :users
   resources :account_activations, only: [:edit]
   resources :password_resets,     only: [:new, :create, :edit, :update]
 
+  # Routes for Sessions
+  get    'login'  => 'sessions#new'
+  post   'login'  => 'sessions#create'
+  delete 'logout' => 'sessions#destroy'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
