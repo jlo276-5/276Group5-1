@@ -16,32 +16,36 @@
   }
 <% end %>
 
+<% provide(:title, "Login") %>
+
 <div class="row">
-  <div class="col-xs-10 col-xs-offset-1" style="text-align: center;">
+  <div class="col-xs-12" style="text-align: center;">
     <h1>Registration</h1>
-    <div class="row" style="margin: 10px 0;">
-      <div class="col-sm-8 col-sm-offset-2">
-        <%= form_for(@user) do |f| %>
-          <div class="form-group">
-            <%= f.text_field :name, class: 'form-control', placeholder: 'Name' %>
-          </div>
-          <div class="form-group">
-            <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
-          </div>
-          <div class="form-group">
-            <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
-          </div>
-          <div class="form-group">
-            <%= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Confirm Password' %>
-          </div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" form="index_register_form" id="register_tos_agree" onClick="VerifyTOSAccept()"> I agree to the <%= link_to 'Terms', terms_path %>.
-            </label>
-          </div>
-          <%= f.submit "Register", class: 'btn btn-primary btn-block', role: 'button', id: 'register_submit', disabled: 'disabled' %>
-        <% end %>
-      </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2" style="text-align: center;">
+    <div style="margin: 10px 0;">
+      <%= form_for(@user) do |f| %>
+        <div class="form-group">
+          <%= f.text_field :name, class: 'form-control', placeholder: 'Name' %>
+        </div>
+        <div class="form-group">
+          <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
+        </div>
+        <div class="form-group">
+          <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
+        </div>
+        <div class="form-group">
+          <%= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Confirm Password' %>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" form="index_register_form" id="register_tos_agree" onClick="VerifyTOSAccept()"> I agree to the <%= link_to 'Terms', terms_path %>.
+          </label>
+        </div>
+        <%= f.submit "Register", class: 'btn btn-primary btn-block', role: 'button', id: 'register_submit', disabled: 'disabled' %>
+      <% end %>
     </div>
   </div>
 </div>
