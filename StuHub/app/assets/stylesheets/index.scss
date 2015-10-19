@@ -9,8 +9,11 @@ $standard_border : 1px solid gray;
   border-right: $standard_border;
 }
 
-#index_login_content, #index_register_content {
-  height: 300px;
+#index_login_content {
+  height: 250px;
+}
+#index_register_content {
+  height: 350px;
 }
 @media (max-width: 767px) {
   #index_login_content, #index_register_content {
