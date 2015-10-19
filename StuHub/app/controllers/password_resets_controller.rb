@@ -5,6 +5,9 @@ class PasswordResetsController < ApplicationController
   before_action :check_expiration, only: [:edit, :update]
 
   def new
+    if current_user # Redirect to user page when already logged in
+      redirect_to current_user
+    end
   end
 
   def create
@@ -21,6 +24,9 @@ class PasswordResetsController < ApplicationController
   end
 
   def edit
+    if current_user # Redirect to user page when already logged in
+      redirect_to current_user
+    end
   end
 
   def update
