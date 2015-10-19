@@ -6,7 +6,7 @@ class AccountActivationsController < ApplicationController
     if user.activated?
       flash[:danger] = "This account has already been activated."
       redirect_to root_url
-    if user && !user.activated? && user.authenticated?(:activation, params[:id])
+    elsif user && !user.activated? && user.authenticated?(:activation, params[:id])
       user.activate
       log_in user
       flash[:success] = "Your account has been activated."
