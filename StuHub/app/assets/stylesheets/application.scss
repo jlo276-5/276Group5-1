@@ -14,6 +14,8 @@
  // *= require_self
  */
 
+ @import url(https://fonts.googleapis.com/css?family=Ubuntu:400,700,700italic,500italic,400italic,500);
+
  @import "bootstrap-sprockets";
  @import "bootstrap";
 
@@ -22,6 +24,7 @@
  }
  body {
    height: 100%;
+   font-family: 'Ubuntu', sans-serif !important;
  }
 
  footer {
