@@ -1,5 +1,15 @@
 <footer class="footer">
   <div class="container">
-    <p class="footer-text">&copy; 2015 CMPT276 - Fall 2015 - Group 5.</p>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6" id="footer_text">
+        &copy; 2015 CMPT276 - Fall 2015 - Group 5
+      </div>
+      <div class="col-xs-12 col-sm-6" id="footer_nav_links">
+        <%= link_to "Help", help_path, class: 'footer_link' %>
+        <%= link_to "Terms of Use", terms_path, class: 'footer_link' %>
+        <%= link_to "About", about_path, class: 'footer_link' %>
+      </div>
+    </div>
+    <small></small>
   </div>
 </footer>
