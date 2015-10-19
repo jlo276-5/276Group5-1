@@ -19,6 +19,12 @@ module SessionsHelper
     cookies.delete(:remember_token)
   end
   
+  #return true if is current user
+  def current_user?(user)
+    user == current_user
+  end
+
+
   # return currently login user
   def current_user
     if (user_id = session[:user_id])
@@ -43,4 +49,16 @@ module SessionsHelper
     session.delete(:user_id)
     @current_user = nil
   end
+  
+   # redirect to saved address, or default page
+  def redirect_back_or(default)
+    redirect_to(session[:forwarding_url] || default)
+    session.delete(:forwarding_url)
+  end
+
+  # save address
+  def store_location
+    session[:forwarding_url] = request.url if request.get?
+  end
+  
 end
