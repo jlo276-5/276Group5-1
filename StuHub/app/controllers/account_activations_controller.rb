@@ -7,6 +7,7 @@ class AccountActivationsController < ApplicationController
       user.activate
       log_in user
       flash[:success] = "Your account has been activated."
+      UserMailer.welcome_email(user).deliver_now
       redirect_to user
     else
       flash.now[:danger] = "Invalid activation link. Please check that the link has not expired."
