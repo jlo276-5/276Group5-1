@@ -8,34 +8,35 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
   end
-  
+
   def index
     @users = User.paginate(page: params[:page])
 
   end
-  
+
   def new
     @user = User.new
   end
-  
+
   def create
     @user = User.new(user_params)
     if @user.save
-      UserMailer.account_activation(@user).deliver_now
+      @user.send_activation_email
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
       # if Register succeed
     else
+      flash[:danger] = "Please check your registration details for errors."
       render 'new'
     end
   end
-  
+
   def destroy
     User.find(params[:id]).destroy
     flash[:success] = "User deleted"
     redirect_to users_url
   end
-  
+
   def edit
     @user = User.find(params[:id])
   end
@@ -50,9 +51,9 @@ class UsersController < ApplicationController
       render 'edit'
     end
   end
-  
+
   private
-  
+
    def user_params
       params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation)
@@ -73,7 +74,7 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
       redirect_to(root_url) unless current_user?(@user)
     end
-    
+
      # make sure admin
     def admin_user
       redirect_to(root_url) unless current_user.admin?
