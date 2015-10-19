@@ -1,47 +1,71 @@
 <% content_for :title, "Home" %>
 
 <div class="row">
-  <div class="col-xs-3" id="home_left_sidebar">
+  <div class="col-sm-3" id="home_left_sidebar">
     <!-- Left Sidebar, order middle on mobile -->
     <div class="row">
       <div class="col-xs-12" id="home_course_list">
-        <h1>Courses</h1>
-        <ul>
-          <li><a href="#">CMPT 120</a></li>
-          <li><a href="#">CMPT 125</a></li>
-          <li><a href="#">CMPT 150</a></li>
-          <li><a href="#">CMPT 225</a></li>
-          <li><a href="#">CMPT 276</a></li>
-          <li><a href="#">CMPT 295</a></li>
-        <ul>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h1 class="panel-title">Courses</h1>
+          </div>
+          <div class="list-group">
+            <a href="#" class="list-group-item">CMPT 120</a>
+            <a href="#" class="list-group-item">CMPT 125</a>
+            <a href="#" class="list-group-item">CMPT 150</a>
+            <a href="#" class="list-group-item">CMPT 225</a>
+            <a href="#" class="list-group-item">CMPT 276</a>
+            <a href="#" class="list-group-item">CMPT 295</a>
+          </div>
+        </div>
       </div>
       <div class="col-xs-12" id="home_group_list">
-        <h1>Groups</h1>
-        <ul>
-          <li><a href="#">CMPT 276 Group 1</a></li>
-          <li><a href="#">CMPT 276 Group 2</a></li>
-          <li><a href="#">CMPT 276 Group 3</a></li>
-          <li><a href="#">CMPT 276 Group 4</a></li>
-          <li><a href="#">CMPT 276 Group 5</a></li>
-        <ul>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h1 class="panel-title">Groups</h1>
+          </div>
+          <div class="list-group">
+            <a href="#" class="list-group-item">CMPT 276 Group 1</a>
+            <a href="#" class="list-group-item">CMPT 276 Group 2</a>
+            <a href="#" class="list-group-item">CMPT 276 Group 3</a>
+            <a href="#" class="list-group-item">CMPT 276 Group 4</a>
+            <a href="#" class="list-group-item">CMPT 276 Group 5</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-xs-6" id="home_main_column" style="height: 600px;">
+  <div class="col-sm-6" id="home_main_column" style="min-height: 200px;">
     <!-- Main Content, order top on mobile -->
-    <h1>// Content //<h1>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <h1>// Content //</h1>
+      </div>
+    </div>
   </div>
-  <div class="col-xs-3" id="home_right_sidebar">
+  <div class="col-sm-3" id="home_right_sidebar">
     <!-- Right Sidebar, order bottom on mobile -->
     <div class="row">
-      <div class="col-xs-12" id="home_user_panel">
-        <h1>// User Name //</h1>
-        <h4>Last Logged In : // ???// </h4>
-        // Something Else. //
+      <div class="col-xs-12 hidden-xs" id="home_user_panel">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3><%= gravatar_for @user, size: 30 %>&nbsp;&nbsp;<%= @user.name %></h3>
+          </div>
+          <div class="panel-body">
+            <h4>Last Logged In : // ???// </h4>
+            // Something Else. //
+          </div>
+        </div>
       </div>
       <div class="col-xs-12" id="home_schedule_panel">
-        <h1>Schedule</h1>
-        // Insert Calendar/Schedule List //
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h1 class="panel-title">Schedule</h3>
+          </div>
+          <div class="panel-body">
+            // Insert Calendar/Schedule List //
+          </div>
+        </div>
       </div>
     </div>
   </div>
