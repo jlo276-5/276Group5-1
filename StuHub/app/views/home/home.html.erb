@@ -39,7 +39,7 @@
     <!-- Main Content, order top on mobile -->
     <div class="panel panel-default">
       <div class="panel-body">
-        <h1>// Content //</h1>
+        <h1>&nbsp;</h1>
       </div>
     </div>
   </div>
@@ -49,11 +49,13 @@
       <div class="col-xs-12 hidden-xs" id="home_user_panel">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3><%= gravatar_for @user, size: 30 %>&nbsp;&nbsp;<%= @user.name %></h3>
+            <%= link_to @user, style: 'color: black; text-decoration: none;' do %>
+              <h3><%= gravatar_for @user, size: 30, class: 'img-rounded' %>&nbsp;&nbsp;<%= @user.name %></h3>
+            <% end %>
           </div>
           <div class="panel-body">
-            <h4>Last Logged In : // ???// </h4>
-            // Something Else. //
+            <h4>Last Logged In: &nbsp;</h4>
+            &nbsp;
           </div>
         </div>
       </div>
@@ -63,7 +65,7 @@
             <h1 class="panel-title">Schedule</h3>
           </div>
           <div class="panel-body">
-            // Insert Calendar/Schedule List //
+            &nbsp;
           </div>
         </div>
       </div>
