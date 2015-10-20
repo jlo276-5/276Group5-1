@@ -60,3 +60,22 @@
      margin-left: 20px;
    }
  }
+
+ /** Navbar **/
+ .navbar-mod {
+   min-height: 30px;
+ }
+ .navbar-mod .navbar-brand {
+   height: 30px;
+   padding: 0px 12px;
+   font-size: 16px;
+   line-height: 30px;
+ }
+ .navbar-mod .navbar-nav > li > a {
+   padding-top: 0px;
+   padding-bottom: 0px;
+   line-height: 30px;
+ }
+ .navbar-mod .navbar-toggle {
+   margin: 4px 4px 4px 0;
+ }
