@@ -6,7 +6,11 @@ class UsersController < ApplicationController
 
   ## Use 'find' method to show certain user
   def show
-    @user = User.find(params[:id])
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    end
   end
 
   def index
