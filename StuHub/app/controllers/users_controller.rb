@@ -10,7 +10,8 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.paginate(page: params[:page])
+    @userscount = User.all.count
+    @users = User.paginate(page: params[:page], per_page: 25).order('created_at ASC')
   end
 
   def new
@@ -71,7 +72,7 @@ class UsersController < ApplicationController
     # ensure correct user
     def correct_user
       @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
+      redirect_to(root_url) unless (current_user?(@user) or current_user.admin?)
     end
 
      # make sure admin
