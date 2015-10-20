@@ -13,7 +13,7 @@ class AccountActivationsController < ApplicationController
       UserMailer.welcome_email(user).deliver_now
       redirect_to user
     else
-      flash.now[:danger] = "Invalid activation link. Please verify that the link is correct."
+      flash[:danger] = "Invalid activation link. Please verify that the link is correct."
       redirect_to root_url
     end
   end
