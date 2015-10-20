@@ -61,6 +61,17 @@
    }
  }
 
+ .banner_image {
+   display: block;
+   height: 100px;
+   text-align: center;
+   padding: 0;
+   background-image: image-url("logo-2-01.png");
+   background-repeat: no-repeat;
+   background-size: contain;
+   background-position: center top;
+ }
+
  /** Navbar **/
  .navbar-mod {
    min-height: 30px;
