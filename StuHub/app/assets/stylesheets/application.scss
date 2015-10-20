@@ -24,7 +24,7 @@
  }
  body {
    height: 100%;
-   font-family: 'Ubuntu', sans-serif !important;
+   font-family: 'Ubuntu', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
    background-image: image-url("logo-2-02.png"); // 20% opacity of original
    background-size: 30%;
    background-attachment: fixed;
@@ -32,7 +32,8 @@
    background-position: center center;
  }
  h1, h2, h3, h4, h5, h6 {
-   font-family: "Helvetica Neue", sans-serif !important;
+   // Restore original bootstrap fonts for header
+   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
  }
 
  footer {
