@@ -28,10 +28,5 @@
 
   <%# debug information show on development pages %>
   <%= debug(params) if Rails.env.development? %>
-
-  <script type="text/javascript">
-      var title = '<%= yield(:title) %>';
-      $(".navbar-nav a:contains(" + title + ")").parent().addClass('active');
-  </script>
 </body>
 </html>
