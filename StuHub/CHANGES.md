@@ -8,10 +8,22 @@ Created login feature
 Created database User
 Created basic layout for welcome, users, home
 
-### 2015.10.18 & 2015.10.19
+### 2015.10.18
 Created basic features
 Update,display,delete user
 Activate account and Reset Password
-Email service for production environment is not quite ready
-    since some problem, but it wont matter until deployed on heroku
-    finish layouts and I will finish this part
+
+### 2015.10.19
+Email Service established for activate account and reset password
+Security checks to prevent exploitation of routing failures
+Improve page appearance, fonts
+
+### 2015.10.20
+Add site logo
+Use a thinner navigation bar
+Basic layout for User profile, editing of Users.
+Added tests from RoR tutorial, also some custom ones
+
+### 2015.10.21
+Created a profile template for Users
+Moved Login and Register forms to partials
