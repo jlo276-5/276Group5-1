@@ -3,10 +3,9 @@
 <% content_for :checkbox do %>
   <div class="form-group" style="text-align: center;">
     <div class="checkbox">
-        <label>
-          <input type="checkbox" form="index_register_form" id="register_tos_agree" onClick="VerifyTOSAccept()"> I agree to the <%= link_to 'Terms', terms_path %>.
-        </label>
-      </div>
+      <label>
+        <input type="checkbox" id="register_tos_agree" onClick="VerifyTOSAccept()"> I agree to the <%= link_to 'Terms', terms_path %>.
+      </label>
     </div>
   </div>
 <% end %>
