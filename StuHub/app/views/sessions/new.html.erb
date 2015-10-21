@@ -6,9 +6,12 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-sm-8 col-sm-offset-2" style="text-align: center;">
+  <div class="col-sm-8 col-sm-offset-2">
     <div style="margin: 10px 0;">
-      <%= form_for(:session) do |f| %>
+
+      <%= render 'users/login' %>
+
+      <!-- <%= form_for(:session) do |f| %>
       <div class="form-group">
         <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
       </div>
@@ -34,7 +37,7 @@
           <%= link_to 'Forgot Password', new_password_reset_path, id: 'login_forgot_btn' %>
         </div>
       </div>
-      <% end %>
+      <% end %> -->
     </div>
   </div>
 </div>
