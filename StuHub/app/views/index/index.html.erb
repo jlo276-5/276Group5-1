@@ -1,26 +1,20 @@
 <% content_for :title, "Welcome" %>
 
-<%# IF LOGGED IN, Redirect to home_path %>
-
-<!-- Script for enabling the register button -->
-<%= javascript_tag do %>
-  <!-- Investigate native Rails solution? -->
-  VerifyTOSAccept = function() {
-    var submitBtn = document.getElementById("register_submit");
-    var acceptCM = document.getElementById("register_tos_agree");
-    if (acceptCM.checked == true) {
-      submitBtn.removeAttribute("disabled");
-    }
-    else {
-      var disable = document.createAttribute("disabled");
-      disable.value = "disabled";
-      submitBtn.setAttributeNode(disable);
-    }
-  }
+<% content_for :checkbox do %>
+  <div class="form-group" style="text-align: center;">
+    <div class="checkbox">
+        <label>
+          <input type="checkbox" form="index_register_form" id="register_tos_agree" onClick="VerifyTOSAccept()"> I agree to the <%= link_to 'Terms', terms_path %>.
+        </label>
+      </div>
+    </div>
+  </div>
 <% end %>
 
-<div class="row" style="text-align: center;">
-  <div class="col-sm-7 col-md-8" id="index_about_content">
+<% provide(:save_button_title, 'Register') %>
+
+<div class="row">
+  <div class="col-sm-7 col-md-8" id="index_about_content" style="text-align: center;">
     <div style="background-color: transparent !important;" class="center jumbotron">
       <h1>Welcome to the StuHub</h1>
 
@@ -28,70 +22,24 @@
         This is the home page
       </h2>
 
-      <%= link_to "Register now!", register_path, class: "btn btn-lg btn-primary" %>
+      <%= link_to "Register Now!", register_path, class: "btn btn-lg btn-primary" %>
     </div>
   </div>
   <div class="col-sm-5 col-md-4" id="index_user_column">
     <div class="row" id="index_login_content">
       <div class="col-sm-12" id="index_login_form_container">
-        <h1>Login</h1>
-        <%= form_for(:session, url: login_path, id: 'index_login_form') do |f| %>
-          <div class="form-group">
-            <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
-          </div>
-          <div class="form-group">
-            <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
-          </div>
-          <div class="checkbox">
-            <%= f.label :remember_me do %>
-              <%= f.check_box :remember_me %>
-              <span>Remember me on this computer</span>
-            <% end %>
-          </div>
-          <div class="row">
-            <div class="col-sm-6 hidden-xs">
-              <%= link_to 'Forgot Password', new_password_reset_path, class: 'btn btn-default btn-block', role: 'button', id: 'login_forgot_btn' %>
-            </div>
-            <div class="col-xs-6 col-xs-offset-3 col-sm-offset-0">
-              <%= f.submit 'Login', class: 'btn btn-primary btn-block', role: 'button', id: 'login_submit' %>
-            </div>
-          </div>
-          <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
-            <div class="col-xs-6 col-xs-offset-3 visible-xs-block">
-              <%= link_to 'Forgot Password', new_password_reset_path, id: 'login_forgot_btn' %>
-            </div>
-          </div>
-        <% end %>
+        <h1 style="text-align: center;">Login</h1>
+
+        <%= render 'users/login' %>
+
       </div>
     </div>
     <div class="row" id="index_register_content">
       <div class="col-xs-12" id="index_register_form_container">
-        <h1>Register</h1>
-        <%= form_for(@user, url: users_path(@user), id: 'index_register_form') do |f| %>
-          <div class="form-group">
-            <%= f.text_field :name, class: 'form-control', placeholder: 'Name' %>
-          </div>
-          <div class="form-group">
-            <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
-          </div>
-          <div class="form-group">
-            <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
-          </div>
-          <div class="form-group">
-            <%= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Confirm Password' %>
-          </div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" form="index_register_form" id="register_tos_agree" onClick="VerifyTOSAccept()"> I agree to the <%= link_to 'Terms', terms_path %>.
-            </label>
-          </div>
-          <div class="row">
-            <div class="col-xs-6 col-xs-offset-3">
-              <!-- Create User, redirect to verify_registration_path if success. -->
-              <%= f.submit 'Register', class: 'btn btn-primary btn-block', role: 'button', id: 'register_submit', disabled: 'disabled' %>
-            </div>
-          </div>
-        <% end %>
+        <h1 style="text-align: center;">Register</h1>
+
+        <%= render 'users/form' %>
+
       </div>
     </div>
   </div>

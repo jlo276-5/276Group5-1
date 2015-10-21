@@ -19,6 +19,9 @@ class UsersController < ApplicationController
   end
 
   def new
+    if current_user
+      redirect_to home_url
+    end
     @user = User.new
   end
 
