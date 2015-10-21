@@ -29,8 +29,6 @@ class UsersController < ApplicationController
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
     else
-      flash.now[:danger] = "Please check your registration for errors."
-      # This really should get @user.errors and list them.
       render 'new'
     end
   end

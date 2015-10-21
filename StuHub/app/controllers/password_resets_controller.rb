@@ -31,7 +31,7 @@ class PasswordResetsController < ApplicationController
 
   def update
     if params[:user][:password].empty?
-      flash.now[:danger] = "Passwords cannot be empty."
+      @user.errors.add(:password, "can't be empty")
       render 'edit'
     elsif @user.update_attributes(user_params)
       @user.reset_reset_digest

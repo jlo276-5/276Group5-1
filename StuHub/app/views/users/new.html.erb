@@ -27,6 +27,8 @@
   <div class="col-sm-8 col-sm-offset-2" style="text-align: center;">
     <div style="margin: 10px 0;">
       <%= form_for(@user) do |f| %>
+        <%= render 'shared/error_messages' %>
+
         <div class="form-group">
           <%= f.text_field :name, class: 'form-control', placeholder: 'Name' %>
         </div>

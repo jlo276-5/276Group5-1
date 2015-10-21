@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-sm-6" id="footer_text">
-        <span style="white-space: nowrap;">&copy; 2015 CMPT276 - Fall 2015 - Group 5</span> <span style="white-space: nowrap;">[Current Version: <%= link_to_unless Rails.env.production?, ENV["HEAD_BRANCH"], 'https://github.com/SweetiePi/276Group5/tree/' + ENV["HEAD_BRANCH"] %>-<%= link_to ENV["HEAD_HASH"], 'https://github.com/SweetiePi/276Group5/commit/' + ENV["HEAD_HASH"] %>]</span>
+        <span style="white-space: nowrap;">&copy; 2015 CMPT276 - Fall 2015 - Group 5</span> <span style="white-space: nowrap;">[Current Version: <%= link_to_unless Rails.env.production?, ENV["HEAD_BRANCH"], ('https://github.com/SweetiePi/276Group5/tree/' + (ENV["HEAD_BRANCH"] or "master")) %>-<%= link_to ENV["HEAD_HASH"], ('https://github.com/SweetiePi/276Group5/commit/' + (ENV["HEAD_HASH"] or "HEAD")) %>]</span>
       </div>
       <div class="col-xs-12 col-sm-6" id="footer_nav_links">
         <%= link_to "Help", help_path, class: 'footer_link' %>
