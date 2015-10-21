@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
 
     def require_login
       unless current_user
+        flash[:danger] = "Please log in."
         redirect_to login_url
       end
     end
