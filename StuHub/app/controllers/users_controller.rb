@@ -6,7 +6,11 @@ class UsersController < ApplicationController
 
   ## Use 'find' method to show certain user
   def show
-    @user = User.find(params[:id])
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    end
   end
 
   def index
@@ -25,8 +29,6 @@ class UsersController < ApplicationController
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
     else
-      flash.now[:danger] = "Please check your registration for errors."
-      # This really should get @user.errors and list them.
       render 'new'
     end
   end
@@ -38,15 +40,21 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id])
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    end
   end
 
   def update
-    @user = User.find(params[:id])
-    if @user.update_attributes(user_params)
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    elsif @user.update_attributes(user_params)
       flash[:success] = "Profile Updated"
       redirect_to @user
-      # update succeed
     else
       render 'edit'
     end
@@ -71,7 +79,10 @@ class UsersController < ApplicationController
 
     # ensure correct user
     def correct_user
-      @user = User.find(params[:id])
+      @user = User.find_by id:params[:id]
+      if !current_user?(@user) and !current_user.admin?
+        flash[:danger] = "You do not have the permission to do that."
+      end
       redirect_to(root_url) unless (current_user?(@user) or current_user.admin?)
     end
 

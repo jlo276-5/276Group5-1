@@ -1,4 +1,4 @@
-<% provide(:title, 'Sign up') %>
+<% provide(:title, 'Register') %>
 
 <%= javascript_tag do %>
   <!-- Investigate native Rails solution? -->
@@ -16,17 +16,17 @@
   }
 <% end %>
 
-<% provide(:title, "Login") %>
-
 <div class="row">
   <div class="col-xs-12" style="text-align: center;">
-    <h1>Registration</h1>
+    <h1>Register</h1>
   </div>
 </div>
 <div class="row">
   <div class="col-sm-8 col-sm-offset-2" style="text-align: center;">
     <div style="margin: 10px 0;">
       <%= form_for(@user) do |f| %>
+        <%= render 'shared/error_messages' %>
+
         <div class="form-group">
           <%= f.text_field :name, class: 'form-control', placeholder: 'Name' %>
         </div>
