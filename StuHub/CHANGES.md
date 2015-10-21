@@ -22,3 +22,8 @@ Improve page appearance, fonts
 Add site logo
 Use a thinner navigation bar
 Basic layout for User profile, editing of Users.
+Added tests from RoR tutorial, also some custom ones
+
+### 2015.10.21
+Created a profile template for Users
+Moved Login and Register forms to partials
