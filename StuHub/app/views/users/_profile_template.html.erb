@@ -2,7 +2,7 @@
   <div class="col-sm-9 col-sm-push-3" id="profile_content">
     <div class="row">
       <div class="col-xs-12">
-        <h1><%= gravatar_for @user, size: 50, class: 'img-responsive img-rounded center-block visible-xs-inline-block' %> <%= @user.name %> <small><%= @user.admin? ? "Administrator" : "Standard User" %></small></h1>
+        <h1><%= gravatar_for @user, size: 50, class: 'img-responsive img-rounded center-block visible-xs-inline-block' %> <%= @user.name %> <small><%= @user.role_string_long %></small></h1>
       </div>
     </div>
     <div class="row">
@@ -25,7 +25,7 @@
           </div>
           <div class="list-group">
             <%= link_to 'Profile', current_user, class: "list-group-item #{'active' if current_page?(@user)}" %>
-            <%= link_to 'Settings', edit_user_path(@user), class: "list-group-item #{'active' if current_page?(edit_user_path(@user))}" if (current_user?(@user) || current_user.admin?) %>
+            <%= link_to 'Settings', edit_user_path(@user), class: "list-group-item #{'active' if current_page?(edit_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
             </div>
         </div>
       </div>
