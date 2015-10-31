@@ -1,0 +1,7 @@
+$('.year_select').prop('disabled', false)
+$('.term_select').prop('disabled', false)
+$('.department_select').prop('disabled', false)
+$('#course_list').empty()
+<% @courses.each do |course| %>
+  $('#course_list').append($('<p><%= link_to course_url(course) do %><%= course.department.name + " " + course.number + " - " + course.name %><% end %><p>'))
+<% end %>

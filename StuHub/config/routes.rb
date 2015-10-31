@@ -24,6 +24,16 @@ Rails.application.routes.draw do
   post   'login'  => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
+  # Routes for Courses
+  get 'courses' => 'courses#index'
+  resources :courses, only: [:show] do
+    collection do
+      get 'get_terms', to: 'courses#get_terms'
+      get 'get_departments', to: 'courses#get_departments'
+      get 'get_courses', to: 'courses#get_courses'
+    end
+  end
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
