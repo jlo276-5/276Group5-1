@@ -3,5 +3,5 @@ $('.term_select').prop('disabled', false)
 $('.department_select').prop('disabled', false)
 $('#course_list').empty()
 <% @courses.each do |course| %>
-  $('#course_list').append($('<p><%= link_to course_url(course) do %><%= course.department.name + " " + course.number + " - " + course.name %><% end %><p>'))
+  $('#course_list').append($('<tr><td><%= link_to course_url(course) do %><%= course.department.name + " " + course.number %><% end %></td><td><%= link_to course_url(course) do %><%= course.name %><% end %>'))
 <% end %>
