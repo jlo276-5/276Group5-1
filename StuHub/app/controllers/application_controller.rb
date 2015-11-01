@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   before_filter :require_login
   before_filter :update_last_active
+  before_filter :set_time_zone
 
   private
 
@@ -20,5 +21,9 @@ class ApplicationController < ActionController::Base
     if current_user
       current_user.touch :last_active_at
     end
+  end
+
+  def set_time_zone
+    Time.zone = current_user.time_zone if current_user
   end
 end

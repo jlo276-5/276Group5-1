@@ -54,7 +54,7 @@
             <% end %>
           </div>
           <div class="panel-body">
-            Last Logged In: <%= @user.last_active_at.in_time_zone.strftime("%b %d, %l:%M %p") %>
+            Last Active: <%= @user.last_active_at.in_time_zone.strftime("%b %d, %l:%M %p") %>
             &nbsp;
           </div>
         </div>
