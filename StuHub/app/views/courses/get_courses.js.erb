@@ -3,5 +3,15 @@ $('.term_select').prop('disabled', false)
 $('.department_select').prop('disabled', false)
 $('#course_list').empty()
 <% @courses.each do |course| %>
-  $('#course_list').append($('<tr><td><%= link_to course_url(course) do %><%= course.department.name + " " + course.number %><% end %></td><td><%= link_to course_url(course) do %><%= course.name %><% end %>'))
+  tr = document.createElement("tr")
+  // <% if course.name.blank? %>
+  //   tr.className = "warning"
+  // <% end %>
+  td1 = document.createElement("td")
+  td1.innerHTML = '<td><%= link_to course_url(course) do %><%= course.department.name + " " + course.number %><% end %></td>'
+  td2 = document.createElement("td")
+  td2.innerHTML = '<td><%= link_to course_url(course) do %><%= course.name.blank? ? "[Click to add this Course to StuHub]" : course.name %><% end %></td>'
+  tr.appendChild(td1)
+  tr.appendChild(td2)
+  $('#course_list').append(tr)
 <% end %>

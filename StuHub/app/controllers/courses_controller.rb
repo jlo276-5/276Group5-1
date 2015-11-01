@@ -98,44 +98,44 @@ class CoursesController < ApplicationController
           course_obj.touch
         end # !course_obj
 
-        if course_obj.name.blank?
-          sections_fetch_error_count = 0
-
-          begin
-            request_sections = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}")
-          rescue => e
-            puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}"
-            puts e.response # Redo.
-            if sections_fetch_error_count < 2
-              sections_fetch_error_count += 1
-              retry
-            else
-              next
-            end
-          end
-          request_sections.each do |s|
-            section_fetch_error_count = 0
-
-            begin
-              request_section = JSON.parse(RestClient.get ("#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}/#{s["text"]}".downcase))
-            rescue => e
-              puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}/#{s["text"]}".downcase
-              puts e.response
-              if section_fetch_error_count < 2
-                section_fetch_error_count += 1
-                retry
-              else
-                next
-              end
-            end
-            if !request_section["info"]["title"].blank?
-              course_obj.name = request_section["info"]["title"]
-              course_obj.save
-              break;
-            end # !request_section["info"]["title"].blank?
-          end # request_sections.each
-        end # course_obj.name.blank?
-
+        # if course_obj.name.blank?
+        #   sections_fetch_error_count = 0
+        #
+        #   begin
+        #     request_sections = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}")
+        #   rescue => e
+        #     puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}"
+        #     puts e.response # Redo.
+        #     if sections_fetch_error_count < 2
+        #       sections_fetch_error_count += 1
+        #       retry
+        #     else
+        #       next
+        #     end
+        #   end
+        #   request_sections.each do |s|
+        #     section_fetch_error_count = 0
+        #
+        #     begin
+        #       request_section = JSON.parse(RestClient.get ("#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}/#{s["text"]}".downcase))
+        #     rescue => e
+        #       puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}/#{s["text"]}".downcase
+        #       puts e.response
+        #       if section_fetch_error_count < 2
+        #         section_fetch_error_count += 1
+        #         retry
+        #       else
+        #         next
+        #       end
+        #     end
+        #     if !request_section["info"]["title"].blank?
+        #       course_obj.name = request_section["info"]["title"]
+        #       course_obj.save
+        #       break;
+        #     end # !request_section["info"]["title"].blank?
+        #   end # request_sections.each
+        # end # course_obj.name.blank?
+        #
         course_obj.save
       end # request_courses.each do
       department.save
