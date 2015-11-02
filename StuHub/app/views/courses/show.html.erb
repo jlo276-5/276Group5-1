@@ -4,7 +4,7 @@
 
 <hr>
 
-<% @course.associated_classes.each do |ac| %>
+<% @course.associated_classes.order('number ASC').each do |ac| %>
   <h4>Section Group <%= ac.sections.first.key %></h4>
   <table border="1">
   <% ac.sections.order('key ASC').each do |s| %>
