@@ -37,9 +37,15 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User Deleted"
-    redirect_to users_url
+    user = User.find(params[:id])
+    if current_user.more_powerful(true, user)
+      user.destroy
+      flash[:success] = "User Deleted"
+      redirect_to users_url
+    else
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to user
+    end
   end
 
   def edit
@@ -47,6 +53,9 @@ class UsersController < ApplicationController
     if (@user.nil?)
       flash[:danger] = "No user exists with an id #{params[:id]}."
       redirect_to users_url
+    elsif !current_user?(@user) and !current_user.more_powerful(true, @user)
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to @user
     end
   end
 
@@ -55,6 +64,9 @@ class UsersController < ApplicationController
     if (@user.nil?)
       flash[:danger] = "No user exists with an id #{params[:id]}."
       redirect_to users_url
+    elsif !current_user?(@user) and !current_user.more_powerful(true, @user)
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to @user
     elsif @user.update_attributes(user_params)
       flash[:success] = "Profile Updated"
       redirect_to @user
@@ -65,10 +77,9 @@ class UsersController < ApplicationController
 
   private
 
-   def user_params
-      params.require(:user).permit(:name, :email, :password,
-                                   :password_confirmation)
-   end
+    def user_params
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :time_zone)
+    end
 
     # Filters
     # ensure logged in
@@ -80,17 +91,20 @@ class UsersController < ApplicationController
       end
     end
 
-    # ensure correct user
+    # ensure correct or admin or super user for editing and updating
     def correct_user
       @user = User.find_by id:params[:id]
-      if !current_user?(@user) and !current_user.admin?
+      unless (current_user?(@user) or current_user.admin? or current_user.superuser?)
         flash[:danger] = "You do not have the permission to do that."
+        redirect_to(users_url)
       end
-      redirect_to(root_url) unless (current_user?(@user) or current_user.admin?)
     end
 
-     # make sure admin
+    # ensure admin or super user for deleting
     def admin_user
-      redirect_to(root_url) unless current_user.admin?
+      unless (current_user.admin? or current_user.superuser?)
+        flash[:danger] = "You do not have the permission to do that."
+        redirect_to(users_url)
+      end
     end
 end

@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: {}
+# column: value
+#
+two: {}
+#  column: value
+
+# # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+#
+# one:
+#   building: MyString
+#   room: MyString
+#   campus: MyString
+#   start_date: 2015-10-21
+#   end_date: 2015-10-21
+#   type_code: MyString
+#   start_time: 2015-10-21 19:58:59
+#   end_time: 2015-10-21 19:58:59
+#
+# two:
+#   building: MyString
+#   room: MyString
+#   campus: MyString
+#   start_date: 2015-10-21
+#   end_date: 2015-10-21
+#   type_code: MyString
+#   start_time: 2015-10-21 19:58:59
+#   end_time: 2015-10-21 19:58:59

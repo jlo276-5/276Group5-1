@@ -8,8 +8,8 @@
 
 User.create!(name:  "Administrator",
              email: "example@railstutorial.org",
-             password: "admin",
-             password_confirmation: "admin",
-             admin: true,
+             password: "adminuser",
+             password_confirmation: "adminuser",
+             role: 2,
              activated: true,
              activated_at: Time.zone.now)

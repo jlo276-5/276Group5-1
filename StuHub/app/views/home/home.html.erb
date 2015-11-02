@@ -10,12 +10,13 @@
             <h1 class="panel-title">Courses</h1>
           </div>
           <div class="list-group">
-            <a href="#" class="list-group-item">CMPT 120</a>
-            <a href="#" class="list-group-item">CMPT 125</a>
-            <a href="#" class="list-group-item">CMPT 150</a>
-            <a href="#" class="list-group-item">CMPT 225</a>
-            <a href="#" class="list-group-item">CMPT 276</a>
-            <a href="#" class="list-group-item">CMPT 295</a>
+            <%#= @user.courses do |course| %>
+              <!-- <a href="#" class="list-group-item"><%#= display course number %></a> -->
+            <%# end %>
+            <%= link_to courses_url, class: 'list-group-item' do %>
+              <span class="badge"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></span>
+              All Courses
+            <% end %>
           </div>
         </div>
       </div>
@@ -25,11 +26,13 @@
             <h1 class="panel-title">Groups</h1>
           </div>
           <div class="list-group">
-            <a href="#" class="list-group-item">CMPT 276 Group 1</a>
-            <a href="#" class="list-group-item">CMPT 276 Group 2</a>
-            <a href="#" class="list-group-item">CMPT 276 Group 3</a>
-            <a href="#" class="list-group-item">CMPT 276 Group 4</a>
-            <a href="#" class="list-group-item">CMPT 276 Group 5</a>
+            <%# if @user.groups %>
+              <%#= @user.groups do |group| %>
+                <!-- <a href="#" class="list-group-item"><%#= display group %></a> -->
+              <%# end %>
+            <%# else %>
+              <span class="list-group-item">No Groups</span>
+            <%# end %>
           </div>
         </div>
       </div>
@@ -54,7 +57,7 @@
             <% end %>
           </div>
           <div class="panel-body">
-            <h4>Last Logged In: &nbsp;</h4>
+            Last Active: <%= @user.last_active_at.in_time_zone.strftime("%b %d, %l:%M %p") %>
             &nbsp;
           </div>
         </div>

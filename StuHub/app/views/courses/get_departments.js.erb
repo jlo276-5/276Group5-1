@@ -1,0 +1,8 @@
+$('.year_select').prop('disabled', false)
+$('.term_select').prop('disabled', false)
+$('.department_select').prop('disabled', false)
+$('.department_select').empty()
+$('.department_select').append($('<option value="0">Departments</option>'))
+<% @departments.each do |department| %>
+  $('.department_select').append($('<option value="<%= department.id %>"><%= department.name %></option>'))
+<% end %>

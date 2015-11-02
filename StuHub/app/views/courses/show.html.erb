@@ -1,0 +1,45 @@
+<% provide(:title, "#{@course.department.name}#{@course.number}") %>
+
+<h1><%= "#{@course.department.name}#{@course.number} - #{@course.name}" %> <small><%= "#{@course.department.term.name} #{@course.department.term.year.number}" %></small></h1>
+
+<hr>
+
+<% @course.associated_classes.order('number ASC').each do |ac| %>
+  <h4>Section Group <%= ac.sections.first.key %></h4>
+  <table border="1">
+  <% ac.sections.order('key ASC').each do |s| %>
+    <tr>
+      <td>Section <%= s.key %></td>
+      <td>
+        <% if s.section_times.length == 0 %>
+          No Known Schedules<br>
+        <% else %>
+          <% s.section_times.each do |st| %>
+            <%= "#{s.code} from #{st.start_time.in_time_zone.strftime('%I:%M %p')} to #{st.end_time.in_time_zone.strftime('%I:%M %p')} on #{st.days} in #{st.building} #{st.room} at #{st.campus}" %>
+            <% if st = s.section_times.last %>
+              <br>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% if s.exams.length == 0 %>
+          No Known Exams<br>
+        <% else %>
+          <% s.exams.each do |e| %>
+            <%= "EXAM on #{e.exam_start.strftime("%D")} from #{e.exam_start.in_time_zone.strftime('%I:%M %p')} to #{e.exam_end.in_time_zone.strftime('%I:%M %p')} in #{e.building} #{e.room} at #{e.campus}" %>
+            <% if e = s.exams.last %>
+              <br>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% if s.instructors.length == 0 %>
+          No Known Instructors
+        <% else %>
+          <% s.instructors.each do |i| %>
+            <%= "INSTRUCTOR is #{i.first_name} #{i.last_name}, email is #{i.email.blank? ? "Unknown" : i.email}, office is #{i.office.blank? ? "Unknown" : i.office}" %>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+<% end %>
