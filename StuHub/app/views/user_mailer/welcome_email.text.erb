@@ -1,15 +1,12 @@
-[StuHub] Welcome to StuHub!
-================================================================
+<% provide(:email_title, 'Welcome to StuHub!') %>
 
-<%= @user.name %>, Welcome to StuHub!
+Welcome to StuHub!
 
 Your account details are as follows:
 
 Name: <%= @user.name %>
-Email: <%= CGI::escape(@user.email) %>
+Email: <%= @user.email %>
 
 Please login to your account at the following url:
 
 <%= login_url %>
-
-Thank you for using StuHub.
