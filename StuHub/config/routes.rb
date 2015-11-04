@@ -1,38 +1,41 @@
 Rails.application.routes.draw do
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
-  root 'index#index'
+  # Routes for Courses
+  resources :courses, only: [:index, :show] do
+    collection do
+      get 'get_terms',       to: 'courses#get_terms'
+      get 'get_departments', to: 'courses#get_departments'
+      get 'get_courses',     to: 'courses#get_courses'
+    end
+  end
 
-  # Home page for logged in Users
-  get 'home' => 'home#home'
-
-  # Routes for Static Pages
-  get 'about' => 'static_pages#about'
-  get 'terms' => 'static_pages#terms'
-  get 'help'  => 'static_pages#help'
-
-  # Routes for Users
-  resources :users
-  resources :account_activations, only: [:edit]
-  resources :password_resets,     only: [:new, :create, :edit, :update]
-  get 'register' => 'users#new'
 
   # Routes for Sessions
   get    'login'  => 'sessions#new'
   post   'login'  => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
-  # Routes for Courses
-  get 'courses' => 'courses#index'
-  resources :courses, only: [:show] do
-    collection do
-      get 'get_terms', to: 'courses#get_terms'
-      get 'get_departments', to: 'courses#get_departments'
-      get 'get_courses', to: 'courses#get_courses'
+  # Routes for Users
+  resources :password_resets,     only: [:new, :create, :edit, :update]
+  resources :account_activations, only: [:edit]
+  get 'register' => 'users#new'
+  resources :users
     end
   end
+
+  # Routes for Static Pages
+  get 'about' => 'static_pages#about'
+  get 'terms' => 'static_pages#terms'
+  get 'help'  => 'static_pages#help'
+
+  # Home page for logged in Users
+  get 'home' => 'home#home'
+
+  # You can have the root of your site routed with "root"
+  root 'index#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
