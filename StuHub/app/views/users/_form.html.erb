@@ -49,13 +49,25 @@
     </div>
   </div>
 
-  <% if !current_page?(root_path) %>
+  <% if !current_page?(root_path) and !current_page?(register_path) %>
     <div class="form-group" style="text-align: center;">
       <h4>StuHub uses avatars from Gravatar</h4>
       <p><a href="http://gravatar.com/emails" target="_blank">Manage your avatars directly on their site.</a></p>
     </div>
   <% end %>
   <%= yield :checkbox %>
+  <% if !current_user.more_powerful(true, @user) and !current_page?(root_path) and !current_page?(register_path) %>
+    <hr>
+    <div class="form-group" style="text-align: center;">
+      Changing any of these settings requires your current password.
+    </div>
+    <div class="form-group <%= 'field_with_errors' if @user.errors[:current_password].present? %>">
+      <label class="col-sm-4 col-md-3 control-label" for="user_current_password">Current Password</label>
+      <div class="col-sm-8 col-md-9">
+        <%= password_field_tag :current_password, '', class: 'form-control', placeholder: 'Current Password' %>
+      </div>
+    </div>
+  <% end %>
   <div class="row">
     <div class="col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
       <%= f.submit yield(:save_button_title), class: "btn btn-primary btn-block", id: 'submit_btn', disabled: 'disabled' %>

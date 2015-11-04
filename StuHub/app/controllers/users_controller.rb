@@ -79,7 +79,11 @@ class UsersController < ApplicationController
       flash[:danger] = "You do not have the permission to do that."
       redirect_to @user
     elsif params[:user].has_key?(:name)
-      if @user.update_attributes(user_params)
+      user = @user.try(:authenticate, params[:current_password])
+      if !user
+        @user.errors[:current_password] = 'is incorrect.'
+        render 'edit'
+      elsif user && @user.update_attributes(user_params)
         flash[:success] = "Account Settings Updated"
         redirect_to @user
       else
