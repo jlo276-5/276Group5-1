@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   resources :account_activations, only: [:edit]
   get 'register' => 'users#new'
   resources :users
+  resources :users do
+    member do
+      get 'customize'
     end
   end
 

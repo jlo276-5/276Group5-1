@@ -59,6 +59,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def customize
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    elsif !current_user?(@user) and !current_user.more_powerful(true, @user)
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to @user
+    end
+  end
+
   def update
     @user = User.find_by id:params[:id]
     if (@user.nil?)
@@ -67,18 +78,33 @@ class UsersController < ApplicationController
     elsif !current_user?(@user) and !current_user.more_powerful(true, @user)
       flash[:danger] = "You do not have the permission to do that."
       redirect_to @user
-    elsif @user.update_attributes(user_params)
-      flash[:success] = "Profile Updated"
-      redirect_to @user
+    elsif params[:user].has_key?(:name)
+      if @user.update_attributes(user_params)
+        flash[:success] = "Account Settings Updated"
+        redirect_to @user
+      else
+        render 'edit'
+      end
+    elsif params[:user].has_key?(:time_zone)
+      if @user.update_attributes(customization_params)
+        flash[:success] = "Profile Updated"
+        redirect_to @user
+      else
+        render 'customize'
+      end
     else
-      render 'edit'
+      render 'show'
     end
   end
 
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :time_zone)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+
+    def customization_params
+      params.require(:user).permit(:time_zone)
     end
 
     # Filters

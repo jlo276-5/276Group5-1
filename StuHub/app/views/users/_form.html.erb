@@ -48,12 +48,6 @@
       <%= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Confirm Password' %>
     </div>
   </div>
-  <div class="form-group">
-    <%= f.label :time_zone, 'Time Zone', class: 'col-sm-4 col-md-3 control-label' %>
-    <div class="col-sm-8 col-md-9">
-      <%= f.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones, {}, {class: 'form-control', default: "Pacific Time (US & Canada)"} %>
-    </div>
-  </div>
 
   <% if !current_page?(root_path) %>
     <div class="form-group" style="text-align: center;">

@@ -25,7 +25,8 @@
           </div>
           <div class="list-group">
             <%= link_to 'Profile', current_user, class: "list-group-item #{'active' if current_page?(@user)}" %>
-            <%= link_to 'Settings', edit_user_path(@user), class: "list-group-item #{'active' if current_page?(edit_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
+            <%= link_to 'Edit Profile', customize_user_path(@user), class: "list-group-item #{'active' if current_page?(customize_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
+            <%= link_to 'Account Settings', edit_user_path(@user), class: "list-group-item #{'active' if current_page?(edit_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
             </div>
         </div>
       </div>
