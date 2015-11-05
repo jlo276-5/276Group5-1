@@ -11,7 +11,12 @@ $('#course_list').empty()
   td1.innerHTML = '<td><%= link_to course_url(course) do %><%= course.department.name + " " + course.number %><% end %></td>'
   td2 = document.createElement("td")
   td2.innerHTML = '<td><%= link_to course_url(course) do %><%= course.name.blank? ? "[Click to add this Course to StuHub]" : course.name %><% end %></td>'
+  td3 = document.createElement("td")
+  // Need to check if current user has already added.
+  td3.innerHTML = '<td><a href="#" class="btn btn-primary btn-block" role="button">Add</a></td>'
+  // td3.innerHTML = '<td><a href="#" class="btn btn-info btn-block" role="button">Already Added</a></td>'
   tr.appendChild(td1)
   tr.appendChild(td2)
+  tr.appendChild(td3)
   $('#course_list').append(tr)
 <% end %>

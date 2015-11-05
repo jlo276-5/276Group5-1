@@ -4,42 +4,77 @@
 
 <hr>
 
+<%= link_to 'back', courses_path(term: "FALL") %>
+
 <% @course.associated_classes.order('number ASC').each do |ac| %>
-  <h4>Section Group <%= ac.sections.first.key %></h4>
-  <table border="1">
-  <% ac.sections.order('key ASC').each do |s| %>
-    <tr>
-      <td>Section <%= s.key %></td>
-      <td>
-        <% if s.section_times.length == 0 %>
-          No Known Schedules<br>
-        <% else %>
-          <% s.section_times.each do |st| %>
-            <%= "#{s.code} from #{st.start_time.in_time_zone.strftime('%I:%M %p')} to #{st.end_time.in_time_zone.strftime('%I:%M %p')} on #{st.days} in #{st.building} #{st.room} at #{st.campus}" %>
-            <% if st = s.section_times.last %>
-              <br>
+
+  <h3>Section Group <%= ac.sections.first.key %>
+    <small><%= link_to 'Course Outline', "https://www.sfu.ca/outlines.html?#{@course.department.term.year.number}/#{@course.department.term.name}/#{@course.department.name}/#{@course.number}/#{ac.sections.first.key}".downcase, target: '_blank' %></small></h3>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover table-condensed" id="sections">
+      <thead>
+        <tr>
+          <th width="10%">Section #</th>
+          <th width="25%">Instructors</th>
+          <th width="50%">Location and Time</th>
+          <th width="15%">Add to Schedule</th>
+        </tr>
+      </thead>
+
+      <tbody id="section_list">
+        <% ac.sections.order('key ASC').each do |s| %>
+        <tr>
+          <td><strong><%= s.key %></strong><br><%= s.code %></td>
+          <td>
+            <% if s.instructors.length == 0 %>
+              No Known Instructors
+            <% else %>
+              <% s.instructors.each do |i| %>
+                <strong><%= "#{i.first_name} #{i.last_name}" %></strong>
+                <% if !i.email.blank? %><small> <%= i.email %></small><% end %>
+                <% if !i.office.blank? %><br><strong>O: </strong> <%= i.office %><% end %>
+                <% if !i.phone.blank? %><br><strong>P: </strong> <%= i.phone %><% end %>
+                <% if i != s.instructors.last %>
+                  <hr style="margin: 4px 0;">
+                <% end %>
+              <% end %>
             <% end %>
-          <% end %>
-        <% end %>
-        <% if s.exams.length == 0 %>
-          No Known Exams<br>
-        <% else %>
-          <% s.exams.each do |e| %>
-            <%= "EXAM on #{e.exam_start.strftime("%D")} from #{e.exam_start.in_time_zone.strftime('%I:%M %p')} to #{e.exam_end.in_time_zone.strftime('%I:%M %p')} in #{e.building} #{e.room} at #{e.campus}" %>
-            <% if e = s.exams.last %>
-              <br>
+          </td>
+          <td>
+            <% if s.section_times.length == 0 %>
+              No Known Schedules
+            <% else %>
+              <% s.section_times.each do |st| %>
+                <strong><%= "#{st.days} #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')}" %></strong>
+                <%= "#{st.building} #{st.room} at #{st.campus}" %>
+                <% if st != s.section_times.last %>
+                  <br>
+                <% end %>
+              <% end %>
             <% end %>
-          <% end %>
+            <hr style="margin: 4px 0;">
+            <% if s.exams.length == 0 %>
+              No Known Exams
+            <% else %>
+              <% s.exams.order('exam_start ASC').each do |e| %>
+                <strong><%= "#{e.exam_start.strftime("%a")} #{e.exam_start.strftime("%D")} #{e.exam_start.in_time_zone.strftime('%I:%M %p')} - #{e.exam_end.in_time_zone.strftime('%I:%M %p')}" %></strong>
+                <%= "#{e.building} #{e.room} at #{e.campus}" %>
+                <% if e != s.exams.last %>
+                  <br>
+                <% end %>
+              <% end %>
+            <% end %>
+          </td>
+          <td>
+            <!-- Need to check if current user has already added. -->
+            <a href="#" class="btn btn-primary btn-block" role="button">Add</a>
+            <!--<a href="#" class="btn btn-info btn-block" role="button">Already Added</a>-->
+          </td>
+        </tr>
         <% end %>
-        <% if s.instructors.length == 0 %>
-          No Known Instructors
-        <% else %>
-          <% s.instructors.each do |i| %>
-            <%= "INSTRUCTOR is #{i.first_name} #{i.last_name}, email is #{i.email.blank? ? "Unknown" : i.email}, office is #{i.office.blank? ? "Unknown" : i.office}" %>
-          <% end %>
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
-  </table>
+      </tbody>
+    </table>
+  </div>
+
 <% end %>

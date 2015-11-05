@@ -3,5 +3,5 @@ $('.term_select').prop('disabled', false)
 $('.term_select').empty()
 $('.term_select').append($('<option value="0">Terms</option>'))
 <% @terms.each do |term| %>
-  $('.term_select').append($('<option value="<%= term.id %>"><%= term.name %></option>'))
+  $('.term_select').append($('<option value="<%= term.id %>"><%= term.name.capitalize %></option>'))
 <% end %>
