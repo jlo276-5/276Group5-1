@@ -104,13 +104,13 @@ class User < ActiveRecord::Base
   # Strings
   def role_string_long
     if self.role == 0
-      return "Standard User"
+      return "Standard&nbsp;User".html_safe
     elsif self.role == 1
       return "Administrator"
     elsif self.role == 2
-      return "Super User"
+      return "Super&nbsp;User".html_safe
     else
-      return "Unknown Role"
+      return "Unknown&nbsp;Role".html_safe
     end
   end
 
