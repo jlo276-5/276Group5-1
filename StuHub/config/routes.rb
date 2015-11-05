@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     end
   end
 
+  # Routes for Administration
+  get 'admin', to: 'administration#main'
 
   # Routes for Sessions
   get    'login'  => 'sessions#new'

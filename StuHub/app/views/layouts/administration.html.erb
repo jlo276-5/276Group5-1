@@ -1,0 +1,15 @@
+<% content_for :content do %>
+<div class="row">
+  <div class="col-sm-9 col-sm-push-3">
+    <%= yield %>
+  </div>
+  <div class="col-sm-3 col-sm-pull-9">
+    <ul class="nav nav-pills nav-stacked">
+      <li role="presentation" class="<%= 'active' if current_page?(admin_path) %>"><%= link_to 'Main', admin_path %></li>
+      <li role="presentation"><a href="#">General Settings</a></li>
+      <li role="presentation"><a href="#">User Management</a></li>
+    </ul>
+  </div>
+</div>
+<% end %>
+<%= render template: "layouts/application" %>
