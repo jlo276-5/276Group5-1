@@ -5,3 +5,4 @@ $('.term_select').append($('<option value="0">Terms</option>'))
 <% @terms.each do |term| %>
   $('.term_select').append($('<option value="<%= term.id %>"><%= term.name.capitalize %></option>'))
 <% end %>
+$('.term_select').focus()
