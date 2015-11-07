@@ -26,122 +26,18 @@ class CoursesController < ApplicationController
 
   def get_terms
     year = Year.find(params[:year_id])
-    terms = year.terms
-
-    if terms.count == 0 or (Time.now-(terms.order('updated_at').last.updated_at)) > 1.month
-      request_terms = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}")
-      request_terms.each do |t|
-        # term_obj = Term.find_by(name: t["text"], year_id: year.id)
-        term_obj = year.terms.find_by(name: t["text"])
-        if !term_obj
-          term_obj = Term.new
-          term_obj.name = t["text"]
-          year.terms << term_obj
-        else
-          term_obj.touch
-        end
-      end
-      year.save
-    end
-
-    @terms = terms.order('name ASC')
-    @departments = []
+    @terms = get_terms_api(year).order('name ASC')
   end
 
   def get_departments
     term = Term.find(params[:term_id])
-    year = term.year
-    departments = term.departments
-
-    if departments.count == 0 or (Time.now-(departments.order('updated_at').last.updated_at)) > 1.month
-      request_departments = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}")
-      request_departments.each do |d|
-        # department_obj = Department.find_by(name: d["text"], term_id: term.id)
-        department_obj = term.departments.find_by(name: d["text"])
-        if !department_obj
-          department_obj = Department.new
-          department_obj.name = d["text"]
-          term.departments << department_obj
-        else
-          department_obj.touch
-        end
-      end
-      term.save
-    end
-
-    @departments = departments.order('name ASC')
+    @departments = get_departments_api(term).order('name ASC')
   end
 
   def get_courses
     department = Department.find(params[:department_id])
-    term = department.term
-    year = term.year
-    courses = department.courses
 
-    if courses.count == 0 or (Time.now-(courses.order('updated_at').last.updated_at)) > 2.weeks
-      begin
-        request_courses = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}")
-      rescue => e
-        puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}"
-        puts e.response
-        @courses = []
-        return
-      end
-      request_courses.each do |c|
-        # course_obj = Course.find_by(number: c["text"], department_id: department.id)
-        course_obj = department.courses.find_by(number: c["text"])
-        if !course_obj
-          course_obj = Course.new
-          course_obj.number = c["text"]
-          department.courses << course_obj
-        else
-          course_obj.touch
-        end # !course_obj
-
-        # if course_obj.name.blank?
-        #   sections_fetch_error_count = 0
-        #
-        #   begin
-        #     request_sections = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}")
-        #   rescue => e
-        #     puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}"
-        #     puts e.response # Redo.
-        #     if sections_fetch_error_count < 2
-        #       sections_fetch_error_count += 1
-        #       retry
-        #     else
-        #       next
-        #     end
-        #   end
-        #   request_sections.each do |s|
-        #     section_fetch_error_count = 0
-        #
-        #     begin
-        #       request_section = JSON.parse(RestClient.get ("#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}/#{s["text"]}".downcase))
-        #     rescue => e
-        #       puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}/#{course_obj.number}/#{s["text"]}".downcase
-        #       puts e.response
-        #       if section_fetch_error_count < 2
-        #         section_fetch_error_count += 1
-        #         retry
-        #       else
-        #         next
-        #       end
-        #     end
-        #     if !request_section["info"]["title"].blank?
-        #       course_obj.name = request_section["info"]["title"]
-        #       course_obj.save
-        #       break;
-        #     end # !request_section["info"]["title"].blank?
-        #   end # request_sections.each
-        # end # course_obj.name.blank?
-        #
-        course_obj.save
-      end # request_courses.each do
-      department.save
-    end # courses.count == 0 or (Time.now-(courses.order('updated_at').last.updated_at)) > 1.day
-
-    @courses = courses.order('number ASC')
+    @courses = get_courses_api(department).order('number ASC')
   end
 
   def show
@@ -292,5 +188,84 @@ class CoursesController < ApplicationController
       end # request_sections.each
       @course.save
     end
+  end
+
+  private
+
+  def get_terms_api(year)
+    terms = year.terms
+
+    if terms.count == 0 or (Time.now-(terms.order('updated_at').last.updated_at)) > 1.month
+      request_terms = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}")
+      request_terms.each do |t|
+        term_obj = year.terms.find_by(name: t["text"])
+        if !term_obj
+          term_obj = Term.new
+          term_obj.name = t["text"]
+          year.terms << term_obj
+        else
+          term_obj.touch
+        end
+      end
+      year.save
+    end
+
+    return terms
+  end
+
+  def get_departments_api(term)
+    year = term.year
+    departments = term.departments
+
+    if departments.count == 0 or (Time.now-(departments.order('updated_at').last.updated_at)) > 1.month
+      request_departments = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}")
+      request_departments.each do |d|
+        # department_obj = Department.find_by(name: d["text"], term_id: term.id)
+        department_obj = term.departments.find_by(name: d["text"])
+        if !department_obj
+          department_obj = Department.new
+          department_obj.name = d["text"]
+          term.departments << department_obj
+        else
+          department_obj.touch
+        end
+      end
+      term.save
+    end
+
+    return departments
+  end
+
+  def get_courses_api(department)
+    term = department.term
+    year = term.year
+    courses = department.courses
+
+    if courses.count == 0 or (Time.now-(courses.order('updated_at').last.updated_at)) > 2.weeks
+      begin
+        request_courses = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}")
+      rescue => e
+        puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}"
+        puts e.response
+        @courses = []
+        return
+      end
+      request_courses.each do |c|
+        # course_obj = Course.find_by(number: c["text"], department_id: department.id)
+        course_obj = department.courses.find_by(number: c["text"])
+        if !course_obj
+          course_obj = Course.new
+          course_obj.number = c["text"]
+          department.courses << course_obj
+        else
+          course_obj.touch
+        end # !course_obj
+
+        course_obj.save
+      end # request_courses.each do
+      department.save
+    end # courses.count == 0 or (Time.now-(courses.order('updated_at').last.updated_at)) > 1.day
+
+    return courses
   end
 end
