@@ -49,7 +49,17 @@
     </div>
   </div>
 
-  <% if !current_page?(root_path) and !current_page?(register_path) %>
+  <% if current_page?(root_path) or current_page?(register_path) or controller.action_name == "create"  %>
+  <div class="form-group">
+    <%= f.label :institution, class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.collection_select :institution, Institution.all.order('name ASC'), :id, :name, {}, {class: 'form-control'} %>
+    </div>
+  </div>
+
+  <% end %>
+
+  <% if !current_page?(root_path) and !current_page?(register_path) and controller.action_name != "create" %>
     <div class="form-group" style="text-align: center;">
       <h4>StuHub uses avatars from Gravatar</h4>
       <p><a href="http://gravatar.com/emails" target="_blank">Manage your avatars directly on their site.</a></p>
