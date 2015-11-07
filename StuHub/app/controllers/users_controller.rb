@@ -81,10 +81,10 @@ class UsersController < ApplicationController
       redirect_to @user
     elsif params[:user].has_key?(:name)
       user = @user.try(:authenticate, params[:current_password])
-      if !user
+      if !user && !current_user.more_powerful(true, @user)
         @user.errors[:current_password] = 'is incorrect.'
         render 'edit'
-      elsif user && @user.update_attributes(user_params)
+      elsif (user || current_user.more_powerful(true, @user)) && @user.update_attributes(user_params)
         flash[:success] = "Account Settings Updated"
         redirect_to @user
       else
