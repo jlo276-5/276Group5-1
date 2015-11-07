@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   ## check name exist and length
    validates :name,  presence: true, length: { maximum: 50 }
 
+   validates :tos_agree, acceptance: true
+
   ## check email format
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 

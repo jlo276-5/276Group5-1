@@ -2,7 +2,7 @@
   <!-- Investigate native Rails solution? -->
   VerifyTOSAccept = function() {
     var submitBtn = document.getElementById("submit_btn");
-    var acceptCM = document.getElementById("register_tos_agree");
+    var acceptCM = document.getElementById("user_tos_agree");
     if (acceptCM.checked == true) {
       submitBtn.removeAttribute("disabled");
     }
@@ -35,7 +35,7 @@
       <div class="input-group">
         <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
         <span class="input-group-btn">
-          <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Passwords must be at least 6 characters">
+          <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Passwords must be at least 6 characters" tabindex="-1">
             <span class="glyphicon glyphicon-question-sign"></span>
           </button>
         </span>
@@ -50,13 +50,19 @@
   </div>
 
   <% if current_page?(root_path) or current_page?(register_path) or controller.action_name == "create"  %>
-  <div class="form-group">
-    <%= f.label :institution, class: 'col-sm-4 col-md-3 control-label' %>
-    <div class="col-sm-8 col-md-9">
-      <%= f.collection_select :institution, Institution.all.order('name ASC'), :id, :name, {}, {class: 'form-control'} %>
+    <div class="form-group">
+      <%= f.label :institution_id, class: 'col-sm-4 col-md-3 control-label' %>
+      <div class="col-sm-8 col-md-9">
+        <%= f.collection_select :institution_id, Institution.all.order('name ASC'), :id, :name, {}, {class: 'form-control'} %>
+      </div>
     </div>
-  </div>
-
+    <div class="form-group" style="text-align: center;">
+      <div class="checkbox">
+        <label>
+          <%= f.check_box :tos_agree, onclick: 'VerifyTOSAccept()' %>  I agree to the <%= link_to 'Terms', terms_path %>.
+        </label>
+      </div>
+    </div>
   <% end %>
 
   <% if !current_page?(root_path) and !current_page?(register_path) and controller.action_name != "create" %>
@@ -65,7 +71,6 @@
       <p><a href="http://gravatar.com/emails" target="_blank">Manage your avatars directly on their site.</a></p>
     </div>
   <% end %>
-  <%= yield :checkbox %>
   <% if !current_page?(root_path) and !current_page?(register_path) and controller.action_name != "create" and !current_user.more_powerful(true, @user) %>
     <hr>
     <div class="form-group" style="text-align: center;">
