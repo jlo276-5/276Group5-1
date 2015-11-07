@@ -1,4 +1,10 @@
 class User < ActiveRecord::Base
+  belongs_to :institution
+  has_one :privacy_setting
+  has_many :user_interests, dependent: :destroy
+  accepts_nested_attributes_for :privacy_setting
+  accepts_nested_attributes_for :user_interests, allow_destroy: true
+
   attr_accessor :remember_token, :activation_token, :reset_token
   ##check upper case
   before_save   :downcase_email
@@ -123,6 +129,16 @@ class User < ActiveRecord::Base
       return "Super"
     else
       return "Unknown"
+    end
+  end
+
+  def gender_string
+    if self.gender == 1
+      return "Male"
+    elsif self.gender == 2
+      return "Female"
+    else
+      return "Unspecified"
     end
   end
 

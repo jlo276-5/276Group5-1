@@ -24,7 +24,6 @@ Rails.application.routes.draw do
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :account_activations, only: [:edit]
   get 'register' => 'users#new'
-  resources :users
   resources :users do
     member do
       get 'customize'

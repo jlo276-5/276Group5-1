@@ -29,6 +29,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       @user.send_activation_email
+      @user.privacy_setting = PrivacySetting.new
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
     else
@@ -108,7 +109,7 @@ class UsersController < ApplicationController
     end
 
     def customization_params
-      params.require(:user).permit(:time_zone)
+      params.require(:user).permit(:major, :about_me, :website, :birthday, :gender, :time_zone, privacy_setting_attributes: [:id, :display_institution, :display_major, :display_about_me, :display_email, :display_website, :display_birthday, :display_gender, :display_courses, :display_groups])
     end
 
     # Filters

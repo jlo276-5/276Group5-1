@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  state: MyString
+  country: MyString
+  email_constraint: MyString
+
+two:
+  name: MyString
+  state: MyString
+  country: MyString
+  email_constraint: MyString
