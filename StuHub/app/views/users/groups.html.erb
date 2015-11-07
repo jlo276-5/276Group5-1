@@ -1,0 +1,27 @@
+<% provide(:title, "Groups - #{@user.name}") %>
+
+<% content_for :page_content do %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">Groups</h1>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th width="80%">Name</th>
+            <th width="20%"></th>
+          </tr>
+        </thead>
+        <%# @user.group_memberships.each do |gm| %>
+          <!-- <tr>
+            <td><%#= link_to gm.group.name, gm.group %></td>
+            <td><%#= link_to "Delete", destroy_group_membership_path(gm_id: gm.id), method: "delete", class: "btn btn-primary btn-block", role: "button" %></td>
+          </tr> -->
+        <%# end %>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<%= render 'profile_template' %>
