@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
-  before_action :check_privacy
+  before_action :check_privacy,  only: [:show, :edit, :customize, :courses, :groups]
 
   ## Use 'find' method to show certain user
   def show
