@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   belongs_to :institution
   has_one :privacy_setting
   has_many :user_interests, dependent: :destroy
+  has_many :course_memberships, dependent: :destroy
+  has_many :courses, through: :course_memberships
   accepts_nested_attributes_for :privacy_setting
   accepts_nested_attributes_for :user_interests, allow_destroy: true
 
@@ -140,6 +142,10 @@ class User < ActiveRecord::Base
     else
       return "Unspecified"
     end
+  end
+
+  def memberOfCourse?(course)
+    return !self.courses.find_by(id: course.id).nil?
   end
 
   private

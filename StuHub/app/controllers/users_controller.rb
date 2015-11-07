@@ -102,6 +102,28 @@ class UsersController < ApplicationController
     end
   end
 
+  def courses
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    elsif !current_user?(@user) and !@user.privacy_setting.display_courses and !current_user.more_powerful(true, @user)
+      flash[:danger] = "You do not have the permission to view that."
+      redirect_to @user
+    end
+  end
+
+  def groups
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    elsif !current_user?(@user) and !@user.privacy_setting.display_groups and !current_user.more_powerful(true, @user)
+      flash[:danger] = "You do not have the permission to view that."
+      redirect_to @user
+    end
+  end
+
   private
 
     def user_params

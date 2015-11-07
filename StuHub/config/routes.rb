@@ -4,7 +4,17 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # Routes for Courses
+  resources :course_memberships, only: [:destroy, :create] do
+    member do
+      get 'join_success', to: 'course_memberships#join_success', as: 'join_success'
+      delete 'remove_section', to: 'course_memberships#remove_section', as: 'remove_sec'
+      post 'add_section', to: 'course_memberships#add_section', as: 'add_sec'
+    end
+  end
   resources :courses, only: [:index, :show] do
+    member do
+      get 'info', to: 'courses#info', as: 'get_info'
+    end
     collection do
       get 'get_terms',       to: 'courses#get_terms'
       get 'get_departments', to: 'courses#get_departments'
@@ -26,6 +36,8 @@ Rails.application.routes.draw do
   get 'register' => 'users#new'
   resources :users do
     member do
+      get 'courses'
+      get 'groups'
       get 'customize'
     end
   end

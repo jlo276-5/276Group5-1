@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151106084916) do
+ActiveRecord::Schema.define(version: 20151107095500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,26 @@ ActiveRecord::Schema.define(version: 20151106084916) do
 
   add_index "associated_classes", ["course_id"], name: "index_associated_classes_on_course_id", using: :btree
   add_index "associated_classes", ["number", "course_id"], name: "index_associated_classes_on_number_and_course_id", unique: true, using: :btree
+
+  create_table "course_memberships", force: :cascade do |t|
+    t.datetime "join_date"
+    t.integer  "role",       default: 0
+    t.integer  "user_id"
+    t.integer  "course_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "course_memberships", ["course_id"], name: "index_course_memberships_on_course_id", using: :btree
+  add_index "course_memberships", ["user_id", "course_id"], name: "index_course_memberships_on_user_id_and_course_id", unique: true, using: :btree
+  add_index "course_memberships", ["user_id"], name: "index_course_memberships_on_user_id", using: :btree
+
+  create_table "course_memberships_sections", id: false, force: :cascade do |t|
+    t.integer "course_membership_id", null: false
+    t.integer "section_id",           null: false
+  end
+
+  add_index "course_memberships_sections", ["course_membership_id", "section_id"], name: "index_cms_on_cm_id_and_section_id", unique: true, using: :btree
 
   create_table "courses", force: :cascade do |t|
     t.string   "name"
@@ -181,6 +201,8 @@ ActiveRecord::Schema.define(version: 20151106084916) do
   end
 
   add_foreign_key "associated_classes", "courses"
+  add_foreign_key "course_memberships", "courses"
+  add_foreign_key "course_memberships", "users"
   add_foreign_key "courses", "departments"
   add_foreign_key "departments", "terms"
   add_foreign_key "exams", "sections"

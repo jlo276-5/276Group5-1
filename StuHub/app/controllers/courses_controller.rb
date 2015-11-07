@@ -40,6 +40,17 @@ class CoursesController < ApplicationController
     @courses = get_courses_api(department).order('number ASC')
   end
 
+  def info
+    @course = Course.find_by(id: params[:id])
+    @cm = current_user.course_memberships.find_by(course_id: @course.id)
+    if @course.nil?
+      flash[:danger] = "No course exists with an id #{params[:id]}."
+      redirect_to courses_url
+    else
+      get_course_api(@course)
+    end
+  end
+
   def show
     @course = Course.find_by(id: params[:id])
     if @course.nil?

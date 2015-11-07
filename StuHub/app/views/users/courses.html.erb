@@ -1,0 +1,35 @@
+<% provide(:title, "Courses - #{@user.name}") %>
+
+<% content_for :page_content do %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">Courses</h1>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th width="20%">Number</th>
+            <th width="50%">Name</th>
+            <th width="10%">Sections</th>
+            <th width="20%"></th>
+          </tr>
+        </thead>
+        <% @user.course_memberships.each do |cm| %>
+          <tr>
+            <td><%= link_to "#{cm.course.department.name} #{cm.course.number}", cm.course %></td>
+            <td><%= link_to cm.course.name, cm.course %></td>
+            <td>
+              <% cm.sections.each do |s| %>
+                <%= s.key %>
+              <% end %>
+            </td>
+            <td><%= link_to "Delete", course_membership_path(cm), method: "delete", class: "btn btn-primary btn-block", role: "button" %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<%= render 'profile_template' %>
