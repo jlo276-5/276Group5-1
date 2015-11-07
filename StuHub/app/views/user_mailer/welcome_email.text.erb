@@ -5,7 +5,7 @@ Welcome to StuHub!
 Your account details are as follows:
 
 Name: <%= @user.name %>
-Email: <%= @user.email %>
+Email: <%= CGI::escape(@user.email) %>
 
 Please login to your account at the following url:
 
