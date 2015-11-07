@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
+  before_action :check_privacy
 
   ## Use 'find' method to show certain user
   def show
@@ -158,6 +159,13 @@ class UsersController < ApplicationController
       unless (current_user.admin? or current_user.superuser?)
         flash[:danger] = "You do not have the permission to do that."
         redirect_to(users_url)
+      end
+    end
+
+    def check_privacy
+      @user = User.find_by id:params[:id]
+      if @user.privacy_setting.nil?
+        @user.privacy_setting = PrivacySetting.new
       end
     end
 end
