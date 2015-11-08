@@ -68,21 +68,19 @@ class CoursesController < ApplicationController
   def get_terms_api(year)
     terms = year.terms
 
-    terms.with_lock do
-      if terms.count == 0 or (Time.now-(terms.order('updated_at').last.updated_at)) > 1.month
-        request_terms = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}")
-        request_terms.each do |t|
-          term_obj = year.terms.find_by(name: t["text"])
-          if !term_obj
-            term_obj = Term.new
-            term_obj.name = t["text"]
-            year.terms << term_obj
-          else
-            term_obj.touch
-          end
+    if terms.count == 0 or (Time.now-(terms.order('updated_at').last.updated_at)) > 1.month
+      request_terms = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}")
+      request_terms.each do |t|
+        term_obj = year.terms.find_by(name: t["text"])
+        if !term_obj
+          term_obj = Term.new
+          term_obj.name = t["text"]
+          year.terms << term_obj
+        else
+          term_obj.touch
         end
-        year.save
       end
+      year.save
     end
 
     return terms
@@ -92,22 +90,20 @@ class CoursesController < ApplicationController
     year = term.year
     departments = term.departments
 
-    departments.with_lock do
-      if departments.count == 0 or (Time.now-(departments.order('updated_at').last.updated_at)) > 1.month
-        request_departments = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}")
-        request_departments.each do |d|
-          # department_obj = Department.find_by(name: d["text"], term_id: term.id)
-          department_obj = term.departments.find_by(name: d["text"])
-          if !department_obj
-            department_obj = Department.new
-            department_obj.name = d["text"]
-            term.departments << department_obj
-          else
-            department_obj.touch
-          end
+    if departments.count == 0 or (Time.now-(departments.order('updated_at').last.updated_at)) > 1.month
+      request_departments = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}")
+      request_departments.each do |d|
+        # department_obj = Department.find_by(name: d["text"], term_id: term.id)
+        department_obj = term.departments.find_by(name: d["text"])
+        if !department_obj
+          department_obj = Department.new
+          department_obj.name = d["text"]
+          term.departments << department_obj
+        else
+          department_obj.touch
         end
-        term.save
       end
+      term.save
     end
 
     return departments
@@ -118,32 +114,30 @@ class CoursesController < ApplicationController
     year = term.year
     courses = department.courses
 
-    courses.with_lock do
-      if courses.count == 0 or (Time.now-(courses.order('updated_at').last.updated_at)) > 2.weeks
-        begin
-          request_courses = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}")
-        rescue => e
-          puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}"
-          puts e.response
-          courses = []
-          return
-        end
-        request_courses.each do |c|
-          # course_obj = Course.find_by(number: c["text"], department_id: department.id)
-          course_obj = department.courses.find_by(number: c["text"])
-          if !course_obj
-            course_obj = Course.new
-            course_obj.number = c["text"]
-            department.courses << course_obj
-          else
-            course_obj.touch
-          end # !course_obj
+    if courses.count == 0 or (Time.now-(courses.order('updated_at').last.updated_at)) > 2.weeks
+      begin
+        request_courses = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}")
+      rescue => e
+        puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}"
+        puts e.response
+        courses = []
+        return
+      end
+      request_courses.each do |c|
+        # course_obj = Course.find_by(number: c["text"], department_id: department.id)
+        course_obj = department.courses.find_by(number: c["text"])
+        if !course_obj
+          course_obj = Course.new
+          course_obj.number = c["text"]
+          department.courses << course_obj
+        else
+          course_obj.touch
+        end # !course_obj
 
-          course_obj.save
-        end # request_courses.each do
-        department.save
-      end # courses.count == 0 or (Time.now-(courses.order('updated_at').last.updated_at)) > 1.day
-    end
+        course_obj.save
+      end # request_courses.each do
+      department.save
+    end # courses.count == 0 or (Time.now-(courses.order('updated_at').last.updated_at)) > 1.day
 
     return courses
   end
