@@ -23,6 +23,11 @@ Rails.application.routes.draw do
 
   # Routes for Administration
   get 'admin', to: 'admin#index'
+  # get 'admin/users', to: 'admin#users'
+  resources :institutions, only: [:show]
+  scope '/admin' do
+    resources :institutions, only: [:new, :index, :create, :edit, :update, :destroy]
+  end
 
   # Routes for Sessions
   get    'login'  => 'sessions#new'

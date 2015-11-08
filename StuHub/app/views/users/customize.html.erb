@@ -8,7 +8,7 @@
     <div class="panel-body">
 
       <%= form_for(@user, html: {class: 'form-horizontal'}) do |f| %>
-        <%= render 'shared/error_messages' %>
+      <%= render partial: 'shared/error_messages', locals: {obj: @user} %>
 
         <%= f.fields_for :privacy_setting do |p| %>
         <div class="form-group">
