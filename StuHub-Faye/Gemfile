@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'private_pub'
+gem 'private_pub', :git => 'https://github.com/PeritusSolutions/private_pub.git'
 gem 'thin'

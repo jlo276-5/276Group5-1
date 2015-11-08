@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/PeritusSolutions/private_pub.git
+  revision: 987ead859c8c5fc19ae354019d8fc97c3820c2ae
+  specs:
+    private_pub (1.0.4)
+      faye
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -26,8 +33,6 @@ GEM
       websocket-driver (>= 0.5.1)
     http_parser.rb (0.6.0)
     multi_json (1.11.2)
-    private_pub (1.0.3)
-      faye
     rack (1.6.4)
     thin (1.6.4)
       daemons (~> 1.0, >= 1.0.9)
@@ -41,7 +46,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  private_pub
+  private_pub!
   thin
 
 BUNDLED WITH

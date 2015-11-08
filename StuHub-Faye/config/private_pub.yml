@@ -6,5 +6,5 @@ test:
   secret_token: "secret"
 production:
   server: "https://stuhub-faye.herokuapp.com/faye"
-  secret_token: ENV["FAYE_HASH"]
+  secret_token: <%= ENV["FAYE_HASH"] %>
   signature_expiration: 3600 # one hour
