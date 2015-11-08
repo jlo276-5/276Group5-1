@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151108075305) do
+ActiveRecord::Schema.define(version: 20151108110256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,10 +108,15 @@ ActiveRecord::Schema.define(version: 20151108075305) do
   add_index "instructors", ["section_id"], name: "index_instructors_on_section_id", using: :btree
 
   create_table "messages", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.text     "content"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "user_id"
+    t.integer  "channel_type", default: 0, null: false
+    t.integer  "channel_id",   default: 0, null: false
   end
+
+  add_index "messages", ["channel_type", "channel_id"], name: "index_messages_on_channel_type_and_channel_id", using: :btree
 
   create_table "privacy_settings", force: :cascade do |t|
     t.boolean  "display_institution", default: true
