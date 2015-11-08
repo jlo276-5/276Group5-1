@@ -4,8 +4,38 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+cmptoneone:
+  unique_number: 1001
+  key: D100
+  code: LEC
+  associated_class: cmptone
+
+cmptonetwo:
+  unique_number: 1002
+  key: D101
+  code: LAB
+  associated_class: cmptone
+
+cmpttwoone:
+  unique_number: 2001
+  key: D200
+  code: LEC
+  associated_class: cmpttwo
+
+macmoneone:
+  unique_number: 3001
+  key: J100
+  code: LEC
+  associated_class: macmone
+
+macmonetwo:
+  unique_number: 3002
+  key: J101
+  code: OPL
+  associated_class: macmone
+
+macmonethree:
+  unique_number: 3003
+  key: J102
+  code: LAB
+  associated_class: macmone

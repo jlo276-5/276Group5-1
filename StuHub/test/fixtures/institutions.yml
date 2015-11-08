@@ -1,13 +1,10 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  state: MyString
-  country: MyString
-  email_constraint: MyString
-
-two:
-  name: MyString
-  state: MyString
-  country: MyString
-  email_constraint: MyString
+institution:
+  name: Institute of Testing
+  city: Testingville
+  state: Testingy
+  country: Testingland
+  website: http://www.example.com/iot
+  image: http://thenextweb.com/wp-content/blogs.dir/1/files/2010/03/gravatar.jpg
+  email_constraint: example.com
