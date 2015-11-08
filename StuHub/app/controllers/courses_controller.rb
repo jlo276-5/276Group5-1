@@ -80,6 +80,8 @@ class CoursesController < ApplicationController
     else
       get_course_api(@course)
     end
+
+    @messages = Message.where(channel_type: 1, channel_id: @course.id).limit(30)
   end
 
   private

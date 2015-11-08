@@ -12,4 +12,20 @@
 
 <hr>
 
+<ul id="chat">
+  <%= render @messages %>
+</ul>
+
+<%= form_for Message.new, remote: true do |f| %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
+  <%= f.hidden_field :channel_type, value: "1" %>
+  <%= f.hidden_field :channel_id, value: @course.id %>
+  <%= f.text_field :content %>
+  <%= f.submit "Send" %>
+<% end %>
+
+<%= subscribe_to "/courses/#{@course.id}/messages" %>
+
+<hr>
+
 <%= link_to "Course Info", get_info_course_path(@course), class: "btn btn-primary btn-block", role: "button" %>

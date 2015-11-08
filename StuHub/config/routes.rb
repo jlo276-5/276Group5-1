@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # Routes for Messages
-  resources :messages
+  resources :messages, only: [:index, :create]
 
   # Routes for Courses
   resources :course_memberships, only: [:destroy, :create] do

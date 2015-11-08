@@ -1,4 +1,13 @@
-<% publish_to "/messages/new" do %>
-$("#chat").append("<%= j render(@message) %>");
-$("#new_message")[0].reset();
+<% if @message.valid? %>
+  <% publish_to @channel do %>
+  $("#chat").append("<%= j render(@message) %>");
+  $("#new_message")[0].reset();
+  <% end %>
+<% else %>
+  errorString = "The following errors occured:\n\n"
+  <% @message.errors.full_messages.each do |msg| %>
+    errorString += '<%= msg %>\n';
+  <% end %>
+  errorString += '\nPlease check and send again.';
+  alert(errorString);
 <% end %>
