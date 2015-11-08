@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class AdministrationControllerTest < ActionController::TestCase
+class AdminControllerTest < ActionController::TestCase
 
   def setup
     @user = users(:lana)
@@ -8,21 +8,20 @@ class AdministrationControllerTest < ActionController::TestCase
   end
 
   test "should redirect main while logged out" do
-    get :main
+    get :index
     assert_redirected_to login_path
   end
 
   test "should redirect main while standard logged in" do
     log_in_as(@user)
-    get :main
+    get :index
     assert_redirected_to home_path
   end
 
   test "should get main while admin logged in" do
     log_in_as(@superuser)
-    get :main
+    get :index
     assert_response :success
   end
-
 
 end
