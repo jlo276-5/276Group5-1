@@ -107,6 +107,12 @@ ActiveRecord::Schema.define(version: 20151108075305) do
 
   add_index "instructors", ["section_id"], name: "index_instructors_on_section_id", using: :btree
 
+  create_table "messages", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text     "content"
+  end
+
   create_table "privacy_settings", force: :cascade do |t|
     t.boolean  "display_institution", default: true
     t.boolean  "display_major",       default: true
