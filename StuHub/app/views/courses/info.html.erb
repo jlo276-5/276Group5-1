@@ -18,10 +18,10 @@
     <span style="font-size: 24px">Current Status: <%= @cm ? "Enrolled" : "Not Enrolled" %></span>
   </div>
   <div class="col-xs-12 col-sm-4">
-    <% if @cm %>
+    <% if !@cm.nil? %>
       <%= link_to "Drop", course_membership_path(@cm), method: "delete", class: "btn btn-danger btn-block", role: "button", data: { confirm: "Are you sure you want to drop this course?" } %>
     <% else %>
-      <%= link_to "Add", course_memberships_path(user_id: current_user, course_id: course), method: "post", class: "btn btn-primary btn-block", role: "button" %>
+      <%= link_to "Add", course_memberships_path(user_id: current_user, course_id: @course), method: "post", class: "btn btn-primary btn-block", role: "button" %>
     <% end %>
   </div>
 </div>
@@ -87,10 +87,12 @@
             <% end %>
           </td>
           <td>
-            <% if @cm and @cm.sectionInMembership?(s.id) %>
-              <%= link_to "Remove", remove_sec_course_membership_path(@cm, section_id: s.id), method: "delete", class: "btn btn-danger btn-block", role: "button" %></td>
-            <% else %>
-              <%= link_to "Add", add_sec_course_membership_path(@cm, section_id: s.id), method: "post", class: "btn btn-primary btn-block", role: "button" %></td>
+            <% if !@cm.nil? %>
+              <% if @cm.sectionInMembership?(s.id) %>
+                <%= link_to "Remove", remove_sec_course_membership_path(@cm, section_id: s.id), method: "delete", class: "btn btn-danger btn-block", role: "button" %></td>
+              <% else %>
+                <%= link_to "Add", add_sec_course_membership_path(id: @cm.id, section_id: s.id), method: "post", class: "btn btn-primary btn-block", role: "button" %></td>
+              <% end %>
             <% end %>
           </td>
         </tr>
