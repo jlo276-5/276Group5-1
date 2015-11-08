@@ -24,6 +24,8 @@ class User < ActiveRecord::Base
                       format: { with: VALID_EMAIL_REGEX },
                       uniqueness: { case_sensitive: false }
 
+  validate :validate_email_domain
+
   ##activate
   def activate
     update_attribute(:activation_digest, nil)
@@ -151,6 +153,12 @@ class User < ActiveRecord::Base
   end
 
   private
+
+    def validate_email_domain
+      unless !self.institution_id.blank? and !self.email.blank? and (self.email.ends_with?("@" + Institution.find(self.institution_id).email_constraint) or self.email.ends_with?("." + Institution.find(self.institution_id).email_constraint))
+        errors.add(:email, "contains an invalid domain for the selected institution")
+      end
+    end
 
     # change email address into lowercase
     def downcase_email
