@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -23,7 +22,7 @@ Rails.application.routes.draw do
   end
 
   # Routes for Administration
-  get 'admin', to: 'administration#main'
+  get 'admin', to: 'admin#index'
 
   # Routes for Sessions
   get    'login'  => 'sessions#new'
