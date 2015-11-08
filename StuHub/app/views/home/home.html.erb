@@ -11,7 +11,9 @@
           </div>
           <div class="list-group">
             <% current_user.courses.each do |course| %>
-              <%= link_to "#{course.department.name} #{course.number}", course, class: 'list-group-item' %>
+              <%= link_to course, class: 'list-group-item' do %>
+                <%= "#{course.department.name} #{course.number}" %> <small style="white-space:pre;"><%= "#{course.department.term.name} #{course.department.term.year.number}" %></small>
+              <% end %>
             <% end %>
             <%= link_to courses_url, class: 'list-group-item' do %>
               <span class="badge"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></span>
