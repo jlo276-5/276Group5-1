@@ -1,2 +1,2 @@
 web: bundle exec puma -C config/puma.rb
-
+chat: thin -C config/private_pub_thin.yml start
