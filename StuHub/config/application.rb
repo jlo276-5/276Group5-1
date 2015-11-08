@@ -16,6 +16,8 @@ module StuHub
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'Pacific Time (US & Canada)'
     config.active_record.default_timezone = :utc
+    
+    config.web_console.whitelisted_ips = '24.84.128.99'
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]

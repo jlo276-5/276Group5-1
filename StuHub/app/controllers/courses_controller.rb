@@ -5,6 +5,7 @@ class CoursesController < ApplicationController
   SFU_CO_API = "http://www.sfu.ca/bin/wcm/course-outlines"
 
   def index
+    @courses = Course.all
     if Year.count == 0 or (Time.now-(Year.order('updated_at').last.updated_at)) > 1.month
       request_years = JSON.parse(RestClient.get SFU_CO_API)
       request_years.each do |y|
@@ -143,6 +144,10 @@ class CoursesController < ApplicationController
 
     @courses = courses.order('number ASC')
   end
+
+def create
+  @course = Course.create!(params[:course])
+end
 
   def show
     @course = Course.find(params[:id])

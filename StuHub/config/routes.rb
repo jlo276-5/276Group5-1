@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   get 'terms' => 'static_pages#terms'
   get 'help'  => 'static_pages#help'
 
+  # Routes for Messages
+  resources :messages
+
   # Routes for Users
   resources :users
   resources :account_activations, only: [:edit]
