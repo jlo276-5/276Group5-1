@@ -164,7 +164,7 @@ class UsersController < ApplicationController
 
     def check_privacy
       @user = User.find_by id:params[:id]
-      if @user.privacy_setting.nil?
+      if @user and @user.privacy_setting.nil?
         @user.privacy_setting = PrivacySetting.new
       end
     end
