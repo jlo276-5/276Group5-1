@@ -20,8 +20,27 @@ class CoursesController < ApplicationController
     end
 
     @years = Year.order('number ASC').all
-    @terms = []
-    @departments = []
+    if !params[:year].to_s.blank?
+      year = Year.find(params[:year])
+      @terms = get_terms_api(year).order('name ASC')
+      @year_select = params[:year]
+    else
+      @terms = []
+    end
+    if !params[:term].to_s.blank?
+      term = Term.find(params[:term])
+      @departments = get_departments_api(term).order('name ASC')
+      @term_select = params[:term]
+    else
+      @departments = []
+    end
+    if !params[:department].to_s.blank?
+      department = Department.find(params[:department])
+      @courses = get_courses_api(department).order('number ASC')
+      @department_select = params[:department]
+    else
+      @courses = []
+    end
   end
 
   def get_terms

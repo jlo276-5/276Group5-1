@@ -14,15 +14,15 @@
 <!-- <form class="form-inline"> -->
   <div class="form-group col-sm-4">
     <!-- <label for="year_select">Year&nbsp;&nbsp;</label> -->
-    <%= collection_select(:year, :number, @years, :id, :number, {prompt: "Years"}, {class: 'form-control year_select', style: 'width: 100%'}) %>
+    <%= collection_select(:year, :number, @years, :id, :number, (@year_select ? {prompt: "Years", selected: @year_select} : {prompt: "Years"}), {class: 'form-control year_select', style: 'width: 100%'}) %>
   </div>
   <div class="form-group col-sm-4">
     <!-- <label for="term_select">Term&nbsp;&nbsp;</label> -->
-    <%= collection_select(:term, :name, @terms, :id, :name, {prompt: "Terms"}, {class: 'form-control term_select', disabled: 'disabled'}) %>
+    <%= collection_select(:term, :name, @terms, :id, :name, (@term_select ? {prompt: "Terms", selected: @term_select} : {prompt: "Terms"}), (@terms.size == 0 ? {class: 'form-control term_select', disabled: 'disabled'} : {class: 'form-control term_select'})) %>
   </div>
   <div class="form-group col-sm-4">
     <!-- <label for="department_select">Department&nbsp;&nbsp;</label> -->
-    <%= collection_select(:department, :name, @departments, :id, :name, {prompt: "Departments"}, {class: 'form-control department_select', disabled: 'disabled'}) %>
+    <%= collection_select(:department, :name, @departments, :id, :name, (@department_select ? {prompt: "Departments", selected: @department_select} : {prompt: "Departments"}), (@departments.size == 0 ? {class: 'form-control department_select', disabled: 'disabled'} : {class: 'form-control department_select'})) %>
   </div>
 <!-- </form> -->
 </div>
@@ -39,7 +39,16 @@
         </thead>
 
         <tbody id="course_list">
-
+          <% @courses.each do |course| %>
+            <tr>
+              <td><%= link_to get_info_course_url(course) do %><%= course.department.name + " " + course.number %><% end %></td>
+              <% if current_user.memberOfCourse?(course) %>
+                <td><%= link_to "Drop", course_membership_path(current_user.course_memberships.find_by(course_id: course.id)), method: "delete", class: "btn btn-danger btn-block", role: "button", data: { confirm: "Are you sure you want to drop this course?" } %></td>
+              <% else %>
+                <td><%= link_to "Add", course_memberships_path(user_id: current_user, course_id: course), method: "post", class: "btn btn-primary btn-block", role: "button" %></td>
+              <% end %>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>
