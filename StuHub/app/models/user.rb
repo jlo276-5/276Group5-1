@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   belongs_to :institution
-  has_one :privacy_setting
+  has_one :privacy_setting, dependent: :destroy
   has_many :user_interests, dependent: :destroy
   has_many :course_memberships, dependent: :destroy
   has_many :courses, through: :course_memberships
