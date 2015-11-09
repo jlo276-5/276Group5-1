@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # Routes for Messages
-  resources :messages, only: [:index, :create]
+  resources :messages, only: [:create]
 
   # Routes for Courses
   resources :course_memberships, only: [:destroy, :create] do
@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   resources :institutions, only: [:show]
   scope '/admin' do
     resources :institutions, only: [:new, :index, :create, :edit, :update, :destroy]
+    resources :messages, only: [:index]
   end
 
   # Routes for Sessions
@@ -41,7 +42,7 @@ Rails.application.routes.draw do
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :account_activations, only: [:edit]
   get 'register' => 'users#new'
-  resources :users do
+  resources :users, only: [:index, :create, :show, :edit, :update, :destroy] do
     member do
       get 'courses'
       get 'groups'
