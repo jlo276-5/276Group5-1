@@ -61,6 +61,8 @@ class GroupsController < ApplicationController
   def destroy
     @group = Group.find_by(id: params[:id])
     if @group.destroy
+      Message.where(channel_type: '2', channel_id: @group.id).destroy_all
+      Message.where(channel_type: '5', channel_id: @group.id).destroy_all
       flash[:success] = "Group Deleted"
       redirect_to groups_path
     else
