@@ -26,7 +26,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li class="<%= 'active' if current_page?(admin_path) %>"><%= link_to 'General Settings', admin_path %></li>
-                <!-- <li class="<%#= 'active' if current_page?(admin_users_path) %>"><%#= link_to 'User Management', admin_users_path %></li> -->
+                <li class="<%= 'active' if current_page?(admin_users_path) %>"><%= link_to 'User Management', admin_users_path %></li>
                 <li class="<%= 'active' if current_page?(institutions_path) %>"><%= link_to 'Institutions', institutions_path %></li>
                 <li role="separator" class="divider"></li>
                 <li class="<%= 'active' if current_page?(users_path) %>"><%= link_to 'All Users', users_path %></li>

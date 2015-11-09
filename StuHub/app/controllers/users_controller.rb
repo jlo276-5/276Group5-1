@@ -72,6 +72,38 @@ class UsersController < ApplicationController
     end
   end
 
+  def promote
+    @user = User.find_by id:params[:id]
+    if (current_user.superuser? and !@user.superuser?) or (current_user.admin? and !@user.admin?)
+      @user.role += 1
+      if @user.save
+        flash[:success] = "Promoted #{@user.name} to #{@user.role_string_long}"
+      else
+        flash[:danger] = "Could not promote User"
+      end
+      redirect_to admin_users_path
+    else
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to home_path
+    end
+  end
+
+  def demote
+    @user = User.find_by id:params[:id]
+    if (!@user.more_powerful(true, current_user) and @user.role > 0)
+      @user.role -= 1
+      if @user.save
+        flash[:success] = "Demoted #{@user.name} to #{@user.role_string_long}"
+      else
+        flash[:danger] = "Could not demote #{@user.name}"
+      end
+      redirect_to admin_users_path
+    else
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to home_path
+    end
+  end
+
   def update
     @user = User.find_by id:params[:id]
     if (@user.nil?)

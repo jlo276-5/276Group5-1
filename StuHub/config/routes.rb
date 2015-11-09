@@ -38,7 +38,7 @@ Rails.application.routes.draw do
 
   # Routes for Administration
   get 'admin', to: 'admin#index'
-  # get 'admin/users', to: 'admin#users'
+  get 'admin/users', to: 'admin#user_management'
   resources :institutions, only: [:show]
   scope '/admin' do
     resources :institutions, only: [:new, :index, :create, :edit, :update, :destroy]
@@ -56,6 +56,8 @@ Rails.application.routes.draw do
   get 'register' => 'users#new'
   resources :users, only: [:index, :create, :show, :edit, :update, :destroy] do
     member do
+      post 'promote'
+      post 'demote'
       get 'courses'
       get 'groups'
       get 'customize'

@@ -14,12 +14,12 @@ class User < ActiveRecord::Base
   before_save   :downcase_email
   before_create :create_activation_digest
   ## check name exist and length
-   validates :name,  presence: true, length: { maximum: 50 }
-
-   validates :tos_agree, acceptance: true
+  validates :name, presence: true, length: { maximum: 50 }
+  validates :tos_agree, acceptance: true
+  validates :role, numericality: {only_integer: true, less_than_or_equal_to: 0, less_than_or_equal_to: 2}
 
   ## check email format
-    VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   ## check email exist and length
    validates :email, presence: true, length: { maximum: 255 },
@@ -118,13 +118,13 @@ class User < ActiveRecord::Base
   # Strings
   def role_string_long
     if self.role == 0
-      return "Standard&nbsp;User".html_safe
+      return "Standard User"
     elsif self.role == 1
       return "Administrator"
     elsif self.role == 2
-      return "Super&nbsp;User".html_safe
+      return "Super User"
     else
-      return "Unknown&nbsp;Role".html_safe
+      return "Unknown Role"
     end
   end
 
