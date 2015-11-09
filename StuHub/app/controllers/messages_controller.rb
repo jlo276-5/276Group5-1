@@ -12,6 +12,12 @@ class MessagesController < ApplicationController
         @channel = "/courses/#{params[:message][:channel_id]}/messages"
       elsif params[:message][:channel_type].to_i == 2
         @channel = "/groups/#{params[:message][:channel_id]}/messages"
+      elsif params[:message][:channel_type].to_i == 3
+        @channel = "/posts/new"
+      elsif params[:message][:channel_type].to_i == 5
+        @channel = "/courses/#{params[:message][:channel_id]}/posts"
+      elsif params[:message][:channel_type].to_i == 6
+        @channel = "/groups/#{params[:message][:channel_id]}/posts"
       end
       PrivatePub.publish_to(@channel, message: @message)
     end
