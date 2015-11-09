@@ -3,9 +3,19 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # Routes for groups
+  resources :group_membership_requests, as: 'gm_request', only: [:new, :create] do
+    member do
+      post 'approve_request', to: 'group_membership_requests#approve'
+      post 'reject_request', to: 'group_membership_requests#reject'
+    end
+  end
   resources :group_memberships, only: [:destroy, :create]
   resources :groups do
     member do
+      post 'kick_member', to: 'groups#kick_member'
+      post 'promote_member', to: 'groups#promote_member'
+      post 'demote_member', to: 'groups#demote_member'
+      get 'requests', to: 'groups#group_requests'
       get 'users', to: 'groups#group_members'
     end
     collection do

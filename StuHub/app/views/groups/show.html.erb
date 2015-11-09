@@ -5,20 +5,22 @@
   <li class="active"><%= @group.name %></li>
 </ol>
 
-<div class="row">
-  <div class="col-xs-12 col-sm-8">
-    <h1><%= @group.name %></h1>
+<h1><%= @group.name %></h1>
 
-    <% if !@group.description.blank? %>
-      <p><%= markdown(@group.description) %></p>
-    <% end %>
-  </div>
-  <div class="col-xs-12 col-sm-4">
-    <%= link_to "Users", users_group_path(@group), class: "btn btn-primary btn-block", role: "button" %>
-  </div>
-</div>
+<% if !@group.description.blank? %>
+  <p><%= markdown(@group.description) %></p>
+<% end %>
 
 <hr>
+
+<div class="row">
+  <div class="col-xs-6">
+    <%= link_to "Group Management", edit_group_path(@group), class: "btn btn-primary btn-block", role: "button" %>
+  </div>
+  <div class="col-xs-6">
+    <%= link_to "Group Members", users_group_path(@group), class: "btn btn-primary btn-block", role: "button" %>
+  </div>
+</div>
 
 <%= render partial: 'messages/interface', locals: {chat_channel_type: @chat_channel_type,
                                                    post_channel_type: @post_channel_type,

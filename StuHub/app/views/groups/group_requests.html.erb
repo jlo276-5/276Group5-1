@@ -1,0 +1,59 @@
+<% provide(:title, "Requests - #{@group.name}") %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1 class="panel-title">Membership Requests</h1>
+  </div>
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1" style="text-align: center;">
+      <% if !@group.limited %>
+        <h4>Join Approvals not required for this Group</h4>
+      <% else %>
+        <%= will_paginate @requests, style: 'margin: 0;' %><br>
+        <%= page_entries_info @requests if @requests.count > 0 %>
+      <% end %>
+    </div>
+  </div>
+  <% if @group.limited %>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover" id="requests">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Description</ht>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% if @requests.count <= 0 %>
+            <tr>
+              <td colspan="3" style="text-align: center;">No Pending Requests</td>
+            </tr>
+          <% else %>
+            <% @requests.each do |r| %>
+              <tr>
+                <td><%= link_to r.user.name, r.user %><br><small><strong>Requested:</strong> <%= r.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></small></td>
+                <td><%= r.request_message %></td>
+                <td>
+                  <div class="row" style="min-width: 200px;">
+                    <div class="col-xs-6">
+                      <% if current_user.adminOfGroup?(@group) %>
+                        <%= link_to "Approve", approve_request_gm_request_path(r), method: "post", class: "btn btn-success btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to approve this request?" }  %>
+                      <% end %>
+                    </div>
+                    <div class="col-xs-6">
+                      <% if current_user.adminOfGroup?(@group) %>
+                        <%= link_to "Reject", reject_request_gm_request_path(r), method: "post", class: "btn btn-warning btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to reject this request?" }  %>
+                      <% end %>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

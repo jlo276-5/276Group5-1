@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :courses, through: :course_memberships
   has_many :group_memberships, dependent: :destroy
   has_many :groups, through: :group_memberships
+  has_many :group_membership_requests, dependent: :destroy
   accepts_nested_attributes_for :privacy_setting
   accepts_nested_attributes_for :user_interests, allow_destroy: true
 
@@ -156,6 +157,11 @@ class User < ActiveRecord::Base
 
   def memberOfGroup?(group)
     return !self.groups.find_by(id: group.id).nil?
+  end
+
+  def adminOfGroup?(group)
+    gm = self.group_memberships.find_by(group_id: group.id)
+    return (!gm.nil? and gm.role == 1)
   end
 
   private

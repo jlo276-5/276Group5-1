@@ -8,6 +8,9 @@ class GroupMembershipsController < ApplicationController
     if !user.groups.find_by(id: group.id).nil?
       flash[:warning] = "You are already a member of this group."
       redirect_to group_path(group)
+    elsif group.limited
+      flash[:info] = "This Group requires Join Approvals."
+      redirect_to new_gm_request_path(group_id: group.id, user_id: user.id)
     else
       @gm = GroupMembership.new(group: group, user: user)
       @gm.join_date = DateTime.now

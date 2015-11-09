@@ -4,4 +4,6 @@ class GroupMembership < ActiveRecord::Base
 
   validates_associated :user
   validates_associated :group
+
+  validates :role, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 1}
 end

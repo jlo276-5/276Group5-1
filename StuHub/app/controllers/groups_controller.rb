@@ -1,8 +1,7 @@
 class GroupsController < ApplicationController
-  before_action :valid_group, only: [:show, :edit, :update, :destroy]
-  before_action :verify_membership, only: [:show, :edit, :update, :destroy]
-  before_action :group_owner, only: [:destroy]
-  before_action :group_admin, only: [:edit, :update]
+  before_action :verify_membership, only: [:show, :edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
+  before_action :group_admin, only: [:edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
+  layout 'group_admin', only: [:edit, :group_members, :group_requests]
 
   def new
     @group = Group.new
@@ -33,7 +32,52 @@ class GroupsController < ApplicationController
 
   def group_members
     @group = Group.find_by(id: params[:id])
-    @users = @group.users.paginate(page: params[:page], per_page: 25).order('created_at ASC')
+    @members = @group.group_memberships.paginate(page: params[:page], per_page: 25).order('created_at ASC')
+  end
+
+  def group_requests
+    @group = Group.find_by(id: params[:id])
+    @requests = @group.group_membership_requests.paginate(page: params[:page], per_page: 25).order('created_at ASC')
+  end
+
+  def promote_member
+    gm = GroupMembership.find_by(id: params[:gm_id])
+    if gm.role == 0
+      gm.role += 1
+      if gm.save
+        flash[:success] = "Promoted #{gm.user.name} to Administrator in this Group"
+      else
+        flash[:danger] = "Could not promote #{gm.user.name}"
+      end
+    else
+      flash[:danger] = "#{gm.user.name} is already an Administrator"
+    end
+    redirect_to users_group_path(gm.group)
+  end
+
+  def demote_member
+    gm = GroupMembership.find_by(id: params[:gm_id])
+    if gm.role == 1
+      gm.role -= 1
+      if gm.save
+        flash[:success] = "Demoted #{gm.user.name} to Administrator in this Group"
+      else
+        flash[:danger] = "Could not demote #{gm.user.name}"
+      end
+    else
+      flash[:danger] = "#{gm.user.name} is not an Administrator"
+    end
+    redirect_to users_group_path(gm.group)
+  end
+
+  def kick_member
+    gm = GroupMembership.find_by(id: params[:gm_id])
+    if gm.destroy
+      flash[:success] = "Kicked #{gm.user.name} from this Group"
+    else
+      flash[:danger] = "Could not kick #{gm.user.name}"
+    end
+    redirect_to users_group_path(gm.group)
   end
 
   def create
@@ -56,7 +100,7 @@ class GroupsController < ApplicationController
     @group = Group.find_by(id: params[:id])
     if @group.update_attributes(group_params)
       flash[:success] = "Group updated."
-      redirect_to @group
+      redirect_to edit_group_path(@group)
     else
       render 'edit'
     end
@@ -83,29 +127,20 @@ class GroupsController < ApplicationController
 
   def verify_membership
     group = Group.find_by(id: params[:id])
-    if group and !current_user.memberOfGroup?(group)
+    if group.nil?
+      flash[:danger] = "No such group exists with an id #{params[:id]}"
+      redirect_to groups_path
+    elsif !current_user.memberOfGroup?(group)
       flash[:danger] = "You are not a member of this group yet."
       redirect_to groups_path
     end
   end
 
   def group_admin
-    unless false
-
-    end
-  end
-
-  def group_owner
-    unless false
-
-    end
-  end
-
-  def valid_group
-    @group = Group.find_by(id: params[:id])
-    if @group.nil?
-      flash[:danger] = "No such group exists with an id #{params[:id]}"
-      redirect_to groups_path
+    group = Group.find_by(id: params[:id])
+    unless current_user.adminOfGroup?(group)
+      flash[:danger] = "You are not an admininstrator of this group."
+      redirect_to group
     end
   end
 end

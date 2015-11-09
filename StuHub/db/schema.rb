@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109111612) do
+ActiveRecord::Schema.define(version: 20151109142144) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,8 +80,19 @@ ActiveRecord::Schema.define(version: 20151109111612) do
 
   add_index "exams", ["section_id"], name: "index_exams_on_section_id", using: :btree
 
+  create_table "group_membership_requests", force: :cascade do |t|
+    t.string   "request_message"
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "group_membership_requests", ["group_id"], name: "index_group_membership_requests_on_group_id", using: :btree
+  add_index "group_membership_requests", ["user_id", "group_id"], name: "index_group_membership_requests_on_user_id_and_group_id", unique: true, using: :btree
+  add_index "group_membership_requests", ["user_id"], name: "index_group_membership_requests_on_user_id", using: :btree
+
   create_table "group_memberships", force: :cascade do |t|
-    t.datetime "join_date"
     t.integer  "role",       default: 0
     t.integer  "user_id"
     t.integer  "group_id"
@@ -245,6 +256,8 @@ ActiveRecord::Schema.define(version: 20151109111612) do
   add_foreign_key "courses", "departments"
   add_foreign_key "departments", "terms"
   add_foreign_key "exams", "sections"
+  add_foreign_key "group_membership_requests", "groups"
+  add_foreign_key "group_membership_requests", "users"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
   add_foreign_key "instructors", "sections"
