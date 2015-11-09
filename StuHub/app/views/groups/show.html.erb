@@ -10,7 +10,7 @@
     <h1><%= @group.name %></h1>
 
     <% if !@group.description.blank? %>
-      <p><%= @group.description %></p>
+      <p><%= markdown(@group.description) %></p>
     <% end %>
   </div>
   <div class="col-xs-12 col-sm-4">

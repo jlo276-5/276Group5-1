@@ -20,7 +20,7 @@
               <small><span style="float: right" class="message_created_at"><%= "#{message.created_at.strftime("%x") + " " if message.created_at.in_time_zone < Date.today} #{message.created_at.strftime("%l:%m:%S %p")}" %></span></small>
             </h4>
             <!-- Does not handle long words well. -->
-            <span class="message_content"><%= message.content %></span>
+            <span class="message_content"><%= markdown(message.content) %></span>
           </div>
         </div>
       </div>

@@ -14,10 +14,6 @@ gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
-#gems for real-time chat
-gem 'nifty-generators'
-gem 'private_pub', :git => 'https://github.com/PeritusSolutions/private_pub.git'
-gem 'thin'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -44,6 +40,14 @@ gem 'bootstrap-will_paginate'
 
 # REST Client for access to REST APIs
 gem 'rest-client'
+
+#gems for real-time chat
+gem 'nifty-generators'
+gem 'private_pub', :git => 'https://github.com/PeritusSolutions/private_pub.git'
+gem 'thin'
+
+# redcarpet for markdown support
+gem 'redcarpet', '~> 3.3.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

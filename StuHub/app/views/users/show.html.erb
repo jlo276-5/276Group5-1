@@ -21,7 +21,7 @@
       <div class="row profile_fields">
         <% if @user.privacy_setting.display_about_me or current_user?(@user) or current_user.admin? %>
           <div class="col-xs-12 col-sm-3 profile_fields_header">About Me:</div>
-          <div class="col-xs-12 col-sm-9" style="white-space: pre;"><%= @user.about_me.blank? ? "&nbsp;".html_safe : (simple_format @user.about_me) %></div>
+          <div class="col-xs-12 col-sm-9" style="white-space: pre;"><%= @user.about_me.blank? ? "&nbsp;".html_safe : markdown(@user.about_me) %></div>
         <% end %>
         <% if (@user.privacy_setting.display_birthday and !@user.birthday.nil?) or current_user?(@user) or current_user.admin? %>
           <div class="col-xs-12 col-sm-3 profile_fields_header">Birthday:</div>
