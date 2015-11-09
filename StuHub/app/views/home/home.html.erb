@@ -70,7 +70,7 @@
             <h1 class="panel-title">Schedule</h1>
           </div>
           <ul class="list-group">
-            <% current_user.course_memberships.each do |cm| %>
+            <% (current_user.course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
               <% cm.sections.each do |s| %>
                 <li class="list-group-item">
                   <% course = s.associated_class.course %>
