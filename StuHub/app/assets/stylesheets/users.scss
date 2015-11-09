@@ -1,3 +1,16 @@
 // Place all the styles related to the Users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.profile_fields_header {
+  font-weight: bold;
+}
+@media(min-width: 768px) {
+  .profile_fields_header {
+    text-align: right;
+  }
+}
+
+.profile_fields > div {
+  margin-bottom: 10px;
+}

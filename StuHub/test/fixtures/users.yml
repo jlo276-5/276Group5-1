@@ -4,33 +4,61 @@ superman:
   name: Superman
   email: superman@example.ca
   password_digest: <%= User.digest('password') %>
-  role: 2
   activated: true
   activated_at: <%= Time.zone.now %>
+  role: 2
+  last_active_at: <%= Time.zone.now %>
+  major: B.Sc. Major in Being Super
+  about_me: Superman is super.
+  website: http://www.google.com
+  birthday: <%= Date.today %>
+  gender: 1
+  institution: institution
 
 superwoman:
   name: Superwoman
   email: superwoman@example.ca
   password_digest: <%= User.digest('password') %>
-  role: 2
   activated: true
   activated_at: <%= Time.zone.now %>
+  role: 2
+  last_active_at: <%= Time.zone.now %>
+  major: B.Sc. Major in Being Super
+  about_me: Superwoman is supreme.
+  website: https://www.google.com
+  birthday: <%= Date.today %>
+  gender: 2
+  institution: institution
 
 michael:
   name: Michael Example
   email: michael@example.com
   password_digest: <%= User.digest('password') %>
-  role: 1
   activated: true
   activated_at: <%= Time.zone.now %>
+  role: 1
+  last_active_at: <%= Time.zone.now %>
+  major: B.BA. Major in Administration
+  about_me: Michael leiks caik.
+  website: http://www.yahoo.com
+  birthday: <%= Date.today %>
+  gender: 0
+  institution: institution
 
 archer:
   name: Sterling Archer
   email: duchess@example.gov
   password_digest: <%= User.digest('password') %>
-  role: 1
   activated: true
   activated_at: <%= Time.zone.now %>
+  role: 2
+  last_active_at: <%= Time.zone.now %>
+  major: B.BA. Major in Administration
+  about_me: Sterling says let them eat cake.
+  website: http://www.bing.com
+  birthday: <%= Date.today %>
+  gender: 0
+  institution: institution
 
 lana:
   name: Lana Kane
@@ -38,6 +66,14 @@ lana:
   password_digest: <%= User.digest('password') %>
   activated: true
   activated_at: <%= Time.zone.now %>
+  role: 0
+  last_active_at: <%= Time.zone.now %>
+  major: B.A. Major in Eating
+  about_me: LANA WANTS CANDY.
+  website: https://encrypted.google.com
+  birthday: <%= Date.today %>
+  gender: 2
+  institution: institution
 
 mallory:
   name: Mallory Archer
@@ -45,6 +81,14 @@ mallory:
   password_digest: <%= User.digest('password') %>
   activated: true
   activated_at: <%= Time.zone.now %>
+  role: 0
+  last_active_at: <%= Time.zone.now %>
+  major: B.A. Major in Failing
+  about_me: Mallory has had thirty fails in the past day.
+  website: http://www.example.com
+  birthday: <%= Date.today %>
+  gender: 1
+  institution: institution
 
 <% 30.times do |n| %>
 user_<%= n %>:
@@ -53,4 +97,12 @@ user_<%= n %>:
   password_digest: <%= User.digest('password') %>
   activated: true
   activated_at: <%= Time.zone.now %>
+  role: 0
+  last_active_at: <%= Time.zone.now %>
+  major: High School Diploma
+  about_me: Just another user.
+  website: http://www.example.com/<%= "user#{n}" %>
+  birthday: <%= Date.today %>
+  gender: 0
+  institution: institution
 <% end %>

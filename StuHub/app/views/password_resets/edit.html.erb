@@ -10,7 +10,7 @@
   <div class="col-sm-8 col-sm-offset-2">
     <div style="margin: 10px 0;">
       <%= form_for(@user, url: password_reset_path(params[:id])) do |f| %>
-        <%= render 'shared/error_messages' %>
+      <%= render partial: 'shared/error_messages', locals: {obj: @user} %>
 
         <%= hidden_field_tag :email, @user.email %>
 

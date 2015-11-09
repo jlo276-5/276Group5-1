@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
+  before_action :check_privacy,  only: [:show, :edit, :customize, :courses, :groups]
 
   ## Use 'find' method to show certain user
   def show
@@ -29,6 +30,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       @user.send_activation_email
+      @user.privacy_setting = PrivacySetting.new
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
     else
@@ -59,6 +61,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def customize
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    elsif !current_user?(@user) and !current_user.more_powerful(true, @user)
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to @user
+    end
+  end
+
   def update
     @user = User.find_by id:params[:id]
     if (@user.nil?)
@@ -67,18 +80,59 @@ class UsersController < ApplicationController
     elsif !current_user?(@user) and !current_user.more_powerful(true, @user)
       flash[:danger] = "You do not have the permission to do that."
       redirect_to @user
-    elsif @user.update_attributes(user_params)
-      flash[:success] = "Profile Updated"
-      redirect_to @user
+    elsif params[:user].has_key?(:name)
+      user = @user.try(:authenticate, params[:current_password])
+      if !user && !current_user.more_powerful(true, @user)
+        @user.errors[:current_password] = 'is incorrect.'
+        render 'edit'
+      elsif (user || current_user.more_powerful(true, @user)) && @user.update_attributes(user_params)
+        flash[:success] = "Account Settings Updated"
+        redirect_to @user
+      else
+        render 'edit'
+      end
+    elsif params[:user].has_key?(:time_zone)
+      if @user.update_attributes(customization_params)
+        flash[:success] = "Profile Updated"
+        redirect_to @user
+      else
+        render 'customize'
+      end
     else
-      render 'edit'
+      render 'show'
+    end
+  end
+
+  def courses
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    elsif !current_user?(@user) and !@user.privacy_setting.display_courses and !current_user.more_powerful(true, @user)
+      flash[:danger] = "You do not have the permission to view that."
+      redirect_to @user
+    end
+  end
+
+  def groups
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    elsif !current_user?(@user) and !@user.privacy_setting.display_groups and !current_user.more_powerful(true, @user)
+      flash[:danger] = "You do not have the permission to view that."
+      redirect_to @user
     end
   end
 
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :time_zone)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :institution_id)
+    end
+
+    def customization_params
+      params.require(:user).permit(:major, :about_me, :website, :birthday, :gender, :time_zone, privacy_setting_attributes: [:id, :display_institution, :display_major, :display_about_me, :display_email, :display_website, :display_birthday, :display_gender, :display_courses, :display_groups])
     end
 
     # Filters
@@ -105,6 +159,13 @@ class UsersController < ApplicationController
       unless (current_user.admin? or current_user.superuser?)
         flash[:danger] = "You do not have the permission to do that."
         redirect_to(users_url)
+      end
+    end
+
+    def check_privacy
+      @user = User.find_by id:params[:id]
+      if @user and @user.privacy_setting.nil?
+        @user.privacy_setting = PrivacySetting.new
       end
     end
 end
