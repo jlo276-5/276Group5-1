@@ -28,13 +28,13 @@
             <h1 class="panel-title">Groups</h1>
           </div>
           <div class="list-group">
-            <%# if @user.groups %>
-              <%#= @user.groups do |group| %>
-                <!-- <a href="#" class="list-group-item"><%#= display group %></a> -->
-              <%# end %>
-            <%# else %>
-              <span class="list-group-item">No Groups</span>
-            <%# end %>
+            <% current_user.groups.each do |group| %>
+              <%= link_to group.name, group, class: 'list-group-item' %>
+            <% end %>
+            <%= link_to groups_url, class: 'list-group-item' do %>
+              <span class="badge"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></span>
+              All Groups
+            <% end %>
           </div>
         </div>
       </div>

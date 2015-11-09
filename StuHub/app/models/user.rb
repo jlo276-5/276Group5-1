@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   has_many :user_interests, dependent: :destroy
   has_many :course_memberships, dependent: :destroy
   has_many :courses, through: :course_memberships
+  has_many :group_memberships, dependent: :destroy
+  has_many :groups, through: :group_memberships
   accepts_nested_attributes_for :privacy_setting
   accepts_nested_attributes_for :user_interests, allow_destroy: true
 
@@ -150,6 +152,10 @@ class User < ActiveRecord::Base
 
   def memberOfCourse?(course)
     return !self.courses.find_by(id: course.id).nil?
+  end
+
+  def memberOfGroup?(group)
+    return !self.groups.find_by(id: group.id).nil?
   end
 
   private

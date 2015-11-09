@@ -2,6 +2,14 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
+  # Routes for groups
+  resources :group_memberships, only: [:destroy, :create]
+    resources :groups do
+    collection do
+      get 'search', to: 'groups#search'
+    end
+  end
+
   # Routes for Messages
   resources :messages, only: [:create]
 
