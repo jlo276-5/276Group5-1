@@ -11,9 +11,7 @@
         <div class="panel-body">
           <div class="media">
             <div class="media-left media-middle">
-              <a href="#">
-                <%= gravatar_for user, size: 64, class: 'media-object img-rounded' %>
-              </a>
+              <% link_to user do %><%= gravatar_for user, size: 64, class: 'media-object img-rounded' %><% end %>
             </div>
             <div class="media-body">
               <h4 class="media-heading"><%= link_to user.name, user %> <small><%= user.role_string_long %><% if current_user.admin? %><%= ", #{user.email}" %><% end %></small></h4>
