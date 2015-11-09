@@ -1,4 +1,5 @@
 class CoursesController < ApplicationController
+  before_action :verify_membership, only: [:show]
   require 'rest-client'
   require 'date'
 
@@ -81,7 +82,10 @@ class CoursesController < ApplicationController
       get_course_api(@course)
     end
 
-    @messages = Message.where(channel_type: 1, channel_id: @course.id).limit(30)
+    @chat_channel_type = 1;
+    @post_channel_type = 4;
+    @messages = Message.where(channel_type: @chat_channel_type, channel_id: @course.id).last(30)
+    @posts = Message.where(channel_type: @post_channel_type, channel_id: @course.id).last(30)
   end
 
   private
@@ -313,5 +317,15 @@ class CoursesController < ApplicationController
     end
 
     return course
+  end
+
+  private
+
+  def verify_membership
+    course = Course.find_by(id: params[:id])
+    if course and !current_user.memberOfCourse?(course)
+      flash[:danger] = "You are not a member of this course yet."
+      redirect_to get_info_course_path(course)
+    end
   end
 end
