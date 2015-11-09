@@ -1,4 +1,5 @@
 class CoursesController < ApplicationController
+  before_action :valid_course, only: [:show, :info, :course_members]
   before_action :verify_membership, only: [:show]
   require 'rest-client'
   require 'date'
@@ -63,24 +64,14 @@ class CoursesController < ApplicationController
   def info
     @course = Course.find_by(id: params[:id])
     @cm = current_user.course_memberships.find_by(course_id: @course.id)
-    if @course.nil?
-      flash[:danger] = "No course exists with an id #{params[:id]}."
-      redirect_to courses_url
-    else
-      get_course_api(@course)
-    end
+
+    get_course_api(@course)
   end
 
   def show
     @course = Course.find_by(id: params[:id])
-    if @course.nil?
-      flash[:danger] = "No course exists with an id #{params[:id]}."
-      redirect_to courses_url
-    elsif !current_user.memberOfCourse?(@course)
-      redirect_to get_info_course_path(@course)
-    else
-      get_course_api(@course)
-    end
+
+    get_course_api(@course)
 
     @chat_channel_type = 1;
     @post_channel_type = 4;
@@ -320,6 +311,14 @@ class CoursesController < ApplicationController
   end
 
   private
+
+  def valid_course
+    @course = Course.find_by(id: params[:id])
+    if @course.nil?
+      flash[:danger] = "No such course exists with an id #{params[:id]}"
+      redirect_to courses_path
+    end
+  end
 
   def verify_membership
     course = Course.find_by(id: params[:id])
