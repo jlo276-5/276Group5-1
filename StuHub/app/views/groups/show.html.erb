@@ -1,10 +1,22 @@
-<% provide(:title, @group.name) %>
+<% provide(:title, "#{@group.name}") %>
 
-<h1><%= @group.name %></h1>
+<ol class="breadcrumb">
+  <li><%= link_to 'Groups', groups_path %></li>
+  <li class="active"><%= @group.name %></li>
+</ol>
 
-<% if !@group.description.blank? %>
-  <p><%= @group.description %></p>
-<% end %>
+<div class="row">
+  <div class="col-xs-12 col-sm-8">
+    <h1><%= @group.name %></h1>
+
+    <% if !@group.description.blank? %>
+      <p><%= @group.description %></p>
+    <% end %>
+  </div>
+  <div class="col-xs-12 col-sm-4">
+    <%= link_to "Users", users_group_path(@group), class: "btn btn-primary btn-block", role: "button" %>
+  </div>
+</div>
 
 <hr>
 

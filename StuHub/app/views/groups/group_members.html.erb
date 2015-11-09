@@ -1,0 +1,17 @@
+<% provide(:title, "#{@group.name}'s Members") %>
+
+<ol class="breadcrumb">
+  <li><%= link_to 'Groups', groups_path %></li>
+  <li><%= link_to @group.name, @group %></li>
+  <li class="active">Members</li>
+</ol>
+
+<div class="row">
+  <div class="col-xs-10 col-xs-offset-1" style="text-align: center">
+    <h1><%= @group.name %></h1>
+  </div>
+</div>
+
+<hr>
+
+<%= render partial: 'users/list' %>

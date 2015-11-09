@@ -12,11 +12,18 @@
 
 <hr>
 
+<div class="row">
+  <div class="col-xs-6">
+    <%= link_to "Course Info", get_info_course_path(@course), class: "btn btn-primary btn-block", role: "button" %>
+  </div>
+  <div class="col-xs-6">
+    <%= link_to "Course Members", users_course_path(@course), class: "btn btn-primary btn-block", role: "button" %>
+  </div>
+</div>
+
 <%= render partial: 'messages/interface', locals: {chat_channel_type: @chat_channel_type,
                                                    post_channel_type: @post_channel_type,
                                                    channel_id: @course.id, nav: false, obj: nil, obj_name: ''} %>
 
 <%= subscribe_to "/courses/#{@course.id}/messages" %>
 <%= subscribe_to "/courses/#{@course.id}/posts" %>
-
-<%= link_to "Course Info", get_info_course_path(@course), class: "btn btn-primary btn-block", role: "button" %>

@@ -29,7 +29,11 @@ class GroupsController < ApplicationController
     @post_channel_type = 5;
     @messages = Message.where(channel_type: @chat_channel_type, channel_id: @group.id).last(30)
     @posts = Message.where(channel_type: @post_channel_type, channel_id: @group.id).last(30)
+  end
 
+  def group_members
+    @group = Group.find_by(id: params[:id])
+    @users = @group.users.paginate(page: params[:page], per_page: 25).order('created_at ASC')
   end
 
   def create

@@ -79,6 +79,11 @@ class CoursesController < ApplicationController
     @posts = Message.where(channel_type: @post_channel_type, channel_id: @course.id).last(30)
   end
 
+  def course_members
+    @course = Course.find_by(id: params[:id])
+    @users = @course.users.paginate(page: params[:page], per_page: 25).order('created_at ASC')
+  end
+
   private
 
   def get_terms_api(year)

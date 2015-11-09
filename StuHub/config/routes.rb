@@ -4,7 +4,10 @@ Rails.application.routes.draw do
 
   # Routes for groups
   resources :group_memberships, only: [:destroy, :create]
-    resources :groups do
+  resources :groups do
+    member do
+      get 'users', to: 'groups#group_members'
+    end
     collection do
       get 'search', to: 'groups#search'
     end
@@ -23,6 +26,7 @@ Rails.application.routes.draw do
   end
   resources :courses, only: [:index, :show] do
     member do
+      get 'users', to: 'courses#course_members'
       get 'info', to: 'courses#info', as: 'get_info'
     end
     collection do
