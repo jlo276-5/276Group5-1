@@ -5,8 +5,11 @@
 body {
   height: 100%;
 }
-.chat-panel > div.panel-body {
+.message_panel > div.panel-body {
   padding: 8px;
+}
+.message_content img {
+  width: 100%;
 }
 .messenger_column {
   margin-bottom: 16px;

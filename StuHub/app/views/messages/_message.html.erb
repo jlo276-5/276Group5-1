@@ -6,17 +6,19 @@
   <% else %>
   <div class="col-xs-10 col-md-8 <%= 'col-xs-offset-2 col-md-offset-4' if user and current_user?(user) %>">
   <% end %>
-    <div class="panel panel-default chat-panel">
+    <div class="panel panel-default message_panel">
       <div class="panel-body">
         <div class="media">
           <div class="media-left media-top">
-            <a href="#">
-              <%= gravatar_for user, size: 44, class: 'media-object img-rounded' unless user.nil?%>
-            </a>
+            <% if user.nil? %>
+              <%= image_tag 'https://secure.gravatar.com/avatar/?s=200', width: 54, class: 'media-object media-middle img-rounded' %>
+            <% else %>
+              <%= link_to user, target: '_blank' do %><%= gravatar_for user, size: 54, class: 'media-object media-middle img-rounded' %><% end %>
+            <% end %>
           </div>
-          <div class="media-body">
+          <div class="media-body message_content">
             <h4 class="media-heading">
-              <span class="message_created_at"><%= user.nil? ? "Unknown" : user.name %></span>
+              <span class="message_created_at"><%= user.nil? ? "Unknown" : (link_to user.name, user, target: '_blank') %></span>
               <small><span style="float: right" class="message_created_at"><%= "#{message.created_at.strftime("%x") + " " if message.created_at.in_time_zone < Date.today} #{message.created_at.strftime("%l:%m:%S %p")}" %></span></small>
             </h4>
             <!-- Does not handle long words well. -->
