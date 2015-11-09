@@ -27,7 +27,17 @@ class GroupMembershipsController < ApplicationController
   def destroy
     gm = GroupMembership.find(params[:id])
     gm.destroy
-    flash[:success] = "Group Membership Destroyed"
+    if gm.group.group_memberships.size == 0
+      gm.group.destroy
+      flash[:success] = "The Group #{gm.group.name} was deleted because there were no more members left."
+    elsif gm.group.admin_users.size == 0
+      gm_n = gm.group.group_memberships.first
+      gm_n.role = 1
+      gm_n.save
+      flash[:success] = "Left Group #{gm.group.name}, set #{gm_n.user.name} as new Administrator."
+    else
+      flash[:success] = "Left Group #{gm.group.name}"
+    end
     redirect_to groups_path
   end
 

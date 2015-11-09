@@ -79,7 +79,7 @@ class UsersController < ApplicationController
       if @user.save
         flash[:success] = "Promoted #{@user.name} to #{@user.role_string_long}"
       else
-        flash[:danger] = "Could not promote User"
+        flash[:danger] = "Could not promote #{@user.name}"
       end
       redirect_to admin_users_path
     else

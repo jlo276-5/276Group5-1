@@ -60,7 +60,14 @@ class GroupsController < ApplicationController
     if gm.role == 1
       gm.role -= 1
       if gm.save
-        flash[:success] = "Demoted #{gm.user.name} to Administrator in this Group"
+        if gm.group.admin_users.size == 0
+          gm_n = gm.group.group_memberships.first
+          gm_n.role = 1
+          gm_n.save
+          flash[:success] = "Demoted #{gm.user.name} to Member in this Group, set #{gm_n.user.name} as new Administrator."
+        else
+          flash[:success] = "Demoted #{gm.user.name} to Member in this Group"
+        end
       else
         flash[:danger] = "Could not demote #{gm.user.name}"
       end
@@ -84,8 +91,10 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
     @group.creator = current_user.name
     if @group.save
-      @group.users << current_user
-      flash[:info] = "Group created."
+      @gm = GroupMembership.new(group: @group, user: current_user)
+      @gm.role = 1
+      @gm.save
+      flash[:success] = "Group created. You are now the Administrator."
       redirect_to @group
     else
       render 'new'

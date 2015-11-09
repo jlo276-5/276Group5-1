@@ -5,4 +5,8 @@ class Group < ActiveRecord::Base
 
   validates :name, presence: true
   validates :creator, presence: true
+
+  def admin_users
+    self.group_memberships.where(role: 1)
+  end
 end
