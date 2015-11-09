@@ -7,12 +7,12 @@
 
 cmptone:
   number: 1
-  course: cmpt
+  course: courseone
 
 cmpttwo:
   number: 2
-  course: cmpt
+  course: courseone
 
 macmone:
   number: 1
-  course: macm
+  course: coursetwo

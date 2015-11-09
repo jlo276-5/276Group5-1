@@ -70,17 +70,21 @@
             <h1 class="panel-title">Schedule</h1>
           </div>
           <ul class="list-group">
-            <% (current_user.course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
-              <% cm.sections.each do |s| %>
-                <li class="list-group-item">
-                  <% course = s.associated_class.course %>
-                  <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %></h4>
-                  <p class="list-group-item-text">
-                    <% s.section_times.each do |st| %>
-                      <%= "#{st.days} #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')}" %><br>
-                    <% end %>
-                  </p>
-                </li>
+            <% if current_user.course_memberships.size <= 0 %>
+              <li class="list-group-item">No Schedules</li>
+            <% else %>
+              <% (current_user.course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
+                <% cm.sections.each do |s| %>
+                  <li class="list-group-item">
+                    <% course = s.associated_class.course %>
+                    <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %></h4>
+                    <p class="list-group-item-text">
+                      <% s.section_times.each do |st| %>
+                        <%= "#{st.days} #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')}" %><br>
+                      <% end %>
+                    </p>
+                  </li>
+                <% end %>
               <% end %>
             <% end %>
           </ul>

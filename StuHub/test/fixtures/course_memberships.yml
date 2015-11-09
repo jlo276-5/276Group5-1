@@ -8,26 +8,26 @@ one:
   join_date: <%= Time.zone.now %>
   role: 0
   user: superman
-  course: one
+  course: courseone
   sections: cmptoneone
 
 two:
   join_date: <%= Time.zone.now %>
   role: 0
   user: michael
-  course: one
+  course: courseone
   sections: cmptoneone, cmptonetwo
 
 three:
   join_date: <%= Time.zone.now %>
   role: 0
   user: archer
-  course: two
+  course: coursetwo
   sections: macmoneone, macmonetwo
 
 four:
   join_date: <%= Time.zone.now %>
   role: 0
   user: superwoman
-  course: one
+  course: courseone
   sections: cmpttwoone

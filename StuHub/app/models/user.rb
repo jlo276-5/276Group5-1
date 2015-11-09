@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   ## check name exist and length
   validates :name, presence: true, length: { maximum: 50 }
   validates :tos_agree, acceptance: true
-  validates :role, numericality: {only_integer: true, less_than_or_equal_to: 0, less_than_or_equal_to: 2}
+  validates :role, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2}
 
   ## check email format
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -161,7 +161,7 @@ class User < ActiveRecord::Base
   private
 
     def validate_email_domain
-      unless !self.institution_id.blank? and !self.email.blank? and (self.email.ends_with?("@" + Institution.find(self.institution_id).email_constraint) or self.email.ends_with?("." + Institution.find(self.institution_id).email_constraint))
+      unless self.institution_id.nil? or (!self.institution_id.blank? and !self.email.blank? and (self.email.ends_with?("@" + Institution.find(self.institution_id).email_constraint) or self.email.ends_with?("." + Institution.find(self.institution_id).email_constraint)))
         errors.add(:email, "contains an invalid domain for the selected institution")
       end
     end
