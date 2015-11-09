@@ -4,10 +4,12 @@
   <div class="panel-heading">
     <h1 class="panel-title">User Management</h1>
   </div>
-  <div class="row">
-    <div class="col-xs-10 col-xs-offset-1" style="text-align: center;">
-      <%= will_paginate @users, style: 'margin: 0;' %><br>
-      <%= page_entries_info @users %>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-10 col-xs-offset-1" style="text-align: center;">
+        <%= will_paginate @users, style: 'margin: 0;' %><br>
+        <%= page_entries_info @users %>
+      </div>
     </div>
   </div>
   <div class="table-responsive">
@@ -28,28 +30,26 @@
           <% @users.each do |user| %>
             <tr>
               <td><%= link_to user.name, user %><br><small><%= user.role_string_long %></small></td>
-              <td>
-                <div class="row" style="min-width: 400px;">
-                  <div class="col-xs-3">
-                    <% if current_user?(user) or current_user.more_powerful(true, user) %>
-                      <%= link_to "Edit", edit_user_path(user), class: "btn btn-primary btn-block btn-sm", role: "button" %>
-                    <% end %>
-                  </div>
-                  <div class="col-xs-3">
-                    <% if (current_user.superuser? and !user.superuser?) or (current_user.admin? and !user.admin?) %>
-                      <%= link_to "Promote", promote_user_path(user), method: "post", class: "btn btn-success btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to promote this user?" }  %>
-                    <% end %>
-                  </div>
-                  <div class="col-xs-3">
-                    <% if (!user.more_powerful(true, current_user) and user.role > 0) %>
-                      <%= link_to "Demote", demote_user_path(user), method: "post", class: "btn btn-warning btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to demote this user?" }  %>
-                    <% end %>
-                  </div>
-                  <div class="col-xs-3">
-                    <% if (current_user.superuser? and !user.superuser?) %>
-                      <%= link_to "Delete", user_path(user), method: "delete", class: "btn btn-danger btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to delete this user?" } %>
-                    <% end %>
-                  </div>
+              <td style="min-width: 400px;">
+                <div class="col-xs-3">
+                  <% if current_user?(user) or current_user.more_powerful(true, user) %>
+                    <%= link_to "Edit", edit_user_path(user), class: "btn btn-primary btn-block btn-sm", role: "button" %>
+                  <% end %>
+                </div>
+                <div class="col-xs-3">
+                  <% if (current_user.superuser? and !user.superuser?) or (current_user.admin? and !user.admin?) %>
+                    <%= link_to "Promote", promote_user_path(user), method: "post", class: "btn btn-success btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to promote this user?" }  %>
+                  <% end %>
+                </div>
+                <div class="col-xs-3">
+                  <% if (!user.more_powerful(true, current_user) and user.role > 0) %>
+                    <%= link_to "Demote", demote_user_path(user), method: "post", class: "btn btn-warning btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to demote this user?" }  %>
+                  <% end %>
+                </div>
+                <div class="col-xs-3">
+                  <% if (current_user.superuser? and !user.superuser?) %>
+                    <%= link_to "Delete", user_path(user), method: "delete", class: "btn btn-danger btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to delete this user?" } %>
+                  <% end %>
                 </div>
               </td>
             </tr>
