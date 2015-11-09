@@ -1,4 +1,29 @@
-<li>
-  <span class="created_at"><%= message.created_at.strftime("%H:%M") %></span>
-  <%= message.content %>
-</li>
+<% user = (User.exists?(id: message.user_id) ? User.find(message.user_id) : nil) %>
+
+<div class="row">
+  <% if message.isPost? %>
+  <div class="col-xs-12">
+  <% else %>
+  <div class="col-xs-10 col-md-8 <%= 'col-xs-offset-2 col-md-offset-4' if user and current_user?(user) %>">
+  <% end %>
+    <div class="panel panel-default chat-panel">
+      <div class="panel-body">
+        <div class="media">
+          <div class="media-left media-top">
+            <a href="#">
+              <%= gravatar_for user, size: 44, class: 'media-object img-rounded' unless user.nil?%>
+            </a>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">
+              <span class="message_created_at"><%= user.nil? ? "Unknown" : user.name %></span>
+              <small><span class="message_created_at"><%= message.created_at.strftime("%H:%M") %></span></small>
+            </h4>
+            <!-- Does not handle long words well. -->
+            <span class="message_content"><%= message.content %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
