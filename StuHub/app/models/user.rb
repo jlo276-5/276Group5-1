@@ -4,6 +4,9 @@ class User < ActiveRecord::Base
   has_many :user_interests, dependent: :destroy
   has_many :course_memberships, dependent: :destroy
   has_many :courses, through: :course_memberships
+  has_many :group_memberships, dependent: :destroy
+  has_many :groups, through: :group_memberships
+  has_many :group_membership_requests, dependent: :destroy
   accepts_nested_attributes_for :privacy_setting
   accepts_nested_attributes_for :user_interests, allow_destroy: true
 
@@ -12,19 +15,19 @@ class User < ActiveRecord::Base
   before_save   :downcase_email
   before_create :create_activation_digest
   ## check name exist and length
-   validates :name,  presence: true, length: { maximum: 50 }
-
-   validates :tos_agree, acceptance: true
+  validates :name, presence: true, length: { maximum: 50 }
+  validates :tos_agree, acceptance: true
+  validates :role, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2}
 
   ## check email format
-    VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   ## check email exist and length
    validates :email, presence: true, length: { maximum: 255 },
                       format: { with: VALID_EMAIL_REGEX },
                       uniqueness: { case_sensitive: false }
 
-  validate :validate_email_domain
+  validate :validate_email_domain, on: :create
 
   ##activate
   def activate
@@ -116,13 +119,13 @@ class User < ActiveRecord::Base
   # Strings
   def role_string_long
     if self.role == 0
-      return "Standard&nbsp;User".html_safe
+      return "Standard User"
     elsif self.role == 1
       return "Administrator"
     elsif self.role == 2
-      return "Super&nbsp;User".html_safe
+      return "Super User"
     else
-      return "Unknown&nbsp;Role".html_safe
+      return "Unknown Role"
     end
   end
 
@@ -152,10 +155,19 @@ class User < ActiveRecord::Base
     return !self.courses.find_by(id: course.id).nil?
   end
 
+  def memberOfGroup?(group)
+    return !self.groups.find_by(id: group.id).nil?
+  end
+
+  def adminOfGroup?(group)
+    gm = self.group_memberships.find_by(group_id: group.id)
+    return (!gm.nil? and gm.role == 1)
+  end
+
   private
 
     def validate_email_domain
-      unless !self.institution_id.blank? and !self.email.blank? and (self.email.ends_with?("@" + Institution.find(self.institution_id).email_constraint) or self.email.ends_with?("." + Institution.find(self.institution_id).email_constraint))
+      unless self.institution_id.nil? or (!self.institution_id.blank? and !self.email.blank? and (self.email.ends_with?("@" + Institution.find(self.institution_id).email_constraint) or self.email.ends_with?("." + Institution.find(self.institution_id).email_constraint)))
         errors.add(:email, "contains an invalid domain for the selected institution")
       end
     end

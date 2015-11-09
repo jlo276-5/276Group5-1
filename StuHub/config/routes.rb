@@ -2,6 +2,27 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
+  # Routes for groups
+  resources :group_membership_requests, as: 'gm_request', only: [:new, :create] do
+    member do
+      post 'approve_request', to: 'group_membership_requests#approve'
+      post 'reject_request', to: 'group_membership_requests#reject'
+    end
+  end
+  resources :group_memberships, only: [:destroy, :create]
+  resources :groups do
+    member do
+      post 'kick_member', to: 'groups#kick_member'
+      post 'promote_member', to: 'groups#promote_member'
+      post 'demote_member', to: 'groups#demote_member'
+      get 'requests', to: 'groups#group_requests'
+      get 'users', to: 'groups#group_members'
+    end
+    collection do
+      get 'search', to: 'groups#search'
+    end
+  end
+
   # Routes for Messages
   resources :messages, only: [:create]
 
@@ -15,6 +36,7 @@ Rails.application.routes.draw do
   end
   resources :courses, only: [:index, :show] do
     member do
+      get 'users', to: 'courses#course_members'
       get 'info', to: 'courses#info', as: 'get_info'
     end
     collection do
@@ -26,7 +48,7 @@ Rails.application.routes.draw do
 
   # Routes for Administration
   get 'admin', to: 'admin#index'
-  # get 'admin/users', to: 'admin#users'
+  get 'admin/users', to: 'admin#user_management'
   resources :institutions, only: [:show]
   scope '/admin' do
     resources :institutions, only: [:new, :index, :create, :edit, :update, :destroy]
@@ -44,6 +66,8 @@ Rails.application.routes.draw do
   get 'register' => 'users#new'
   resources :users, only: [:index, :create, :show, :edit, :update, :destroy] do
     member do
+      post 'promote'
+      post 'demote'
       get 'courses'
       get 'groups'
       get 'customize'

@@ -1,0 +1,84 @@
+<div class="row" style="margin-bottom: 8px;">
+  <div class="col-sm-8" style="text-align: center; margin-bottom: 20px;">
+    <%= will_paginate @groups %><br>
+    <%= page_entries_info @groups %>
+  </div>
+  <div class="col-sm-4">
+    <%= form_tag search_groups_path, method: :get, class: 'form-horizontal' do %>
+      <%= text_field_tag :search, params[:search], placeholder: 'Search', class: 'form-control' %>
+      <%= submit_tag "Go", class: 'form-control', style: 'visibility: hidden; position: absolute', tabindex: '-1' %>
+    <% end %>
+    <br>
+    <%= link_to "Create New", new_group_path, class: "btn btn-primary btn-block", role: "button" %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover" id="users">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Created By</th>
+            <th>Last Post</th>
+            <th>User Count</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% if @groups.count <= 0 %>
+            <tr>
+              <td colspan="5" style="text-align: center;">No Groups</td>
+            </tr>
+          <% else %>
+            <% @groups.each do |group| %>
+              <tr>
+                <td><%= link_to group.name, group %></td>
+                <td><%= group.creator %></td>
+                <td><%= Message.where(channel_type: 5, channel_id: group.id).last.nil? ? "Never" : Message.where(channel_type: 5, channel_id: group.id).last.created_at.in_time_zone.strftime("%b %d, %l:%M %p") %></td>
+                <td><%= group.users.size %></td>
+                <td>
+                  <div class="row" style="min-width: 300px;">
+                    <% @gm = current_user.group_memberships.find_by(group_id: group.id) %>
+                    <% if @gm.nil? %>
+                      <div class="col-xs-12"><%= link_to "Join", group_memberships_path(user_id: current_user.id, group_id: group.id), method: "post", class: "btn btn-primary btn-block", role: "button" %></div>
+                    <% else %>
+                      <div class="<%= @gm.role == 1 ? "col-xs-4" : "col-xs-12" %>"><%= link_to "Leave", group_membership_path(@gm), method: "delete", class: "btn btn-warning btn-block btn-xs", role: "button", data: { confirm: "Are you sure you want to leave this group?" } %></div>
+                      <% if @gm.role == 1 %>
+                        <div class="col-xs-4"><%= link_to "Edit", edit_group_path(@gm.group), class: "btn btn-primary btn-block btn-xs", role: "button" %></div>
+                        <div class="col-xs-4"><%= link_to "Delete", group_path(@gm.group), method: "delete", class: "btn btn-danger btn-block btn-xs", role: "button", data: { confirm: "Are you sure you want to delete this group?" } %></div>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12" style="text-align: center">
+    <%= will_paginate @groups %>
+  </div>
+</div>
+
+<%# This gets cut off in bootstrap tables, use if can fix %>
+<!-- <div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Actions <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <%# @gm = current_user.course_memberships.find_by(course_id: group.id) %>
+    <%# if @gm.nil? %>
+      <li><%#= link_to "Join", group_memberships_path(user_id: current_user.id, group_id: group.id), method: "post" %></li>
+    <%# else %>
+      <li><%#= link_to "Leave", group_membership_path(@gm), method: "delete", data: { confirm: "Are you sure you want to leave this group?" } %></li>
+    <%# end %>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div> -->

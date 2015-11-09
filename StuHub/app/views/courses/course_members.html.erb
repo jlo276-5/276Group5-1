@@ -1,0 +1,20 @@
+<% provide(:title, "#{@course.department.name}#{@course.number}'s Members") %>
+
+<ol class="breadcrumb">
+  <li><%= link_to 'Courses', courses_path %></li>
+  <li><%= link_to @course.department.term.year.number, courses_path(year: @course.department.term.year.id) %></li>
+  <li><%= link_to @course.department.term.name, courses_path(year: @course.department.term.year.id, term: @course.department.term.id) %></li>
+  <li><%= link_to @course.department.name, courses_path(year: @course.department.term.year.id, term: @course.department.term.id, department: @course.department.id) %></li>
+  <li><%= link_to "#{@course.department.name} #{@course.number}", course_path(@course) %></li>
+  <li class="active">Members</li>
+</ol>
+
+<div class="row">
+  <div class="col-xs-10 col-xs-offset-1" style="text-align: center">
+    <h1><%= "#{@course.department.name}#{@course.number} - #{@course.name}" %> <small><%= "#{@course.department.term.name} #{@course.department.term.year.number}" %></small></h1>
+  </div>
+</div>
+
+<hr>
+
+<%= render partial: 'users/list' %>

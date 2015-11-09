@@ -16,7 +16,8 @@
     </div>
     <div class="collapse navbar-collapse" id="navbar-content">
       <ul class="nav navbar-nav">
-        <!-- Insert Left Nav Bar Links -->
+        <li class="<%= 'active' if current_page?(courses_path) %>"><%= link_to 'Courses', courses_path %></li>
+        <li class="<%= 'active' if current_page?(groups_path) %>"><%= link_to 'Groups', groups_path %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="<%= 'active' if current_page?(help_path) %>"><%= link_to 'Help', help_path %></li>
@@ -26,7 +27,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li class="<%= 'active' if current_page?(admin_path) %>"><%= link_to 'General Settings', admin_path %></li>
-                <!-- <li class="<%#= 'active' if current_page?(admin_users_path) %>"><%#= link_to 'User Management', admin_users_path %></li> -->
+                <li class="<%= 'active' if current_page?(admin_users_path) %>"><%= link_to 'User Management', admin_users_path %></li>
                 <li class="<%= 'active' if current_page?(institutions_path) %>"><%= link_to 'Institutions', institutions_path %></li>
                 <li role="separator" class="divider"></li>
                 <li class="<%= 'active' if current_page?(users_path) %>"><%= link_to 'All Users', users_path %></li>
@@ -38,7 +39,10 @@
               <%= gravatar_for current_user, size: 20, class: 'img-rounded' %>&nbsp;&nbsp;<%= current_user.name %> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'User Profile', current_user %></li>
+              <li class="<%= 'active' if current_page?(courses_user_path(current_user)) %>"><%= link_to 'Your Courses', courses_user_path(current_user) %></li>
+              <li class="<%= 'active' if current_page?(groups_user_path(current_user)) %>"><%= link_to 'Your Groups', groups_user_path(current_user) %></li>
+              <li role="separator" class="divider"></li>
+              <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Your Profile', current_user %></li>
               <li class="<%= 'active' if current_page?(edit_user_path(current_user)) %>"><%= link_to 'Account Settings', edit_user_path(current_user) %></li>
               <li role="separator" class="divider"></li>
               <li><%= link_to 'Logout', logout_path, method: "delete" %></li>

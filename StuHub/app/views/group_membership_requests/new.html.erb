@@ -1,0 +1,36 @@
+<% provide(:title, 'Group Membership Request') %>
+
+<div class="row">
+  <div class="col-xs-12" style="text-align: center;">
+    <h2>Group Membership Request</h2>
+    To join this group, you must send a request to the administrators.
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1">
+    <div style="margin: 10px 0;">
+      <%= form_for(@gmr, url: gm_request_index_path, html: {class: 'form-horizontal'}) do |f| %>
+        <%= render partial: 'shared/error_messages', locals: {obj: @gmr} %>
+
+        <%= f.hidden_field :group_id, value:   params[:group_id] %>
+        <div class="form-group">
+          <%= f.label :group, 'Group', class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-8 col-md-9">
+            <%= text_field_tag :group, "#{@group.name}", class: 'form-control', disabled: true %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label :request_message, 'Message', class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-8 col-md-9">
+            <%= f.text_field :request_message, class: 'form-control', placeholder: 'Message to Group Administrators' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            <%= f.submit 'Send', class: "btn btn-primary btn-block", id: 'submit_btn' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

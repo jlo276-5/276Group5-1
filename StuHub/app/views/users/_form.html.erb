@@ -54,6 +54,9 @@
       <%= f.label :institution_id, class: 'col-sm-4 col-md-3 control-label' %>
       <div class="col-sm-8 col-md-9">
         <%= f.collection_select :institution_id, Institution.all.order('name ASC'), :id, :name, {}, {class: 'form-control'} %>
+        <% if !current_page?(root_path) %>
+          <span id="helpBlock" class="help-block">Note: The email used for registration must match domains specified by the institution.</span>
+        <% end %>
       </div>
     </div>
     <div class="form-group" style="text-align: center;">
@@ -72,6 +75,15 @@
     </div>
   <% end %>
   <% if !current_page?(root_path) and !current_page?(register_path) and !(controller.action_name == "create" or controller.action_name == "new") and !current_user.more_powerful(true, @user) %>
+    <div class="form-group" style="text-align: center;">
+      <% if @user.superuser? %>
+        You will need to use your super powers to delete your account.
+      <% elsif @user.admin? %>
+        Contact a Super User if you would like to delete your account.
+      <% else %>
+        Contact an Administrator if you would like to delete your account.
+      <% end %>
+    </div>
     <hr>
     <div class="form-group" style="text-align: center;">
       Changing any of these settings requires your current password.
