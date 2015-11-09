@@ -13,7 +13,6 @@ class GroupMembershipsController < ApplicationController
       redirect_to new_gm_request_path(group_id: group.id, user_id: user.id)
     else
       @gm = GroupMembership.new(group: group, user: user)
-      @gm.join_date = DateTime.now
       if @gm.save
         flash[:success] = "Group Membership Created"
         redirect_to group_path(group)
