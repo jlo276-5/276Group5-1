@@ -56,7 +56,7 @@ class InstitutionsController < ApplicationController
       flash[:danger] = "No institution exists with an id #{params[:id]}."
     else
       institution.destroy
-      flash[:success] = "User Deleted"
+      flash[:success] = "Institution Deleted"
     end
     redirect_to institutions_path
   end

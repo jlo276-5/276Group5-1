@@ -17,7 +17,7 @@
         </thead>
         <% (@user.group_memberships.sort {|a,b| a.name <=> b.name}).each do |gm| %>
           <tr>
-            <td><%= link_to gm.group.name, gm.group %><br><small style="white-space: pre;">Joined: <%= gm.join_date.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></td>
+            <td><%= link_to gm.group.name, gm.group %><br><small style="white-space: pre;">Joined: <%= gm.join_date.nil? ? "Unknown" : gm.join_date.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></td>
             <% if current_user?(@user) %>
               <td><%= link_to "Delete", group_membership_path(gm), method: "delete", class: "btn btn-danger btn-block", role: "button", data: { confirm: "Are you sure you want to leave this group?" } %></td>
             <% end %>
