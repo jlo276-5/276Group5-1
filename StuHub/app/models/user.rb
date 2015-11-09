@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
                       format: { with: VALID_EMAIL_REGEX },
                       uniqueness: { case_sensitive: false }
 
-  validate :validate_email_domain
+  validate :validate_email_domain, on: :create
 
   ##activate
   def activate
