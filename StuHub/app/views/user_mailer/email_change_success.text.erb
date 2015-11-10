@@ -1,0 +1,10 @@
+<% provide(:email_title, 'Account Email Change Successful') %>
+
+This is to notify that the email for your account has been changed.
+
+From now on, log in with your new email (<%= CGI::escape(@user.email) %>)
+
+If you did not request this email change, please contact us immediately.
+
+You should also verify that other accounts which may use the same email address
+and/or password have not been compromised.
