@@ -33,6 +33,10 @@ gem 'puma'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+
+gem 'fullcalendar-rails'
+
+
 # Bootstrap and Pagination
 gem 'bootstrap-sass', '~> 3.3.5'
 gem 'will_paginate'
