@@ -1,7 +1,10 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  user_id: 
+psone:
+  user: superuser
 
-two:
-  user_id: 
+pstwo:
+  user: michael
+  display_courses: false
+  display_groups: false
+  display_major: false

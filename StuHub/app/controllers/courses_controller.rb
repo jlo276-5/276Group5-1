@@ -328,7 +328,7 @@ class CoursesController < ApplicationController
   def verify_membership
     course = Course.find_by(id: params[:id])
     if course and !current_user.memberOfCourse?(course)
-      flash[:danger] = "You are not a member of this course yet."
+      flash[:warning] = "You are not a member of this course yet."
       redirect_to get_info_course_path(course)
     end
   end
