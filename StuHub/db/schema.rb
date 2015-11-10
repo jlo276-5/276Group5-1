@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20151109205050) do
+=======
+ActiveRecord::Schema.define(version: 20151109142144) do
+>>>>>>> aca501b7ac63e5f54a326de2e47ae7d82d1dc9af
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +29,26 @@ ActiveRecord::Schema.define(version: 20151109205050) do
 
   add_index "associated_classes", ["course_id"], name: "index_associated_classes_on_course_id", using: :btree
   add_index "associated_classes", ["number", "course_id"], name: "index_associated_classes_on_number_and_course_id", unique: true, using: :btree
+
+  create_table "course_memberships", force: :cascade do |t|
+    t.datetime "join_date"
+    t.integer  "role",       default: 0
+    t.integer  "user_id"
+    t.integer  "course_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "course_memberships", ["course_id"], name: "index_course_memberships_on_course_id", using: :btree
+  add_index "course_memberships", ["user_id", "course_id"], name: "index_course_memberships_on_user_id_and_course_id", unique: true, using: :btree
+  add_index "course_memberships", ["user_id"], name: "index_course_memberships_on_user_id", using: :btree
+
+  create_table "course_memberships_sections", id: false, force: :cascade do |t|
+    t.integer "course_membership_id", null: false
+    t.integer "section_id",           null: false
+  end
+
+  add_index "course_memberships_sections", ["course_membership_id", "section_id"], name: "index_cms_on_cm_id_and_section_id", unique: true, using: :btree
 
   create_table "courses", force: :cascade do |t|
     t.string   "name"
@@ -69,6 +93,53 @@ ActiveRecord::Schema.define(version: 20151109205050) do
 
   add_index "exams", ["section_id"], name: "index_exams_on_section_id", using: :btree
 
+  create_table "group_membership_requests", force: :cascade do |t|
+    t.string   "request_message"
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "group_membership_requests", ["group_id"], name: "index_group_membership_requests_on_group_id", using: :btree
+  add_index "group_membership_requests", ["user_id", "group_id"], name: "index_group_membership_requests_on_user_id_and_group_id", unique: true, using: :btree
+  add_index "group_membership_requests", ["user_id"], name: "index_group_membership_requests_on_user_id", using: :btree
+
+  create_table "group_memberships", force: :cascade do |t|
+    t.integer  "role",       default: 0
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "group_memberships", ["group_id"], name: "index_group_memberships_on_group_id", using: :btree
+  add_index "group_memberships", ["user_id", "group_id"], name: "index_group_memberships_on_user_id_and_group_id", unique: true, using: :btree
+  add_index "group_memberships", ["user_id"], name: "index_group_memberships_on_user_id", using: :btree
+
+  create_table "groups", force: :cascade do |t|
+    t.string   "name"
+    t.string   "creator"
+    t.boolean  "limited",     default: false
+    t.text     "description"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "groups", ["name"], name: "index_groups_on_name", using: :btree
+
+  create_table "institutions", force: :cascade do |t|
+    t.string   "name"
+    t.string   "state"
+    t.string   "country"
+    t.string   "email_constraint"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.string   "website"
+    t.string   "image"
+    t.string   "city"
+  end
+
   create_table "instructors", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -83,6 +154,34 @@ ActiveRecord::Schema.define(version: 20151109205050) do
   end
 
   add_index "instructors", ["section_id"], name: "index_instructors_on_section_id", using: :btree
+
+  create_table "messages", force: :cascade do |t|
+    t.text     "content"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "user_id"
+    t.integer  "channel_type", default: 0, null: false
+    t.integer  "channel_id",   default: 0, null: false
+  end
+
+  add_index "messages", ["channel_type", "channel_id"], name: "index_messages_on_channel_type_and_channel_id", using: :btree
+
+  create_table "privacy_settings", force: :cascade do |t|
+    t.boolean  "display_institution", default: true
+    t.boolean  "display_major",       default: true
+    t.boolean  "display_about_me",    default: true
+    t.boolean  "display_email",       default: false
+    t.boolean  "display_website",     default: true
+    t.boolean  "display_birthday",    default: false
+    t.boolean  "display_gender",      default: false
+    t.boolean  "display_courses",     default: true
+    t.boolean  "display_groups",      default: true
+    t.integer  "user_id"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "privacy_settings", ["user_id"], name: "index_privacy_settings_on_user_id", using: :btree
 
   create_table "section_times", force: :cascade do |t|
     t.string   "building"
@@ -122,6 +221,16 @@ ActiveRecord::Schema.define(version: 20151109205050) do
   add_index "terms", ["name", "year_id"], name: "index_terms_on_name_and_year_id", unique: true, using: :btree
   add_index "terms", ["year_id"], name: "index_terms_on_year_id", using: :btree
 
+  create_table "user_interests", force: :cascade do |t|
+    t.string   "interest"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "user_interests", ["interest"], name: "index_user_interests_on_interest", using: :btree
+  add_index "user_interests", ["user_id"], name: "index_user_interests_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
@@ -137,9 +246,16 @@ ActiveRecord::Schema.define(version: 20151109205050) do
     t.integer  "role",              default: 0
     t.datetime "last_active_at"
     t.string   "time_zone",         default: "Pacific Time (US & Canada)"
+    t.string   "major",             default: ""
+    t.text     "about_me",          default: ""
+    t.string   "website",           default: ""
+    t.date     "birthday"
+    t.integer  "gender",            default: 0
+    t.integer  "institution_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["institution_id"], name: "index_users_on_institution_id", using: :btree
 
   create_table "years", force: :cascade do |t|
     t.string   "number"
@@ -148,11 +264,19 @@ ActiveRecord::Schema.define(version: 20151109205050) do
   end
 
   add_foreign_key "associated_classes", "courses"
+  add_foreign_key "course_memberships", "courses"
+  add_foreign_key "course_memberships", "users"
   add_foreign_key "courses", "departments"
   add_foreign_key "departments", "terms"
   add_foreign_key "exams", "sections"
+  add_foreign_key "group_membership_requests", "groups"
+  add_foreign_key "group_membership_requests", "users"
+  add_foreign_key "group_memberships", "groups"
+  add_foreign_key "group_memberships", "users"
   add_foreign_key "instructors", "sections"
+  add_foreign_key "privacy_settings", "users"
   add_foreign_key "section_times", "sections"
   add_foreign_key "sections", "associated_classes"
   add_foreign_key "terms", "years"
+  add_foreign_key "user_interests", "users"
 end

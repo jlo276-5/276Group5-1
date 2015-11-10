@@ -1,7 +1,4 @@
-[StuHub] Account Activation for <%= @user.email %>
-================================================================
-
-Hi <%= @user.name %>,
+<% provide(:email_title, 'Account Activation for ' + @user.email) %>
 
 An account for <%= @user.email %> has been created on StuHub.
 
@@ -10,5 +7,3 @@ Go to the following url to activate the account:
 <%= edit_account_activation_url(@user.activation_token, email: @user.email) %>
 
 If you did not create an account, please disregard this message.
-
-Thank you for using StuHub.

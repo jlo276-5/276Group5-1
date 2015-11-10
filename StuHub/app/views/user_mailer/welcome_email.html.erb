@@ -1,15 +1,9 @@
-<h1>[StuHub] Welcome to StuHub!</h1>
+<% provide(:email_title, 'Welcome to StuHub!') %>
 
-<hr>
-
-<h3>Hi <%= @user.name %>,</h3>
-
-<p>Welcome to StuHub! Please customize <%= link_to "Your Profile", user_url(@user) %> when you have time.</p>
+<p>Welcome to StuHub! Please customize <%= link_to "your profile", user_url(@user) %> when you have time.</p>
 
 <p>Your account details are as follows:</p>
 
 <p>Name: <%= @user.name %><br>Email: <%= @user.email %></p>
 
 <p>Click here to login to your account now: <%= link_to "Login", login_url %></p>
-
-<h3>On behalf of all of us at StuHub, we thank you for using StuHub.</h3>

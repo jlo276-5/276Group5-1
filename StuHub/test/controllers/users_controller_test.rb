@@ -28,28 +28,40 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to login_url
   end
 
-  test "should redirect update when standard updates any other" do
+  test "should error when updating without current password as standard" do
     log_in_as(@user)
 
     patch :update, id: @user, user: { name: @user.name, email: @user.email }
-    assert_redirected_to user_url(@user)
+    assert_template 'users/edit'
+    assert_select 'div[id=?]', 'error_explanation'
+  end
+
+  test "should update when updating current with current password" do
+    log_in_as(@user)
+
+    patch :update, id: @user, user: { name: @user.name, email: @user.email }, current_password: "password"
+    assert_redirected_to @user
     assert_not flash.empty?
     assert flash[:success]
     flash.clear
+end
 
-    patch :update, id: @other_user, user: { name: @other_user.name, email: @other_user.email }
+  test "should redirect update when standard updates any other" do
+    log_in_as(@user)
+
+    patch :update, id: @other_user, user: { name: @other_user.name, email: @other_user.email }, current_password: "password"
     assert_redirected_to users_url
     assert_not flash.empty?
     assert flash[:danger]
     flash.clear
 
-    patch :update, id: @admin_user, user: { name: @admin_user.name, email: @admin_user.email }
+    patch :update, id: @admin_user, user: { name: @admin_user.name, email: @admin_user.email }, current_password: "password"
     assert_redirected_to users_url
     assert_not flash.empty?
     assert flash[:danger]
     flash.clear
 
-    patch :update, id: @super_user, user: { name: @super_user.name, email: @super_user.email }
+    patch :update, id: @super_user, user: { name: @super_user.name, email: @super_user.email }, current_password: "password"
     assert_redirected_to users_url
     assert_not flash.empty?
     assert flash[:danger]
@@ -65,7 +77,7 @@ class UsersControllerTest < ActionController::TestCase
     assert flash[:success]
     flash.clear
 
-    patch :update, id: @admin_user, user: { name: @admin_user.name, email: @admin_user.email }
+    patch :update, id: @admin_user, user: { name: @admin_user.name, email: @admin_user.email }, current_password: "password"
     assert_redirected_to user_url(@admin_user)
     assert_not flash.empty?
     assert flash[:success]
@@ -99,7 +111,7 @@ class UsersControllerTest < ActionController::TestCase
     assert flash[:success]
     flash.clear
 
-    patch :update, id: @super_user, user: { name: @super_user.name, email: @super_user.email }
+    patch :update, id: @super_user, user: { name: @super_user.name, email: @super_user.email }, current_password: "password"
     assert_redirected_to user_url(@super_user)
     assert_not flash.empty?
     assert flash[:success]

@@ -1,0 +1,29 @@
+<% content_for :content do %>
+
+<ol class="breadcrumb">
+  <li><%= link_to 'Groups', groups_path %></li>
+  <li><%= link_to @group.name, @group %></li>
+  <li class="active">Group Management</li>
+</ol>
+
+<div class="row">
+  <div class="col-sm-9 col-sm-push-3">
+    <%= yield %>
+  </div>
+  <div class="col-sm-3 col-sm-pull-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title">Group Management</h1>
+      </div>
+      <div class="list-group">
+        <%= link_to 'Edit Group', edit_group_path(@group), class: "list-group-item #{'active' if current_page?(edit_group_path(@group))}" if current_user.adminOfGroup?(@group) %>
+        <%= link_to 'User Management', users_group_path(@group), class: "list-group-item #{'active' if current_page?(users_group_path(@group))}" %>
+        <%= link_to 'Requests', requests_group_path(@group), class: "list-group-item #{'active' if current_page?(requests_group_path(@group))}" if current_user.adminOfGroup?(@group) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% end %>
+
+<%= render template: "layouts/application" %>

@@ -1,45 +1,29 @@
 <% provide(:title, "#{@course.department.name}#{@course.number}") %>
 
+<ol class="breadcrumb">
+  <li><%= link_to 'Courses', courses_path %></li>
+  <li><%= link_to @course.department.term.year.number, courses_path(year: @course.department.term.year.id) %></li>
+  <li><%= link_to @course.department.term.name, courses_path(year: @course.department.term.year.id, term: @course.department.term.id) %></li>
+  <li><%= link_to @course.department.name, courses_path(year: @course.department.term.year.id, term: @course.department.term.id, department: @course.department.id) %></li>
+  <li class="active"><%= "#{@course.department.name} #{@course.number}" %></li>
+</ol>
+
 <h1><%= "#{@course.department.name}#{@course.number} - #{@course.name}" %> <small><%= "#{@course.department.term.name} #{@course.department.term.year.number}" %></small></h1>
 
 <hr>
 
-<% @course.associated_classes.order('number ASC').each do |ac| %>
-  <h4>Section Group <%= ac.sections.first.key %></h4>
-  <table border="1">
-  <% ac.sections.order('key ASC').each do |s| %>
-    <tr>
-      <td>Section <%= s.key %></td>
-      <td>
-        <% if s.section_times.length == 0 %>
-          No Known Schedules<br>
-        <% else %>
-          <% s.section_times.each do |st| %>
-            <%= "#{s.code} from #{st.start_time.in_time_zone.strftime('%I:%M %p')} to #{st.end_time.in_time_zone.strftime('%I:%M %p')} on #{st.days} in #{st.building} #{st.room} at #{st.campus}" %>
-            <% if st = s.section_times.last %>
-              <br>
-            <% end %>
-          <% end %>
-        <% end %>
-        <% if s.exams.length == 0 %>
-          No Known Exams<br>
-        <% else %>
-          <% s.exams.each do |e| %>
-            <%= "EXAM on #{e.exam_start.strftime("%D")} from #{e.exam_start.in_time_zone.strftime('%I:%M %p')} to #{e.exam_end.in_time_zone.strftime('%I:%M %p')} in #{e.building} #{e.room} at #{e.campus}" %>
-            <% if e = s.exams.last %>
-              <br>
-            <% end %>
-          <% end %>
-        <% end %>
-        <% if s.instructors.length == 0 %>
-          No Known Instructors
-        <% else %>
-          <% s.instructors.each do |i| %>
-            <%= "INSTRUCTOR is #{i.first_name} #{i.last_name}, email is #{i.email.blank? ? "Unknown" : i.email}, office is #{i.office.blank? ? "Unknown" : i.office}" %>
-          <% end %>
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
-  </table>
-<% end %>
+<div class="row">
+  <div class="col-xs-6">
+    <%= link_to "Course Info", get_info_course_path(@course), class: "btn btn-primary btn-block", role: "button" %>
+  </div>
+  <div class="col-xs-6">
+    <%= link_to "Course Members", users_course_path(@course), class: "btn btn-primary btn-block", role: "button" %>
+  </div>
+</div>
+
+<%= render partial: 'messages/interface', locals: {chat_channel_type: @chat_channel_type,
+                                                   post_channel_type: @post_channel_type,
+                                                   channel_id: @course.id, nav: false, obj: nil, obj_name: ''} %>
+
+<%= subscribe_to "/courses/#{@course.id}/messages" %>
+<%= subscribe_to "/courses/#{@course.id}/posts" %>

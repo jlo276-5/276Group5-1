@@ -1,0 +1,39 @@
+<% provide(:title, "Courses - #{@user.name}") %>
+
+<% content_for :page_content do %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">Courses</h1>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th width="20%">Number</th>
+            <th width="50%">Name</th>
+            <th width="10%">Sections</th>
+            <% if current_user?(@user) %>
+              <th width="20%"></th>
+            <% end %>
+          </tr>
+        </thead>
+        <% (@user.course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
+          <tr>
+            <td><%= link_to "#{cm.course.department.name} #{cm.course.number}", cm.course %><br><small style="white-space:pre;"><%= "#{cm.course.department.term.name} #{cm.course.department.term.year.number}" %></small></td>
+            <td><%= link_to cm.course.name, cm.course %><br><small style="white-space: pre;">Joined: <%= cm.join_date.nil? ? "Unknown" : cm.join_date.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></td>
+            <td>
+              <% cm.sections.each do |s| %>
+                <%= s.key %>
+              <% end %>
+            </td>
+            <% if current_user?(@user) %>
+              <td><%= link_to "Delete", course_membership_path(cm), method: "delete", class: "btn btn-danger btn-block", role: "button", data: { confirm: "Are you sure you want to drop this course?" } %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<%= render 'profile_template' %>

@@ -27,3 +27,19 @@ Added tests from RoR tutorial, also some custom ones
 ### 2015.10.21
 Created a profile template for Users
 Moved Login and Register forms to partials
+
+### 2015.10.31
+SFU Course API Integration
+TravisCI configuration
+User attributes: last active, time zones
+
+### 2015.11.01 - 2015.11.05
+SFU API usage improvements
+Require current password to change crucial user settings
+Improve display of users and courses
+
+### 2015.11.06 - 2015.11.07
+Add attributes to allow for User Profile editing
+Implemented Course Management for Users: can now add courses and sections
+Privacy Settings for Users to control public profile
+Add framework for adding more institutions

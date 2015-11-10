@@ -1,0 +1,82 @@
+<% if !nav.nil? and nav %>
+  <%= render partial: "shared/messenger_nav", locals: {obj: obj, obj_name: obj_name} %>
+<% end %>
+
+<div class="container-fluid">
+  <div id="messenger_main_container" class="row">
+    <div class="col-xs-12 col-sm-6 messenger_column">
+      <h1>Posts</h1>
+      <hr>
+      <div class="row messenger_view">
+        <div class="col-xs-12" style="height: 100%; overflow: auto;" id="posts">
+          <%= render @posts %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <%= form_for Message.new, remote: true do |f| %>
+            <%= f.hidden_field :user_id, value: current_user.id %>
+            <%= f.hidden_field :channel_type, value: post_channel_type %>
+            <%= f.hidden_field :channel_id, value: channel_id %>
+
+            <div class="row">
+              <div class="col-xs-12 col-sm-8 col-md-9">
+                <%= f.text_area :content, class: 'form-control', rows: 5 %>
+                <span id="helpBlock" class="help-block">Markdown formatting supported. See <a href="https://daringfireball.net/projects/markdown/basics" target="_blank">Guide</a> for help.</span>
+
+              </div>
+              <div class="hidden-xs col-sm-4 col-md-3">
+                <%= f.submit "Send", class: "btn btn-primary btn-block" %>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 8px;">
+              <div class="col-xs-12 hidden-sm hidden-md hidden-lg">
+                <%= f.submit "Send", class: "btn btn-primary btn-block" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 messenger_column">
+      <h1>Messages</h1>
+      <hr>
+      <div class="row messenger_view">
+        <div class="col-xs-12" style="height: 100%; overflow: auto;" id="chat">
+          <%= render @messages %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <%= form_for Message.new, remote: true do |f| %>
+            <%= f.hidden_field :user_id, value: current_user.id %>
+            <%= f.hidden_field :channel_type, value: chat_channel_type %>
+            <%= f.hidden_field :channel_id, value: channel_id %>
+
+            <div class="row">
+              <div class="col-xs-12 col-sm-8 col-md-9">
+                <%= f.text_field :content, class: 'form-control' %>
+                <span id="helpBlock" class="help-block">Markdown formatting supported. See <a href="https://daringfireball.net/projects/markdown/basics" target="_blank">Guide</a> for help.</span>
+              </div>
+              <div class="hidden-xs col-sm-4 col-md-3">
+                <%= f.submit "Send", class: "btn btn-primary btn-block" %>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 8px;">
+              <div class="col-xs-12 hidden-sm hidden-md hidden-lg">
+                <%= f.submit "Send", class: "btn btn-primary btn-block" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#posts").scrollTop($("#posts")[0].scrollHeight)
+  $("#chat").scrollTop($("#chat")[0].scrollHeight)
+});
+</script>

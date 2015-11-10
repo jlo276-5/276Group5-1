@@ -1,10 +1,52 @@
 <% provide(:title, @user.name + "'s Profile") %>
-<% content_for :content do %>
+<% content_for :page_content do %>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h1 class="panel-title">&nbsp;</h1>
+      <h1 class="panel-title">Profile</h1>
     </div>
-    &nbsp;
+    <div class="panel-body">
+      <h4>Education</h4>
+      <div class="row profile_fields">
+        <% if @user.privacy_setting.display_institution or current_user?(@user) or current_user.admin? %>
+          <div class="col-xs-12 col-sm-3 profile_fields_header">Institution:</div>
+          <div class="col-xs-12 col-sm-9"><%= @user.institution.nil? ? "Unknown" : (link_to @user.institution.name, @user.institution) %> <small><%= "#{@user.institution.city}, #{@user.institution.state}, #{@user.institution.country}" if !@user.institution.nil?%></small></div>
+        <% end %>
+        <% if @user.privacy_setting.display_major or current_user?(@user) or current_user.admin? %>
+          <div class="col-xs-12 col-sm-3 profile_fields_header">Major:</div>
+          <div class="col-xs-12 col-sm-9"><%= @user.major.blank? ? "Unknown" : @user.major %></div>
+        <% end %>
+      </div>
+      <hr>
+      <h4>About</h4>
+      <div class="row profile_fields">
+        <% if @user.privacy_setting.display_about_me or current_user?(@user) or current_user.admin? %>
+          <div class="col-xs-12 col-sm-3 profile_fields_header">About Me:</div>
+          <div class="col-xs-12 col-sm-9" style="white-space: pre;"><%= @user.about_me.blank? ? "&nbsp;".html_safe : markdown(@user.about_me) %></div>
+        <% end %>
+        <% if (@user.privacy_setting.display_birthday and !@user.birthday.nil?) or current_user?(@user) or current_user.admin? %>
+          <div class="col-xs-12 col-sm-3 profile_fields_header">Birthday:</div>
+          <div class="col-xs-12 col-sm-9"><%= @user.birthday.nil? ? "Unknown" : @user.birthday.strftime("%b %d") %></div>
+        <% end %>
+        <% if @user.privacy_setting.display_gender or current_user?(@user) or current_user.admin? %>
+          <div class="col-xs-12 col-sm-3 profile_fields_header">Gender:</div>
+          <div class="col-xs-12 col-sm-9"><%= @user.gender_string %></div>
+        <% end %>
+      </div>
+      <hr>
+      <h4>Contact</h4>
+      <div class="row profile_fields">
+        <% if @user.privacy_setting.display_email or current_user?(@user) or current_user.admin? %>
+          <div class="col-xs-12 col-sm-3 profile_fields_header">Email:</div>
+          <div class="col-xs-12 col-sm-9"><%= @user.email %></div>
+        <% end %>
+        <% if (@user.privacy_setting.display_website and !@user.website.blank?) or current_user?(@user) or current_user.admin? %>
+          <div class="col-xs-12 col-sm-3 profile_fields_header">Website:</div>
+          <!-- Need to Sanitize Link <div class="col-xs-12 col-sm-9"><%= @user.website.blank? ? "None" : (link_to "#{@user.website}", @user.website, target: '_blank') %></div>-->
+          <div class="col-xs-12 col-sm-9"><%= @user.website.blank? ? "None" : @user.website %></div>
+        <% end %>
+      </div>
+
+    </div>
   </div>
 <% end %>
 

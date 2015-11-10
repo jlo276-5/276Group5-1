@@ -26,9 +26,6 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     first_page_of_users = User.paginate(page: 1, per_page: 25)
     first_page_of_users.each do |user|
       assert_select 'a[href=?]', user_path(user), text: user.name
-      if (user != @admin and @admin.more_powerful(true, user))
-        assert_select 'a[href=?]', user_path(user), text: 'Delete'
-      end
     end
     assert_difference 'User.count', -1 do
       delete user_path(@standard)
@@ -43,9 +40,6 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     first_page_of_users = User.paginate(page: 1, per_page: 25)
     first_page_of_users.each do |user|
       assert_select 'a[href=?]', user_path(user), text: user.name
-      if (user != @super and @super.more_powerful(true, user))
-        assert_select 'a[href=?]', user_path(user), text: 'Delete'
-      end
     end
     assert_difference 'User.count', -1 do
       delete user_path(@admin)

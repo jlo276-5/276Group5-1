@@ -1,0 +1,27 @@
+// Place all the styles related to the messages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body {
+  height: 100%;
+}
+.message_panel > div.panel-body {
+  padding: 8px;
+}
+.message_content img {
+  width: 100%;
+}
+.messenger_column {
+  margin-bottom: 16px;
+}
+.messenger_view {
+  height: 200px;
+  margin-bottom: 16px;
+}
+@for $i from 1 through 7 {
+  @media (min-height: (500px + ($i * 100px))) {
+  .messenger_view {
+    height: 200px + ($i * 100px);
+  }
+  }
+}

@@ -6,3 +6,4 @@ $('.department_select').append($('<option value="0">Departments</option>'))
 <% @departments.each do |department| %>
   $('.department_select').append($('<option value="<%= department.id %>"><%= department.name %></option>'))
 <% end %>
+$('.department_select').focus()

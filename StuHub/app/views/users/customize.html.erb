@@ -1,0 +1,152 @@
+<% provide(:title, "Edit Profile - #{@user.name}") %>
+
+<% content_for :page_content do %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">Edit Profile</h1>
+    </div>
+    <div class="panel-body">
+
+      <%= form_for(@user, html: {class: 'form-horizontal'}) do |f| %>
+      <%= render partial: 'shared/error_messages', locals: {obj: @user} %>
+
+        <%= f.fields_for :privacy_setting do |p| %>
+        <div class="form-group">
+          <%= f.label :institution, class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-6 col-md-7">
+            <%= f.label :institution, @user.institution.nil? ? "Unknown" : @user.institution.name, class: 'form-control', placeholder: 'Name', readonly: 'readonly' %>
+          </div>
+          <div class="col-sm-2 col-md-2">
+            <div class="checkbox">
+              <label>
+                <%= p.check_box :display_institution %> Show
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :major, class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-6 col-md-7">
+            <%= f.text_field :major, class: 'form-control', placeholder: 'Major' %>
+          </div>
+          <div class="col-sm-2 col-md-2">
+            <div class="checkbox">
+              <label>
+                <%= p.check_box :display_major %> Show
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+          <%= f.label :about_me, 'About Me', class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-6 col-md-7">
+            <%= f.text_area :about_me, class: 'form-control', placeholder: 'A short description about you.', rows: '6' %>
+            <span id="helpBlock" class="help-block">Markdown formatting supported. See <a href="https://daringfireball.net/projects/markdown/basics" target="_blank">Guide</a> for help.</span>
+          </div>
+          <div class="col-sm-2 col-md-2">
+            <div class="checkbox">
+              <label>
+                <%= p.check_box :display_about_me %> Show
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :birthday, class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-6 col-md-7">
+            <%= f.date_field :birthday, class: 'form-control' %>
+            <span id="birthday-help" class="help-block">Note: Your birth year is never shown.</span>
+          </div>
+          <div class="col-sm-2 col-md-2">
+            <div class="checkbox">
+              <label>
+                <%= p.check_box :display_birthday %> Show
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :gender, class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-6 col-md-7">
+            <label class="radio-inline">
+              <%= f.radio_button :gender, 0 %> Unspecified
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button :gender, 1 %> Male
+            </label>
+            <label class="radio-inline">
+              <%= f.radio_button :gender, 2 %> Female
+            </label>
+          </div>
+          <div class="col-sm-2 col-md-2">
+            <div class="checkbox">
+              <label>
+                <%= p.check_box :display_birthday %> Show
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+          <%= f.label :website, class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-6 col-md-7">
+            <%= f.url_field :website, class: 'form-control', placeholder: 'Website' %>
+          </div>
+          <div class="col-sm-2 col-md-2">
+            <div class="checkbox">
+              <label>
+                <%= p.check_box :display_website %> Show
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+          <%= label_tag nil, 'Other Permissions', class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-8 col-md-9">
+            <div class="checkbox">
+              <label>
+                <%= p.check_box :display_courses %> Make Course List Public
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <%= p.check_box :display_groups %> Make Groups List Public
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <% end %>
+
+        <hr>
+
+        <div class="form-group">
+          <%= f.label :time_zone, 'Time Zone', class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-8 col-md-9">
+            <%= f.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones, {}, {class: 'form-control', default: "Pacific Time (US & Canada)"} %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            <%= f.submit 'Save', class: "btn btn-primary btn-block", id: 'submit_btn' %>
+          </div>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+<% end %>
+
+<%= render 'profile_template' %>

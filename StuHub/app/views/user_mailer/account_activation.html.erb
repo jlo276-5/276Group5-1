@@ -1,17 +1,11 @@
-<h1>[StuHub] Account Activation for <%= @user.email %></h1>
-
-<hr>
-
-<h3>Hi <%= @user.name %>,</h3>
+<% provide(:email_title, 'Account Activation for ' + @user.email) %>
 
 <p>An account for <%= @user.email %> has been created on StuHub. Click on the link below to activate it:</p>
 
 <%= link_to "Activate this Account", edit_account_activation_url(@user.activation_token, email: @user.email) %>
 
-<p>If the link above does not work, type the following url into your browser:</p>
+<p>If the link above does not work, copy and paste the following url into your browser:</p>
 
 <%= edit_account_activation_url(@user.activation_token, email: @user.email) %>
 
 <p>If you did not create an account, please disregard this message.</p>
-
-<h3>On behalf of all of us at StuHub, we thank you for using StuHub.</h3>
