@@ -235,6 +235,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   minitest-reporters (= 1.0.5)
+  momentjs-rails
   nifty-generators
   pg
   private_pub!
