@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   include SessionsHelper
   before_filter :require_login
+  before_filter :update_last_active
   before_filter :set_time_zone
 
   private
@@ -13,6 +14,12 @@ class ApplicationController < ActionController::Base
       store_location
       flash[:danger] = "Please log in."
       redirect_to login_url
+    end
+  end
+
+  def update_last_active
+    if current_user
+      current_user.touch :last_active_at
     end
   end
 

@@ -59,7 +59,7 @@
             <% end %>
           </div>
           <div class="panel-body">
-            Last Login: <%= current_user.last_active_at.nil? ? "Unknown" : current_user.last_active_at.in_time_zone.strftime("%b %d, %l:%M %p") %>
+            Last Login: <%= current_user.last_login_at.nil? ? "Unknown" : current_user.last_login_at.in_time_zone.strftime("%b %d, %l:%M %p") %>
             &nbsp;
           </div>
         </div>

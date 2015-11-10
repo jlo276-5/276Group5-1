@@ -3,7 +3,7 @@ module SessionsHelper
   # login
   def log_in(user)
     session[:user_id] = user.id
-    user.touch :last_active_at
+    user.touch :last_login_at
   end
 
     #remember user
