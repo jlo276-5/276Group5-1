@@ -74,7 +74,7 @@ class UsersController < ApplicationController
 
   def promote
     @user = User.find_by id:params[:id]
-    if (current_user.superuser? and !@user.superuser?) or (current_user.admin? and !@user.admin?)
+    if (!user.more_powerful(false, current_user) and user.role < 2)
       @user.role += 1
       if @user.save
         flash[:success] = "Promoted #{@user.name} to #{@user.role_string_long}"
@@ -90,7 +90,7 @@ class UsersController < ApplicationController
 
   def demote
     @user = User.find_by id:params[:id]
-    if (!@user.more_powerful(true, current_user) and @user.role > 0)
+    if (!@user.more_powerful(false, current_user) and @user.role > 0)
       @user.role -= 1
       if @user.save
         flash[:success] = "Demoted #{@user.name} to #{@user.role_string_long}"
