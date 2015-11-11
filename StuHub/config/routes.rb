@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get 'sfu_auth', to: 'sfu_auth#auth'
+  get 'sfu_callback', to: 'sfu_auth#callback'
+  get 'sfu_success', to: 'sfu_auth#success'
+  get 'sfu_failure', to: 'sfu_auth#failure'
+
   resources :events
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
