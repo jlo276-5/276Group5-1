@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_filter :require_login, except: [:destroy]
+  before_filter :logged_out, except: [:destroy]
 
   def new
   end
@@ -23,8 +24,21 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out if logged_in?
-    flash[:success] = 'Successfully logged out.'
+    if logged_in?
+      log_out
+      flash[:success] = 'Successfully logged out.'
+    else
+      flash[:warning] = 'You are not logged in.'
+    end
     redirect_to root_url
+  end
+
+  private
+
+  def logged_out
+    if current_user
+      flash[:warning] = "You cannot do that while logged in."
+      redirect_to home_path
+    end
   end
 end
