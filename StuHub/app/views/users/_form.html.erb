@@ -68,13 +68,7 @@
       </div>
     </div>
   <% end %>
-
-  <% if !current_page?(root_path) and !current_page?(register_path) and controller.action_name != "create" %>
-    <div class="form-group" style="text-align: center;">
-      <h4>StuHub uses avatars from Gravatar</h4>
-      <p><a href="http://gravatar.com/emails" target="_blank">Manage your avatars directly on their site.</a></p>
-    </div>
-  <% end %>
+  <hr>
   <% if !current_page?(root_path) and !current_page?(register_path) and !(controller.action_name == "create" or controller.action_name == "new") and !current_user.more_powerful(true, @user) %>
     <div class="form-group" style="text-align: center;">
       <% if @user.superuser? %>
