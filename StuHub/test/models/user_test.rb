@@ -76,4 +76,21 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.authenticated?(:remember, '')
   end
 
+  test "admin? and superuser? should return correct values" do
+    assert_not @user.admin?
+    @user.role = 1
+    assert @user.admin?
+    assert_not @user.superuser?
+    @user.role = 2
+    assert @user.superuser?
+  end
+
+  test "role_string should return correct value" do
+    assert_equal "Standard", @user.role_string
+    @user.role = 1
+    assert_equal "Admin", @user.role_string
+    @user.role = 2
+    assert_equal "Super", @user.role_string
+  end
+
 end
