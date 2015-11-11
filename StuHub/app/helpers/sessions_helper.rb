@@ -3,6 +3,7 @@ module SessionsHelper
   # login
   def log_in(user)
     session[:user_id] = user.id
+    user.save # Save CAS toggle
     user.touch :last_login_at
   end
 

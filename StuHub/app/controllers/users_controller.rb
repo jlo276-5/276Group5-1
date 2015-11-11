@@ -24,6 +24,12 @@ class UsersController < ApplicationController
       redirect_to home_url
     end
     @user = User.new
+    @disable_institution = false
+    if !params[:institution_id].nil? and !params[:cas_identifier].nil?
+      @user.institution_id = params[:institution_id].to_i
+      @user.cas_identifier = params[:cas_identifier]
+      @disable_institution = true
+    end
   end
 
   def create
@@ -67,6 +73,17 @@ class UsersController < ApplicationController
       flash[:danger] = "No user exists with an id #{params[:id]}."
       redirect_to users_url
     elsif !current_user?(@user) and !current_user.more_powerful(true, @user)
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to @user
+    end
+  end
+
+  def accounts
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    elsif !current_user?(@user) and !current_user.superuser?
       flash[:danger] = "You do not have the permission to do that."
       redirect_to @user
     end
@@ -164,7 +181,7 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :institution_id)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :institution_id, :cas_identifier, :tos_agree)
     end
 
     def customization_params

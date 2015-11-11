@@ -1,3 +1,5 @@
 StuHub/SFU_API_EXAMPLES
 .env
 StuHub/test/html_reports
+master_lock
+backup.db

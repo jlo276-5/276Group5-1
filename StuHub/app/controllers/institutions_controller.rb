@@ -64,7 +64,7 @@ class InstitutionsController < ApplicationController
   private
 
   def institution_params
-    params.require(:institution).permit(:name, :state, :city, :country, :email_constraint, :website, :image)
+    params.require(:institution).permit(:name, :state, :city, :country, :email_constraint, :website, :image, :uses_cas, :cas_endpoint)
   end
 
   def admin_user
