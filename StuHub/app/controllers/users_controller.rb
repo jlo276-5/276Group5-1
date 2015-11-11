@@ -87,6 +87,11 @@ class UsersController < ApplicationController
       flash[:danger] = "You do not have the permission to do that."
       redirect_to @user
     end
+
+    if !@user.dropbox_uid.nil?
+      client = Dropbox::API::Client.new(token: @user.dropbox_token, secret: @user.dropbox_secret)
+      @dropbox_display_name = "#{client.account.display_name} [#{@user.dropbox_uid}]"
+    end
   end
 
   def promote

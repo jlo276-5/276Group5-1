@@ -30,6 +30,25 @@
 
         <hr>
 
+        <div class="form-group">
+          <%= label_tag '', 'Dropbox', {class: 'col-sm-4 col-md-3 control-label'} %>
+          <div class="col-sm-8 col-md-9">
+            <% if @user.dropbox_uid.blank? %>
+              <%= link_to "Link Dropbox", dropbox_link_path(user_id: @user.id), method: "post", class: "btn btn-primary btn-block", role: "button" %>
+            <% else %>
+              <%= link_to "Unlink Dropbox", dropbox_unlink_path(user_id: @user.id), method: "post", class: "btn btn-danger btn-block", role: "button" %>
+            <% end %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= label_tag '', 'Dropbox Account', {class: 'col-sm-4 col-md-3 control-label'} %>
+          <div class="col-sm-8 col-md-9">
+            <%= text_field_tag '', @dropbox_display_name, {class: 'form-control', placeholder: 'N/A', disabled: 'disabled'} %>
+          </div>
+        </div>
+
+        <hr>
+
         <div style="text-align: center;"><strong>More Account Integrations Coming Soon</strong></div>
       </form>
     </div>

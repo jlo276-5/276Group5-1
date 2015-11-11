@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  post 'dropbox_link', to: 'dropbox_auth#link'
+  post 'dropbox_unlink', to: 'dropbox_auth#unlink'
+  get 'dropbox_callback', to: 'dropbox_auth#callback'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
