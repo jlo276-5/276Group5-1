@@ -8,9 +8,6 @@ $(document).ready ->
         left: 'prev,next today',
         center: 'title',
         right: 'month,basicWeek,basicDay'
-        
-      
-    }
-         
-    
+    },
+    events: '/events.json'
   })

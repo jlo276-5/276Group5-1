@@ -65,7 +65,11 @@
 * User email validation per institution (on signup only)
 * User management system for Administrators
 * Markdown support for various fields.
+* Various fixes and layout
 
 ### 2015.11.10
+* Various fixes
+* Test Writing
+* Basic calendar
 
 #### **__Iteration 2 Complete__**

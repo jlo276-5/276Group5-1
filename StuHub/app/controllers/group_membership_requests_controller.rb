@@ -38,15 +38,20 @@ class GroupMembershipRequestsController < ApplicationController
       redirect_to requests_group_path(gm.group)
     else
       flash[:danger] = "You are not allowed to do that."
-      redirect_to home_path
+      redirect_to gmr.group
     end
   end
 
   def reject
     gmr = GroupMembershipRequest.find_by(id: params[:id])
-    gmr.destroy
-    flash[:success] = "Membership Request Rejected"
-    redirect_to requests_group_path(gmr.group)
+    if current_user.adminOfGroup?(gmr.group)
+      gmr.destroy
+      flash[:success] = "Membership Request Rejected"
+      redirect_to requests_group_path(gmr.group)
+    else
+      flash[:danger] = "You are not allowed to do that."
+      redirect_to gmr.group
+    end
   end
 
   private

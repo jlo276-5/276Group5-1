@@ -157,6 +157,10 @@ class UsersController < ApplicationController
     end
   end
 
+  def schedule
+    @user = current_user
+  end
+
   private
 
     def user_params
