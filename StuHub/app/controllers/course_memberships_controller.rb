@@ -28,7 +28,10 @@ class CourseMembershipsController < ApplicationController
   def add_section
     cm = CourseMembership.find(params[:id])
     section = Section.find(params[:section_id])
-    if !cm.sections.find_by(id: section.id).nil?
+    if section.associated_class.course.id != cm.course.id
+      flash[:danger] = "Invalid Membership Request"
+      return if redirect_to courses_path
+    elsif !cm.sections.find_by(id: section.id).nil?
       flash[:warning] = "You have already added this section."
     else
       flash[:success] = "Section Added to Course Membership"

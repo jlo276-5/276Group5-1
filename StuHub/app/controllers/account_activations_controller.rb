@@ -10,7 +10,7 @@ class AccountActivationsController < ApplicationController
       UserMailer.welcome_email(user).deliver_now
       redirect_to user
     elsif user && user.activated?
-      flash[:danger] = "This account has already been activated."
+      flash[:warning] = "This account has already been activated."
       redirect_to root_url
     else
       flash[:danger] = "Invalid activation link. Please verify that the link is correct."

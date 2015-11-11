@@ -3,9 +3,12 @@ class GroupMembershipsController < ApplicationController
   before_action :correct_user, only: [:destroy]
 
   def create
-    group = Group.find(params[:group_id])
-    user = User.find(params[:user_id])
-    if !user.groups.find_by(id: group.id).nil?
+    group = Group.find_by(id: params[:group_id])
+    user = User.find_by(id: params[:user_id])
+    if group.nil?
+      flash[:danger] = "No Group exists with id #{params[:group_id]}"
+      redirect_to groups_path
+    elsif !user.groups.find_by(id: group.id).nil?
       flash[:warning] = "You are already a member of this group."
       redirect_to group_path(group)
     elsif group.limited
@@ -13,7 +16,6 @@ class GroupMembershipsController < ApplicationController
       redirect_to new_gm_request_path(group_id: group.id, user_id: user.id)
     else
       @gm = GroupMembership.new(group: group, user: user)
-      @gm.join_date = DateTime.now
       if @gm.save
         flash[:success] = "Group Membership Created"
         redirect_to group_path(group)
@@ -25,11 +27,11 @@ class GroupMembershipsController < ApplicationController
   end
 
   def destroy
-    gm = GroupMembership.find(params[:id])
+    gm = GroupMembership.find_by(id: params[:id])
     gm.destroy
     if gm.group.group_memberships.size == 0
       gm.group.destroy
-      flash[:success] = "The Group #{gm.group.name} was deleted because there were no more members left."
+      flash[:info] = "The Group #{gm.group.name} was deleted because there were no more members left."
     elsif gm.group.admin_users.size == 0
       gm_n = gm.group.group_memberships.first
       gm_n.role = 1
@@ -47,13 +49,13 @@ class GroupMembershipsController < ApplicationController
     @gm = GroupMembership.find_by(id: params[:id])
     if @gm.nil?
       flash[:danger] = "No such Group Membership Exists"
-      redirect_to home_path
+      redirect_to groups_path
     end
   end
 
   def correct_user
     @gm = GroupMembership.find_by(id: params[:id])
-    unless (current_user?(@gm.user) or current_user.more_powerful(true, gm.user))
+    unless (current_user?(@gm.user) or (current_user.adminOfGroup?(@gm.group) and @gm.role < 1))
       flash[:danger] = "You do not have the permission to do that."
       redirect_to groups_path
     end

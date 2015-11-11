@@ -1,9 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  user_id: 
-  group_id: 
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+gmrone:
+  request_message: Derp
+  user: lana
+  group: groupone
 
-two:
-  user_id: 
-  group_id: 
+gmrtwo:
+  request_message: Ding
+  user: superwoman
+  group: groupone

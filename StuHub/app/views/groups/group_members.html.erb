@@ -28,23 +28,21 @@
           <% @members.each do |gm| %>
             <tr>
               <td><%= link_to gm.user.name, gm.user %> <small><%= gm.role == 1 ? "Administrator" : "Member" %></small><br><small><strong>Joined:</strong> <%= gm.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></small></td>
-              <td>
-                <div class="row" style="min-width: 300px;">
-                  <div class="col-xs-4">
-                    <% if (current_user.adminOfGroup?(@group) and gm.role == 0) %>
-                      <%= link_to "Promote", promote_member_group_path(@group, gm_id: gm.id), method: "post", class: "btn btn-success btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to promote this user?" }  %>
-                    <% end %>
-                  </div>
-                  <div class="col-xs-4">
-                    <% if (current_user.adminOfGroup?(@group) and gm.role == 1) %>
-                      <%= link_to "Demote", demote_member_group_path(@group, gm_id: gm.id), method: "post", class: "btn btn-warning btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to demote this user?" }  %>
-                    <% end %>
-                  </div>
-                  <div class="col-xs-4">
-                    <% if (current_user.adminOfGroup?(@group) and gm.role == 0) %>
-                      <%= link_to "Kick", kick_member_group_path(@group, gm_id: gm.id), method: "post", class: "btn btn-danger btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to kick this user?" } %>
-                    <% end %>
-                  </div>
+              <td style="min-width: 300px;">
+                <div class="col-xs-4">
+                  <% if (current_user.adminOfGroup?(@group) and gm.role == 0) %>
+                    <%= link_to "Promote", promote_member_group_path(@group, gm_id: gm.id), method: "post", class: "btn btn-success btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to promote this user?" }  %>
+                  <% end %>
+                </div>
+                <div class="col-xs-4">
+                  <% if (current_user.adminOfGroup?(@group) and gm.role == 1) %>
+                    <%= link_to "Demote", demote_member_group_path(@group, gm_id: gm.id), method: "post", class: "btn btn-warning btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to demote this user?" }  %>
+                  <% end %>
+                </div>
+                <div class="col-xs-4">
+                  <% if (current_user.adminOfGroup?(@group) and gm.role == 0) %>
+                    <%= link_to "Kick", kick_member_group_path(@group, gm_id: gm.id), method: "post", class: "btn btn-danger btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to kick this user?" } %>
+                  <% end %>
                 </div>
               </td>
             </tr>

@@ -35,18 +35,16 @@
               <tr>
                 <td><%= link_to r.user.name, r.user %><br><small><strong>Requested:</strong> <%= r.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></small></td>
                 <td><%= r.request_message %></td>
-                <td>
-                  <div class="row" style="min-width: 200px;">
-                    <div class="col-xs-6">
-                      <% if current_user.adminOfGroup?(@group) %>
-                        <%= link_to "Approve", approve_request_gm_request_path(r), method: "post", class: "btn btn-success btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to approve this request?" }  %>
-                      <% end %>
-                    </div>
-                    <div class="col-xs-6">
-                      <% if current_user.adminOfGroup?(@group) %>
-                        <%= link_to "Reject", reject_request_gm_request_path(r), method: "post", class: "btn btn-warning btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to reject this request?" }  %>
-                      <% end %>
-                    </div>
+                <td style="min-width: 200px;">
+                  <div class="col-xs-6">
+                    <% if current_user.adminOfGroup?(@group) %>
+                      <%= link_to "Approve", approve_request_gm_request_path(r), method: "post", class: "btn btn-success btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to approve this request?" }  %>
+                    <% end %>
+                  </div>
+                  <div class="col-xs-6">
+                    <% if current_user.adminOfGroup?(@group) %>
+                      <%= link_to "Reject", reject_request_gm_request_path(r), method: "post", class: "btn btn-warning btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to reject this request?" }  %>
+                    <% end %>
                   </div>
                 </td>
               </tr>
