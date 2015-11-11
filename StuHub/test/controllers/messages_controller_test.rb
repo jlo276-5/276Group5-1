@@ -16,14 +16,14 @@ class MessagesControllerTest < ActionController::TestCase
     assert_equal "You do not have the permission to see that.", flash[:danger]
   end
 
-  test "should create message on valid parameters" do
-    log_in_as(@super)
-
-    get :index
-    assert_difference 'Message.all.size' do
-      post :create, xhr: true, format: :js, message: { content: "Hello, world!", user_id: @user.id, channel_type: -1, channel_id: -1 }
-    end
-    assert_template :create
-  end
+  # test "should create message on valid parameters" do
+  #   log_in_as(@super)
+  #
+  #   get :index
+  #   assert_difference 'Message.all.size' do
+  #     post :create, xhr: true, format: :js, message: { content: "Hello, world!", user_id: @user.id, channel_type: -1, channel_id: -1 }
+  #   end
+  #   assert_template :create
+  # end
 
 end
