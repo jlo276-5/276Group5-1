@@ -1,66 +1,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>We're sorry, but something went wrong (500)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Sorry, 500 Time - StuHub</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
   <style>
+  html {
+    height: 100%;
+  }
   body {
-    background-color: #EFEFEF;
-    color: #2E2F30;
-    text-align: center;
-    font-family: arial, sans-serif;
-    margin: 0;
+    height: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    background-image: image-url("logo-2-02.png");
+    background-size: 30%;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   }
 
-  div.dialog {
-    width: 95%;
-    max-width: 33em;
-    margin: 4em auto 0;
+  footer {
+    margin-top: 20px;
+    padding-top: 5px;
+    border-top: 1px solid darkgray;
+    color: gray;
   }
 
-  div.dialog > div {
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #BBB;
-    border-top: #B00100 solid 4px;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
-    background-color: white;
-    padding: 7px 12% 0;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
+  #footer_nav_links {
+    height: 40px;
+  }
+  @media (max-width: 767px) {
+    footer #footer_text {
+      text-align: center;
+    }
+    footer #footer_nav_links {
+      text-align: center;
+    }
+    .footer_link {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
+  @media (min-width: 768px) {
+    footer #footer_nav_links {
+      text-align: right;
+    }
+    .footer_link {
+      margin-left: 20px;
+    }
   }
 
-  h1 {
-    font-size: 100%;
-    color: #730E15;
-    line-height: 1.5em;
+  /** Navbar **/
+  .navbar-mod {
+    min-height: 30px;
   }
-
-  div.dialog > p {
-    margin: 0 0 1em;
-    padding: 1em;
-    background-color: #F7F7F7;
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #999;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-top-color: #DADADA;
-    color: #666;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
+  .navbar-mod .navbar-brand {
+    height: 30px;
+    padding: 0px 12px;
+    font-size: 16px;
+    line-height: 30px;
+  }
+  .navbar-mod .navbar-nav > li > a {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    line-height: 30px;
+  }
+  .navbar-mod .navbar-toggle {
+    margin: 4px 4px 4px 0;
   }
   </style>
 </head>
 
 <body>
-  <!-- This file lives in public/500.html -->
-  <div class="dialog">
-    <div>
-      <h1>We're sorry, but something went wrong.</h1>
+  <!-- This file lives in public/404.html -->
+  <nav class="navbar navbar-inverse navbar-static-top navbar-mod">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">StuHub</a>
+      </div>
     </div>
-    <p>If you are the application owner check the logs for more information.</p>
+  </nav>
+
+  <div class="container" style="text-align: center;">
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+      <span class="glyphicon glyphicon-remove" style="font-size: 216px; font-size: 25vw;" aria-hidden="true"></span>
+
+      <h1>It's 500 Time</h1>
+      <p>Sorry, something on our side broke.</p>
+      <p>What were you doing to make us break like this?</p>
+      <p>Whatever it was, do tell an Administrator!</p>
+      <p>If you are an Administrator, please check the trusty logs.</p>
+    </div>
   </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6" id="footer_text">
+          <span style="white-space: nowrap;">&copy; 2015 CMPT276 - Fall 2015 - Group 5</span>
+        </div>
+        <div class="col-xs-12 col-sm-6" id="footer_nav_links">
+          <a href="/help" class="footer_link">Help</a></li>
+          <a href="/terms" class="footer_link">Terms of Use</a></li>
+          <a href="/about" class="footer_link">About</a></li>
+        </div>
+      </div>
+      <small></small>
+    </div>
+  </footer>
+
 </body>
 </html>

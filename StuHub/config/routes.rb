@@ -65,6 +65,7 @@ Rails.application.routes.draw do
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :account_activations, only: [:edit]
   get 'register' => 'users#new'
+  get 'schedule', to: 'users#schedule'
   resources :users, only: [:index, :create, :show, :edit, :update, :destroy] do
     member do
       post 'promote'

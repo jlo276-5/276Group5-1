@@ -35,7 +35,7 @@ class MessagesController < ApplicationController
 
   def super_user
     unless current_user.superuser?
-      flash[:danger] = "You do not have the permission to do that."
+      flash[:danger] = "You do not have the permission to see that."
       redirect_to home_path
     end
   end

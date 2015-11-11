@@ -19,3 +19,8 @@ gmfour:
   user: archer
   group: grouptwo
   role: 0
+
+gmfive:
+  user: mallory
+  group: groupone
+  role: 0
