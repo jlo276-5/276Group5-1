@@ -1,3 +1,22 @@
+<%= javascript_tag do %>
+  <!-- Investigate native Rails solution? -->
+  CASSupport = function() {
+    var submitBtn = document.getElementById("cas_field");
+    var acceptCM = document.getElementById("institution_uses_cas");
+    if (acceptCM.checked == true) {
+      submitBtn.removeAttribute("disabled");
+    }
+    else {
+      var disable = document.createAttribute("disabled");
+      disable.value = "disabled";
+      submitBtn.setAttributeNode(disable);
+    }
+  }
+  $(document).ready(function() {
+    CASSupport()
+  })
+<% end %>
+
 <%= form_for(@institution, html: {class: 'form-horizontal'}) do |f| %>
   <%= render partial: 'shared/error_messages', locals: {obj: @institution} %>
 
@@ -41,6 +60,22 @@
     <%= f.label :website, class: 'col-sm-4 col-md-3 control-label' %>
     <div class="col-sm-8 col-md-9">
       <%= f.url_field :website, class: 'form-control', placeholder: 'Website' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3">
+      <div class="checkbox">
+        <label>
+          <%= f.check_box :uses_cas, onclick: 'CASSupport()' %> Uses <%= link_to 'Yale/Jasig/Apereo CAS', 'https://www.apereo.org/projects/cas', target: '_blank' %> (If YES, the endpoint below must be correct)
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :cas_endpoint, 'CAS Endpoint', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.url_field :cas_endpoint, class: 'form-control', placeholder: 'https://example.com/cas', id: 'cas_field', disabled: 'disabled' %>
+      <span id="helpBlock" class="help-block">Standard URLs will be inferred from this base URL. Do not leave a trailing slash.</span>
     </div>
   </div>
   <div class="row">

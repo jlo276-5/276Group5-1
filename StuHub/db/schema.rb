@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109205050) do
+ActiveRecord::Schema.define(version: 20151111110915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,12 +129,16 @@ ActiveRecord::Schema.define(version: 20151109205050) do
     t.string   "state"
     t.string   "country"
     t.string   "email_constraint"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.string   "website"
     t.string   "image"
     t.string   "city"
+    t.boolean  "uses_cas",         default: false
+    t.string   "cas_endpoint"
   end
+
+  add_index "institutions", ["uses_cas"], name: "index_institutions_on_uses_cas", using: :btree
 
   create_table "instructors", force: :cascade do |t|
     t.string   "first_name"
@@ -230,25 +234,32 @@ ActiveRecord::Schema.define(version: 20151109205050) do
   create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
     t.string   "password_digest"
     t.string   "remember_digest"
     t.string   "activation_digest"
-    t.boolean  "activated",         default: false
+    t.boolean  "activated",                    default: false
     t.datetime "activated_at"
     t.string   "reset_digest"
     t.datetime "reset_sent_at"
-    t.integer  "role",              default: 0
+    t.integer  "role",                         default: 0
     t.datetime "last_active_at"
-    t.string   "time_zone",         default: "Pacific Time (US & Canada)"
-    t.string   "major",             default: ""
-    t.text     "about_me",          default: ""
-    t.string   "website",           default: ""
+    t.string   "time_zone",                    default: "Pacific Time (US & Canada)"
+    t.string   "major",                        default: ""
+    t.text     "about_me",                     default: ""
+    t.string   "website",                      default: ""
     t.date     "birthday"
-    t.integer  "gender",            default: 0
+    t.integer  "gender",                       default: 0
     t.integer  "institution_id"
     t.datetime "last_login_at"
+    t.string   "email_change_digest"
+    t.string   "email_change_new"
+    t.datetime "email_change_requested_at"
+    t.string   "password_change_digest"
+    t.datetime "password_change_requested_at"
+    t.string   "cas_identifier"
+    t.boolean  "cas_login_active",             default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

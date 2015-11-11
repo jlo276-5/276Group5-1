@@ -24,6 +24,12 @@ class UsersController < ApplicationController
       redirect_to home_url
     end
     @user = User.new
+    @disable_institution = false
+    if !params[:institution_id].nil? and !params[:cas_identifier].nil?
+      @user.institution_id = params[:institution_id].to_i
+      @user.cas_identifier = params[:cas_identifier]
+      @disable_institution = true
+    end
   end
 
   def create
@@ -164,7 +170,7 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :institution_id)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :institution_id, :cas_identifier, :tos_agree)
     end
 
     def customization_params
