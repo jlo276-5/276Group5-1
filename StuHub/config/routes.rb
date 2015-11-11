@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
-  resources :events
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
+
+  # Routes for CAS Auth
+  post 'cas_auth', to: 'cas_auth#auth'
+  get 'cas_callback', to: 'cas_auth#callback'
+
+  # Routes for events
+  resources :events
 
   # Routes for groups
   resources :group_membership_requests, as: 'gm_request', only: [:new, :create] do
@@ -50,11 +56,11 @@ Rails.application.routes.draw do
   # Routes for Administration
   get 'admin', to: 'admin#index'
   get 'admin/users', to: 'admin#user_management'
-  resources :institutions, only: [:show]
   scope '/admin' do
     resources :institutions, only: [:new, :index, :create, :edit, :update, :destroy]
     resources :messages, only: [:index]
   end
+  resources :institutions, only: [:show]
 
   # Routes for Sessions
   get    'login'  => 'sessions#new'

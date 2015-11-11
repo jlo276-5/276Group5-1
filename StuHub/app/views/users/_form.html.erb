@@ -17,6 +17,7 @@
 <%= form_for(@user, html: {class: 'form-horizontal'}) do |f| %>
 <%= render partial: 'shared/error_messages', locals: {obj: @user} %>
 
+  <%= f.hidden_field :cas_identifier %>
   <div class="form-group">
     <%= f.label :name, class: 'col-sm-4 col-md-3 control-label' %>
     <div class="col-sm-8 col-md-9">
@@ -53,7 +54,7 @@
     <div class="form-group">
       <%= f.label :institution_id, class: 'col-sm-4 col-md-3 control-label' %>
       <div class="col-sm-8 col-md-9">
-        <%= f.collection_select :institution_id, Institution.all.order('name ASC'), :id, :name, {}, {class: 'form-control'} %>
+        <%= f.collection_select :institution_id, Institution.all.order('name ASC'), :id, :name, {}, (@disable_institution ? {class: 'form-control', disabled: ''} : {class: 'form-control'})  %>
         <% if !current_page?(root_path) %>
           <span id="helpBlock" class="help-block">Note: The email used for registration must match domains specified by the institution.</span>
         <% end %>
