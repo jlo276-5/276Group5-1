@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   # Routes for CAS Auth
   post 'cas_auth', to: 'cas_auth#auth'
   get 'cas_callback', to: 'cas_auth#callback'
+  post 'cas_enable', to: 'cas_auth#enable'
+  post 'cas_disable', to: 'cas_auth#disable'
 
   # Routes for events
   resources :events
@@ -78,6 +80,7 @@ Rails.application.routes.draw do
       post 'demote'
       get 'courses'
       get 'groups'
+      get 'accounts'
       get 'customize'
     end
   end

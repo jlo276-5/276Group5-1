@@ -78,6 +78,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def accounts
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    elsif !current_user?(@user) and !current_user.superuser?
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to @user
+    end
+  end
+
   def promote
     @user = User.find_by id:params[:id]
     if (!user.more_powerful(false, current_user) and user.role < 2)
