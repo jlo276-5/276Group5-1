@@ -3,14 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready ->
-  $('#calendar').fullCalendar({
-    header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,basicWeek,basicDay'
-        
-      
-    }
-         
-    
-  })
+  $("#calendar").fullCalendar(
+    events: '/events.json'
+  )
