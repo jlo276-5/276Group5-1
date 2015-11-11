@@ -101,8 +101,11 @@ class CasAuthController < ApplicationController
               if user
                 user.cas_identifier = user_token
                 user.cas_login_active = true
-                user.save
-                flash[:success] = "CAS Authentication enabled for this User."
+                if user.save
+                  flash[:success] = "CAS Authentication enabled for this User."
+                else
+                  flash[:warning] = "Could not save CAS Authentication."
+                end
                 redirect_to accounts_user_path(user)
               else
                 flash[:warning] = "Invalid User ID #{params[:user_id]}"
