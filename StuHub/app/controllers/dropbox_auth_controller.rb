@@ -1,4 +1,6 @@
 class DropboxAuthController < ApplicationController
+  before_filter :allowed_user, only: [:link, :unlink]
+
   def link
     user = User.find_by(id: params[:user_id])
 
@@ -63,6 +65,15 @@ class DropboxAuthController < ApplicationController
     end
   end
 
+
   private
 
+  def allowed_user
+    @user = User.find_by id:params[:id]
+
+    unless (current_user?(@user) or current_user.superuser?)
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to home_path
+    end
+  end
 end

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   skip_before_filter :require_login, only: [:new, :create]
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
+  before_action :correct_user_limited, only: :accounts
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
   before_action :check_privacy,  only: [:show, :edit, :customize, :courses, :groups]
@@ -200,6 +200,14 @@ class UsersController < ApplicationController
         store_location
         flash[:danger] = "Please log in."
         redirect_to login_url
+      end
+    end
+
+    def correct_user_limited
+      @user = User.find_by id:params[:id]
+      unless (current_user?(@user) or current_user.superuser?)
+        flash[:danger] = "You do not have the permission to do that."
+        redirect_to(users_url)
       end
     end
 

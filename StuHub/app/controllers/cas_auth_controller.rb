@@ -1,5 +1,6 @@
 class CasAuthController < ApplicationController
   skip_before_filter :require_login, only: [:auth, :callback]
+  before_filter :allowed_user, only: [:enable, :disable]
   require 'rest-client'
 
   def enable
@@ -140,6 +141,17 @@ class CasAuthController < ApplicationController
     else
       flash[:danger] = "Invalid Institution ID #{params[:institution_id]}"
       redirect_to login_path
+    end
+  end
+
+  private
+
+  def allowed_user
+    @user = User.find_by id:params[:id]
+
+    unless (current_user?(@user) or current_user.superuser?)
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to home_path
     end
   end
 end
