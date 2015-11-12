@@ -34,7 +34,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    if @user.save
+    if verify_recaptcha(model: @user, message: "reCAPTCHA check failed. Try again.") and @user.save
       @user.send_activation_email
       @user.privacy_setting = PrivacySetting.new
       flash[:info] = "Please check your email to activate your account."
