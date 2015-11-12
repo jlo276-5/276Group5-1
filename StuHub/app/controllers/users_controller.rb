@@ -136,7 +136,7 @@ class UsersController < ApplicationController
     elsif !current_user?(@user) and !current_user.more_powerful(true, @user)
       flash[:danger] = "You do not have the permission to do that."
       redirect_to @user
-    elsif params[:user].has_key?(:name)
+    elsif params[:user].has_key?(:email)
       user = @user.try(:authenticate, params[:current_password])
       if !user && !current_user.more_powerful(true, @user)
         @user.errors[:current_password] = 'is incorrect.'
@@ -147,7 +147,10 @@ class UsersController < ApplicationController
       else
         render 'edit'
       end
-    elsif params[:user].has_key?(:time_zone)
+    elsif params[:user].has_key?(:name)
+      if params[:user][:name].blank?
+        params[:user][:name] = nil
+      end
       if @user.update_attributes(customization_params)
         flash[:success] = "Profile Updated"
         redirect_to @user
@@ -188,11 +191,11 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :institution_id, :cas_identifier, :tos_agree)
+      params.require(:user).permit(:email, :password, :password_confirmation, :institution_id, :cas_identifier, :tos_agree)
     end
 
     def customization_params
-      params.require(:user).permit(:major, :about_me, :website, :birthday, :gender, :time_zone, privacy_setting_attributes: [:id, :display_institution, :display_major, :display_about_me, :display_email, :display_website, :display_birthday, :display_gender, :display_courses, :display_groups])
+      params.require(:user).permit(:name, :major, :about_me, :website, :birthday, :gender, :time_zone, privacy_setting_attributes: [:id, :display_institution, :display_major, :display_about_me, :display_email, :display_website, :display_birthday, :display_gender, :display_courses, :display_groups])
     end
 
     # Filters
