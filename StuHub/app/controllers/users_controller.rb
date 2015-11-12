@@ -34,7 +34,9 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    if @user.save
+    if @user.cas_identifier == ""
+      @user.cas_identifier = nil
+    end
       @user.send_activation_email
       @user.privacy_setting = PrivacySetting.new
       flash[:info] = "Please check your email to activate your account."
