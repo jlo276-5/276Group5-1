@@ -177,6 +177,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     rdoc (4.2.0)
+    recaptcha (0.4.0)
     redcarpet (3.3.3)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -249,6 +250,7 @@ DEPENDENCIES
   puma
   rails (= 4.2.4)
   rails_12factor
+  recaptcha
   redcarpet (~> 3.3.1)
   rest-client
   sass-rails (~> 5.0)
