@@ -37,6 +37,7 @@ class UsersController < ApplicationController
     if @user.cas_identifier == ""
       @user.cas_identifier = nil
     end
+    if verify_recaptcha(model: @user, message: "reCAPTCHA check failed. Try again.") and @user.save
       @user.send_activation_email
       @user.privacy_setting = PrivacySetting.new
       flash[:info] = "Please check your email to activate your account."

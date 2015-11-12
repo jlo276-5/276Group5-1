@@ -53,6 +53,9 @@ gem 'thin'
 # redcarpet for markdown support
 gem 'redcarpet', '~> 3.3.1'
 
+# reCAPTCHA
+gem "recaptcha", require: "recaptcha/rails"
+
 # Dropbox API
 gem 'dropbox-api'
 
