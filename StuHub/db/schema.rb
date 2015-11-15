@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151111225412) do
+ActiveRecord::Schema.define(version: 20151114095631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,13 +129,17 @@ ActiveRecord::Schema.define(version: 20151111225412) do
     t.string   "state"
     t.string   "country"
     t.string   "email_constraint"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.string   "website"
     t.string   "image"
     t.string   "city"
-    t.boolean  "uses_cas",         default: false
+    t.boolean  "uses_cas",          default: false
     t.string   "cas_endpoint"
+    t.integer  "data_mode",         default: 0
+    t.string   "xlsx_db_url"
+    t.string   "api_endpoint"
+    t.datetime "data_last_updated"
   end
 
   add_index "institutions", ["uses_cas"], name: "index_institutions_on_uses_cas", using: :btree

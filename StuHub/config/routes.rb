@@ -62,11 +62,12 @@ Rails.application.routes.draw do
   # Routes for Administration
   get 'admin', to: 'admin#index'
   get 'admin/users', to: 'admin#user_management'
+  post '/institutions/:id', to: 'institutions#update'
+  get '/institutions/:id', to: 'institutions#show'
   scope '/admin' do
     resources :institutions, only: [:new, :index, :create, :edit, :update, :destroy]
     resources :messages, only: [:index]
   end
-  resources :institutions, only: [:show]
 
   # Routes for Sessions
   get    'login'  => 'sessions#new'

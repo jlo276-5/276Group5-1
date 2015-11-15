@@ -12,8 +12,28 @@
       submitBtn.setAttributeNode(disable);
     }
   }
+  DataSource = function() {
+    var sourceVal = $('input[name="institution[data_mode]"]:checked').val();
+    var xlsxField = document.getElementById("xlsx_field");
+    var apiField = document.getElementById("api_field");
+
+    var disable = document.createAttribute("disabled");
+    disable.value = "disabled";
+    xlsxField.setAttributeNode(disable);
+    var disable = document.createAttribute("disabled");
+    disable.value = "disabled";
+    apiField.setAttributeNode(disable);
+
+    if (sourceVal == 1) {
+      xlsxField.removeAttribute("disabled");
+    }
+    else if (sourceVal == 2) {
+      apiField.removeAttribute("disabled");
+    }
+  }
   $(document).ready(function() {
     CASSupport()
+    DataSource()
   })
 <% end %>
 
@@ -62,6 +82,9 @@
       <%= f.url_field :website, class: 'form-control', placeholder: 'Website' %>
     </div>
   </div>
+
+  <hr>
+
   <div class="form-group">
     <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3">
       <div class="checkbox">
@@ -78,6 +101,47 @@
       <span id="helpBlock" class="help-block">Standard URLs will be inferred from this base URL. Do not leave a trailing slash.</span>
     </div>
   </div>
+
+  <hr>
+
+  <div class="form-group">
+    <%= f.label :data_mode, 'Data Source', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <label class="radio-inline">
+        <%= f.radio_button :data_mode, 0, onclick: 'DataSource()' %> Manual
+      </label>
+      <label class="radio-inline">
+        <%= f.radio_button :data_mode, 1, onclick: 'DataSource()' %> XLSX DB
+      </label>
+      <label class="radio-inline">
+        <%= f.radio_button :data_mode, 2, onclick: 'DataSource()' %> API
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :xlsx_db_url, 'XLSX DB URL', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.url_field :xlsx_db_url, class: 'form-control', placeholder: 'https://example.com/database.xlsx', id: 'xlsx_field', disabled: 'disabled' %>
+      <span id="helpBlock" class="help-block">Needs to follow specified <a href="/help/institutions#xlsx_db">XLSX format</a>.</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :api_endpoint, 'API Endpoint', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.url_field :api_endpoint, class: 'form-control', placeholder: 'https://example.com/course_outlines', id: 'api_field', disabled: 'disabled' %>
+      <span id="helpBlock" class="help-block">Needs to follow specified <a href="/help/institutions#api_endpoint">API format</a>.</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :data_last_updated, 'Last Updated', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.text_field :data_last_updated, class: 'form-control', placeholder: 'Never', disabled: 'disabled' %>
+    </div>
+  </div>
+
+  <hr>
+
   <div class="row">
     <div class="col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
       <%= f.submit 'Save', class: "btn btn-primary btn-block", id: 'submit_btn' %>
