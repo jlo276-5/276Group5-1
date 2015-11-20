@@ -69,7 +69,7 @@ class DropboxAuthController < ApplicationController
   private
 
   def allowed_user
-    @user = User.find_by id:params[:id]
+    @user = User.find_by id:params[:user_id]
 
     unless (current_user?(@user) or current_user.superuser?)
       flash[:danger] = "You do not have the permission to do that."

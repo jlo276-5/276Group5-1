@@ -99,7 +99,7 @@ class UsersController < ApplicationController
 
   def promote
     @user = User.find_by id:params[:id]
-    if (!user.more_powerful(false, current_user) and user.role < 2)
+    if (!@user.more_powerful(false, current_user) and @user.role < 2)
       @user.role += 1
       if @user.save
         flash[:success] = "Promoted #{@user.name} to #{@user.role_string_long}"
