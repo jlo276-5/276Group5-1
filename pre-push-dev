@@ -1,0 +1,6 @@
+hash_name=HEAD_HASH
+branch_name=HEAD_BRANCH
+hash=$(git rev-parse --short HEAD)
+branch=$(git rev-parse --abbrev-ref HEAD)
+echo Setting commit and branch envvars on Heroku...
+/usr/local/bin/heroku config:set $hash_name=$hash $branch_name=$branch --app stuhub-dev

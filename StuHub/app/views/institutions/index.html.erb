@@ -55,6 +55,8 @@
       </div>
     <% end %>
 
-    <%= link_to "Add Institution", new_institution_path, class: "btn btn-primary btn-block", role: "button" %>
+    <% if current_user.superuser? %>
+      <%= link_to "Add Institution", new_institution_path, class: "btn btn-primary btn-block", role: "button" %>
+    <% end %>
   </div>
 </div>

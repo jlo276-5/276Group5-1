@@ -59,31 +59,48 @@
             <% end %>
           </div>
           <div class="panel-body">
-            Last Login: <%= current_user.last_active_at.nil? ? "Unknown" : current_user.last_active_at.in_time_zone.strftime("%b %d, %l:%M %p") %>
+            Last Login: <%= current_user.last_login_at.nil? ? "Unknown" : current_user.last_login_at.in_time_zone.strftime("%b %d, %l:%M %p") %>
             &nbsp;
           </div>
         </div>
       </div>
+      <div class="col-xs-12" style="margin-bottom: 20px;">
+        <%= link_to 'Calendar', events_path, class: "btn btn-primary btn-block", role: "button" %>
+      </div>
       <div class="col-xs-12" id="home_schedule_panel">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h1 class="panel-title">Schedule</h1>
+            <h1 class="panel-title"><%= link_to 'Schedule', schedule_path %></h1>
           </div>
           <ul class="list-group">
-            <% if current_user.course_memberships.size <= 0 %>
+            <% if current_user.course_memberships.size == 0 %>
               <li class="list-group-item">No Schedules</li>
             <% else %>
               <% (current_user.course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
-                <% cm.sections.each do |s| %>
+                <% if cm.sections.count == 0 %>
+                  <% course = cm.course %>
                   <li class="list-group-item">
-                    <% course = s.associated_class.course %>
-                    <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %></h4>
+                    <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number}", get_info_course_path(course) %><br><small><%= "#{course.department.term.name} #{course.department.term.year.number}" %></small></h4>
                     <p class="list-group-item-text">
-                      <% s.section_times.each do |st| %>
-                        <%= "#{st.days} #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')}" %><br>
-                      <% end %>
+                      No Schedules
                     </p>
                   </li>
+                <% else %>
+                  <% cm.sections.each do |s| %>
+                    <li class="list-group-item">
+                      <% course = s.associated_class.course %>
+                      <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %><br><small><%= "#{course.department.term.name} #{course.department.term.year.number}" %></small></h4>
+                      <p class="list-group-item-text">
+                        <% if s.section_times.count == 0 %>
+                          No Schedules
+                        <% else %>
+                          <% s.section_times.each do |st| %>
+                            <%= "#{st.days} #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')}" %><br>
+                          <% end %>
+                        <% end %>
+                      </p>
+                    </li>
+                  <% end %>
                 <% end %>
               <% end %>
             <% end %>

@@ -248,6 +248,7 @@ ActiveRecord::Schema.define(version: 20151109205050) do
     t.date     "birthday"
     t.integer  "gender",            default: 0
     t.integer  "institution_id"
+    t.datetime "last_login_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

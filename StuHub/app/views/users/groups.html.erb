@@ -15,13 +15,25 @@
             <% end %>
           </tr>
         </thead>
-        <% (@user.group_memberships.sort {|a,b| a.name <=> b.name}).each do |gm| %>
-          <tr>
-            <td><%= link_to gm.group.name, gm.group %><br><small style="white-space: pre;">Joined: <%= gm.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></td>
-            <% if current_user?(@user) %>
-              <td><%= link_to "Delete", group_membership_path(gm), method: "delete", class: "btn btn-danger btn-block", role: "button", data: { confirm: "Are you sure you want to leave this group?" } %></td>
-            <% end %>
-          </tr>
+        <% if @user.group_memberships.size == 0 %>
+          <tr><td colspan="4" style="text-align: center;">No Membership Groups</td></tr>
+        <% else %>
+          <% (@user.group_memberships.sort {|a,b| a.group.name <=> b.group.name}).each do |gm| %>
+            <tr>
+              <td><%= link_to gm.group.name, gm.group %><br><small style="white-space: pre;">Joined: <%= gm.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></td>
+              <% if current_user?(@user) %>
+                <td><%= link_to "Delete", group_membership_path(gm), method: "delete", class: "btn btn-danger btn-block", role: "button", data: { confirm: "Are you sure you want to leave this group?" } %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
+        <% if current_user?(@user) %>
+        <tr>
+          <td colspan="4">
+            <div class="col-xs-6"><%= link_to "Join Groups", groups_path, class: "btn btn-primary btn-block", role: "button" %></div>
+            <div class="col-xs-6"><%= link_to "Create Group", new_group_path, class: "btn btn-primary btn-block", role: "button" %></div>
+          </td>
+        </tr>
         <% end %>
       </table>
     </div>

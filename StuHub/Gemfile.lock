@@ -121,8 +121,13 @@ GEM
       mime-types (>= 1.16, < 3)
     mime-types (2.6.2)
     mini_portile (0.6.2)
+<<<<<<< HEAD
     minitest (5.8.2)
     minitest-reporters (1.0.5)
+=======
+    minitest (5.8.1)
+    minitest-reporters (1.1.5)
+>>>>>>> 2ff8acf0a6e0c00437ed179ea670e2bc3efd77b1
       ansi
       builder
       minitest (>= 5.0)
@@ -233,7 +238,8 @@ DEPENDENCIES
   fullcalendar-rails
   jbuilder (~> 2.0)
   jquery-rails
-  minitest-reporters (= 1.0.5)
+  minitest-reporters (~> 1.1)
+  momentjs-rails
   nifty-generators
   pg
   private_pub!
@@ -247,8 +253,8 @@ DEPENDENCIES
   spring
   thin
   turbolinks
-  uglifier (>= 1.3.0)
-  web-console (~> 2.0)
+  uglifier (~> 2.7)
+  web-console (~> 2.2)
   will_paginate
 
 BUNDLED WITH
