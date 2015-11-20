@@ -17,6 +17,9 @@
 
  @import url(https://fonts.googleapis.com/css?family=Ubuntu:400,700,700italic,500italic,400italic,500);
 
+$brand-primary: #c20c22;
+$link-color: darken(#428bca, 6.5%);
+
  @import "bootstrap-sprockets";
  @import "bootstrap";
 
