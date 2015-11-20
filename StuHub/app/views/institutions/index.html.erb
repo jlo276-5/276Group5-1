@@ -21,7 +21,7 @@
                   <strong>Emails:</strong> <%= i.email_constraint %>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-2">
-                  <strong>Users:</strong> <%= i.users.size %>
+                  <strong><%= link_to pluralize(i.users.size, 'User'), institution_users_path(i) %></strong> 
                 </div>
 
                 <div class="col-xs-12 col-md-6">
