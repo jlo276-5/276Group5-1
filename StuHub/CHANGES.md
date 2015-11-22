@@ -81,3 +81,8 @@
 * JASIG CAS Authentication
 * Dropbox Account Linking
 * reCAPTCHA support
+
+### 2015.11.14 - 2015.11.21
+* Various Fixes
+
+### 2015.11.22
