@@ -2,14 +2,13 @@
 
 <ol class="breadcrumb">
   <li><%= link_to 'Courses', courses_path %></li>
-  <li><%= link_to @course.department.term.year.number, courses_path(year: @course.department.term.year.id) %></li>
-  <li><%= link_to @course.department.term.name, courses_path(year: @course.department.term.year.id, term: @course.department.term.id) %></li>
-  <li><%= link_to @course.department.name, courses_path(year: @course.department.term.year.id, term: @course.department.term.id, department: @course.department.id) %></li>
+  <li><%= link_to @course.department.term.term_name, courses_path(term: @course.department.term.id, term: @course.department.term.id) %></li>
+  <li><%= link_to @course.department.name, courses_path(term: @course.department.term.id, department: @course.department.id) %></li>
   <li><%= link_to "#{@course.department.name} #{@course.number}", @course %></li>
   <li class="active">Course Info</li>
 </ol>
 
-<h1><%= "#{@course.department.name}#{@course.number} - #{@course.name}" %> <small><%= "#{@course.department.term.name} #{@course.department.term.year.number}" %></small></h1>
+<h1><%= "#{@course.department.name}#{@course.number} - #{@course.name}" %> <small><%= @course.department.term.term_name %></small></h1>
 
 <hr>
 
@@ -29,7 +28,7 @@
 <% @course.associated_classes.order('number ASC').each do |ac| %>
 
   <h3>Section Group <%= ac.sections.first.key %>
-    <small><%= link_to 'Course Outline', "https://www.sfu.ca/outlines.html?#{@course.department.term.year.number}/#{@course.department.term.name}/#{@course.department.name}/#{@course.number}/#{ac.sections.first.key}".downcase, target: '_blank' %></small></h3>
+    <small><%= link_to 'Course Outline', "https://www.sfu.ca/outlines.html?#{@course.department.term.year}/#{@course.department.term.name}/#{@course.department.name}/#{@course.number}/#{ac.sections.first.key}".downcase, target: '_blank' %></small></h3>
 
   <div class="table-responsive">
     <table class="table table-striped table-hover table-condensed" id="sections">
