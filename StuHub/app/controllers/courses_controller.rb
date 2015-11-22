@@ -98,9 +98,9 @@ class CoursesController < ApplicationController
 
     if courses.count == 0 or (Time.now-(courses.order('updated_at').last.updated_at)) > 2.weeks
       begin
-        request_courses = JSON.parse(RestClient.get "#{department.term.data_url}?#{term.year}/#{term.name}/#{department.name}")
+        request_courses = JSON.parse(RestClient.get "#{department.term.data_url}?#{department.term.year}/#{department.term.name}/#{department.name}")
       rescue => e
-        puts "#{department.term.data_url}?#{term.year}/#{term.name}/#{department.name}"
+        puts "#{department.term.data_url}?#{department.term.year}/#{department.term.name}/#{department.name}"
         puts e.response
         courses = []
         return
@@ -110,6 +110,7 @@ class CoursesController < ApplicationController
         if !course_obj
           course_obj = Course.new
           course_obj.number = c["text"]
+          course_obj.name = c["title"]
           department.courses << course_obj
         else
           course_obj.touch

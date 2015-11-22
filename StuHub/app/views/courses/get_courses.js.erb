@@ -18,7 +18,7 @@ $('#course_list').empty()
     td3.innerHTML = '<td><%= link_to "Add", course_memberships_path(user_id: current_user, course_id: course), method: "post", class: "btn btn-primary btn-block", role: "button" %></td>'
   <% end %>
   tr.appendChild(td1)
-  // tr.appendChild(td2)
+  tr.appendChild(td2)
   tr.appendChild(td3)
   $('#course_list').append(tr)
 <% end %>
