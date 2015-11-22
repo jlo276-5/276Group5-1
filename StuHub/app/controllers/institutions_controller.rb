@@ -61,7 +61,7 @@ class InstitutionsController < ApplicationController
 
   def destroy
     institution = Institution.find_by id:params[:id]
-    if (@institution.nil?)
+    if (institution.nil?)
       flash[:danger] = "No institution exists with an id #{params[:id]}."
     else
       institution.destroy
