@@ -1,5 +1,11 @@
 <% provide(:title, "Editing Term #{@term.term_name} - #{@term.institution.name}") %>
 
+<ol class="breadcrumb">
+  <li><%= link_to 'Institutions', institutions_path %></li>
+  <li><%= link_to @term.institution.name, @term.institution %></li>
+  <li class="active">Edit <%= @term.term_name %></li>
+</ol>
+
 <div class="row">
   <div class="col-xs-12" style="text-align: center;">
     <h2>Edit <%= @term.term_name %> <small><%= @term.term_reference %></small></h2>
