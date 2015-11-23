@@ -1,6 +1,7 @@
 class TermsController < ApplicationController
   before_action :valid_institution
   before_action :valid_term, except: [:new, :create]
+  before_action :not_updating, except: [:new, :create]
   layout 'admin'
 
   def new
@@ -49,8 +50,10 @@ class TermsController < ApplicationController
     term = Term.find_by id:params[:id]
 
     if term.data_mode == 1
+      term.update_attribute(:updating, true)
+
       UpdateTerm.perform_later(term)
-      flash[:success] = "An Update for Term #{term.term_name_long} has been scheduled."
+      flash[:success] = "A Database Update for Term #{term.term_name_long} has been scheduled."
     else
       flash[:danger] = "That Term does not use an XLSX DB for its data."
     end
@@ -61,6 +64,14 @@ class TermsController < ApplicationController
 
   def term_params
     params.require(:term).permit(:name, :year, :term_reference, :data_mode, :data_url, :database_url, :database_contains_enrollment, :enrollment_start_date, :start_date, :end_date, :exams_end_date)
+  end
+
+  def not_updating
+    term = Term.find_by(id: params[:id])
+    if term.updating
+      flash[:warning] = "This Term is currently scheduled to receive a Database Update. Please wait until that has finished."
+      redirect_to institution_path(id: params[:institution_id])
+    end
   end
 
   def valid_institution

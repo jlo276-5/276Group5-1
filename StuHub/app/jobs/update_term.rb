@@ -5,6 +5,8 @@ class UpdateTerm < ActiveJob::Base
   require 'dullard'
 
   def perform(term)
-    term.update_from_database
+    term.with_lock do
+      term.update_from_database
+    end
   end
 end

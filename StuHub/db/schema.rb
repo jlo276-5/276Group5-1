@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123074821) do
+ActiveRecord::Schema.define(version: 20151123121008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -227,6 +227,7 @@ ActiveRecord::Schema.define(version: 20151123074821) do
     t.integer  "data_mode",                    default: 0
     t.string   "database_url"
     t.boolean  "database_contains_enrollment", default: false
+    t.boolean  "updating",                     default: false
   end
 
   add_index "terms", ["institution_id", "term_reference"], name: "index_terms_on_institution_id_and_term_reference", unique: true, using: :btree

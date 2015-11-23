@@ -10,6 +10,9 @@ class CoursesController < ApplicationController
     if @institution.current_term == nil
       flash[:danger] = "Your Institution has not set up their data sources properly. Please contact your Institution."
       redirect_to home_path
+    elsif @institution.current_term.updating
+      flash[:warning] = "A Data Update is in progress, please try again later."
+      redirect_to home_path
     elsif @institution.current_term.data_mode == 1
       # XLSX DB
       @departments = get_departments_api(@institution.current_term).order('name ASC')
@@ -38,9 +41,14 @@ class CoursesController < ApplicationController
 
   def info
     @course = Course.find_by(id: params[:id])
-    @cm = current_user.course_memberships.find_by(course_id: @course.id)
+    if @course.department.term.updating
+      flash[:warning] = "A Data Update is in progress, please try again later."
+      redirect_to home_path
+    else
+      @cm = current_user.course_memberships.find_by(course_id: @course.id)
 
-    get_course_api(@course)
+      get_course_api(@course)
+    end
   end
 
   def show

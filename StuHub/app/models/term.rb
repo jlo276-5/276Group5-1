@@ -18,7 +18,6 @@ class Term < ActiveRecord::Base
   end
 
   def update_from_database
-    numberAdded = 0
     if data_mode == 1
       uri = URI.parse(database_url)
       Net::HTTP.start(uri.host, uri.port) do |http|
@@ -50,7 +49,7 @@ class Term < ActiveRecord::Base
           end
 
           touch :data_last_updated
-          save
+          self.update_attribute(:updating, false)
         ensure
           temp.close
           temp.unlink
