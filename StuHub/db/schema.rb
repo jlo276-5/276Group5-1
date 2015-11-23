@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123051316) do
+ActiveRecord::Schema.define(version: 20151123060106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,7 +136,6 @@ ActiveRecord::Schema.define(version: 20151123051316) do
     t.string   "city"
     t.boolean  "uses_cas",         default: false
     t.string   "cas_endpoint"
-    t.integer  "current_term_id"
   end
 
   add_index "institutions", ["uses_cas"], name: "index_institutions_on_uses_cas", using: :btree
