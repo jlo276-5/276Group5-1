@@ -48,7 +48,7 @@ class TermsController < ApplicationController
   private
 
   def term_params
-    params.require(:term).permit(:name, :year, :term_reference, :data_mode, :data_url)
+    params.require(:term).permit(:name, :year, :term_reference, :data_mode, :data_url, :enrollment_start_date, :start_date, :end_date, :exams_end_date)
   end
 
   def valid_institution
