@@ -6,16 +6,25 @@ class CoursesController < ApplicationController
   require 'date'
 
   def index
+    @next_term = params[:next_term] == "true" ? true : false
     @institution = current_user.institution
-    if @institution.current_term == nil
-      flash[:danger] = "Your Institution has not set up their data sources properly. Please contact your Institution."
+    @term = @institution.current_term
+    if @next_term
+      if @term.nil?
+        flash[:warning] = "Next Term Data not yet available"
+        redirect_to courses_path
+      end
+      @term = @institution.next_term
+    end
+    if @term == nil
+      flash[:danger] = "Your Institution has not set up their data properly. Please contact your Institution."
       redirect_to home_path
-    elsif @institution.current_term.updating
+    elsif @term.updating
       flash[:warning] = "A Data Update is in progress, please try again later."
       redirect_to home_path
-    elsif @institution.current_term.data_mode == 1
+    elsif @term.data_mode == 1
       # XLSX DB
-      @departments = get_departments_api(@institution.current_term).order('name ASC')
+      @departments = get_departments_api(@term).order('name ASC')
 
       if !params[:department].to_s.blank?
         department = Department.find(params[:department])

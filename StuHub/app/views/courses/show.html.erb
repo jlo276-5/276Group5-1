@@ -2,8 +2,16 @@
 
 <ol class="breadcrumb">
   <li><%= link_to 'Courses', courses_path %></li>
-  <li><%= link_to @course.department.term.term_name, courses_path(term: @course.department.term.id, term: @course.department.term.id) %></li>
-  <li><%= link_to @course.department.name, courses_path(term: @course.department.term.id, department: @course.department.id) %></li>
+  <% if @course.department.term = @course.department.term.institution.next_term %>
+  <li><%= link_to @course.department.term.term_name, courses_path(next_term: true) %></li>
+  <li><%= link_to @course.department.name, courses_path(next_term: true, department: @course.department.id) %></li>
+  <% elsif @course.department.term = @course.department.term.institution.current_term %>
+  <li><%= link_to @course.department.term.term_name, courses_path %></li>
+  <li><%= link_to @course.department.name, courses_path(department: @course.department.id) %></li>
+  <% else %>
+  <li><%= link_to @course.department.term.term_name, courses_path %></li>
+  <li><%= @course.department.name %></li>
+  <% end %>
   <li class="active"><%= "#{@course.department.name} #{@course.number}" %></li>
 </ol>
 
