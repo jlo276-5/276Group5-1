@@ -4,7 +4,7 @@ class TermsController < ApplicationController
   layout 'admin'
 
   require 'net/http'
-  require 'creek'
+  require 'dullard'
 
   def new
     @institution = Institution.find(params[:institution_id])
@@ -63,29 +63,27 @@ class TermsController < ApplicationController
           temp.write(data.body)
           temp.flush
 
-          workbook = Creek::Book.new temp, check_file_extension: false
-          rows = workbook.sheets.first.rows.to_a
-          rows.shift(6)
+          workbook = Dullard::Workbook.new temp
+          workbook.sheets[0].rows.each_with_index do |row, index|
+            if index > 5
+              department = term.departments.find_by(name: row[2])
+              if department.nil?
+                department = Department.new(name: row[2])
+                term.departments << department
+              end
 
-          rows.each do |row|
-            values = row.values
-            department = term.departments.find_by(name: values[2])
-            if department.nil?
-              department = Department.new(name: values[2])
-              term.departments << department
+              course = department.courses.find_by(number: row[3])
+              if course.nil?
+                course = Course.new(number: row[3], name: row[6])
+                department.courses << course
+                numberAdded += 1
+              end
+
+              department.save
             end
-
-            course = department.courses.find_by(number: values[3])
-            if course.nil?
-              course = Course.new(number: values[3], name: values[6])
-              department.courses << course
-              numberAdded += 1
-            end
-
-            department.save!
           end
 
-          term.save!
+          term.save
         ensure
           temp.close
           temp.unlink

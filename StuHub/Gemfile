@@ -59,8 +59,8 @@ gem "recaptcha", require: "recaptcha/rails"
 # Dropbox API
 gem 'dropbox-api'
 
-# creek for XLSX parsing
-gem 'creek'
+# dullard for XLSX parsing
+gem 'dullard', git: 'https://github.com/thirtyseven/dullard.git'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

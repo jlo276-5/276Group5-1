@@ -5,6 +5,14 @@ GIT
     private_pub (1.0.4)
       faye
 
+GIT
+  remote: https://github.com/thirtyseven/dullard.git
+  revision: 3332b6552ab7b9ffb0fbc7237db1448282cbe3f9
+  specs:
+    dullard (0.3.0)
+      nokogiri (~> 1.6)
+      rubyzip (~> 1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -68,9 +76,6 @@ GEM
     coffee-script-source (1.9.1.1)
     cookiejar (0.3.2)
     daemons (1.2.3)
-    creek (1.1.1)
-      nokogiri (~> 1.6.0)
-      rubyzip (>= 1.0.0)
     debug_inspector (0.0.2)
     domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
@@ -241,8 +246,8 @@ DEPENDENCIES
   bootstrap-will_paginate
   byebug
   coffee-rails (~> 4.1.0)
-  creek
   dropbox-api
+  dullard!
   faker (~> 1.4.2)
   fullcalendar-rails
   jbuilder (~> 2.0)
