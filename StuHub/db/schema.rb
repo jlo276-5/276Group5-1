@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123060106) do
+ActiveRecord::Schema.define(version: 20151123074821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -213,11 +213,10 @@ ActiveRecord::Schema.define(version: 20151123060106) do
 
   create_table "terms", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.string   "year"
     t.string   "term_reference"
-    t.integer  "data_mode",             default: 0
     t.string   "data_url"
     t.datetime "data_last_updated"
     t.integer  "institution_id"
@@ -225,6 +224,9 @@ ActiveRecord::Schema.define(version: 20151123060106) do
     t.date     "start_date"
     t.date     "end_date"
     t.date     "exams_end_date"
+    t.integer  "data_mode",                    default: 0
+    t.string   "database_url"
+    t.boolean  "database_contains_enrollment", default: false
   end
 
   add_index "terms", ["institution_id", "term_reference"], name: "index_terms_on_institution_id_and_term_reference", unique: true, using: :btree

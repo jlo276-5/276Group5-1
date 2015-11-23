@@ -1,14 +1,15 @@
 <%= javascript_tag do %>
   DataSource = function() {
     var sourceVal = $('input[name="term[data_mode]"]:checked').val();
-    var dataURLField = document.getElementById("data_url_field");
 
-    var disable = document.createAttribute("disabled");
-    disable.value = "disabled";
-    dataURLField.setAttributeNode(disable);
-
-    if (sourceVal != 0) {
-      dataURLField.removeAttribute("disabled");
+    if (sourceVal == 1) {
+      $('#data_url_field').removeProp('disabled');
+      $('#database_url_field').removeProp('disabled');
+      $('#database_contains_enrollment_field').removeProp('disabled');
+    } else {
+      $('#data_url_field').prop('disabled', true);
+      $('#database_url_field').prop('disabled', true);
+      $('#database_contains_enrollment_field').prop('disabled', true);
     }
   }
   $(document).ready(function() {
@@ -50,10 +51,7 @@
         <%= f.radio_button :data_mode, 0, onclick: 'DataSource()' %> Manual
       </label>
       <label class="radio-inline">
-        <%= f.radio_button :data_mode, 1, onclick: 'DataSource()' %> XLSX DB
-      </label>
-      <label class="radio-inline">
-        <%= f.radio_button :data_mode, 2, onclick: 'DataSource()' %> API
+        <%= f.radio_button :data_mode, 1, onclick: 'DataSource()' %> Automatic
       </label>
     </div>
   </div>
@@ -61,10 +59,24 @@
   <div class="form-group">
     <%= f.label :data_url, 'Data URL', class: 'col-sm-4 col-md-3 control-label' %>
     <div class="col-sm-8 col-md-9">
-      <%= f.url_field :data_url, class: 'form-control', placeholder: 'URL, preferrably over HTTPS', id: 'data_url_field', disabled: 'disabled' %>
-      <span id="helpBlock" class="help-block">Needs to follow a specified <a href="/help/institutions#data_format">format</a>.</span>
+      <%= f.url_field :data_url, class: 'form-control', placeholder: 'API Endpoint', id: 'data_url_field', disabled: 'disabled' %>
+      <span id="helpBlock" class="help-block">Needs to follow a specified <a href="/help/institutions#api_format">format</a>.</span>
     </div>
   </div>
+
+  <div class="form-group">
+    <%= f.label :database_url, 'Database URL (Optional)', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.url_field :database_url, class: 'form-control', placeholder: 'Database URL, XLSX format', id: 'database_url_field', disabled: 'disabled' %>
+      <div class="checkbox">
+        <label>
+          <%= f.check_box :database_contains_enrollment, id: 'database_contains_enrollment_field', disabled: 'disabled' %> Database contains enrollment data.
+        </label>
+      </div>
+      <span id="helpBlock" class="help-block">Used to seed course and (optionally) enrollment data.<br>Needs to follow a specified <a href="/help/institutions#db_format">format</a>.</span>
+    </div>
+  </div>
+
   <div class="form-group">
     <%= f.label :data_last_updated, 'Last Updated', class: 'col-sm-4 col-md-3 control-label' %>
     <div class="col-sm-8 col-md-9">

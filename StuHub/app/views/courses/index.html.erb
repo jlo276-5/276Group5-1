@@ -5,6 +5,7 @@
     <h1>Course Browser</h1>
   </div>
 </div>
+<% if @institution.current_term.data_mode == 1 %>
 <div class="row">
   <div class="form-group col-sm-6 col-sm-offset-3">
     <%= collection_select(:department, :name, @departments, :id, :name, (@department_select ? {prompt: "Departments", selected: @department_select} : {prompt: "Departments"}), (@departments.size == 0 ? {class: 'form-control department_select', disabled: 'disabled'} : {class: 'form-control department_select'})) %>
@@ -39,3 +40,8 @@
     </div>
   </div>
 </div>
+<% else %>
+<div class="row" style="text-align: center;">
+  <h4>Your Institution currently does not support courses on this system.</h4>
+</div>
+<% end %>

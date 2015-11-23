@@ -12,17 +12,6 @@ class CoursesController < ApplicationController
       redirect_to home_path
     elsif @institution.current_term.data_mode == 1
       # XLSX DB
-      @departments = @institution.current_term.departments.order('name ASC')
-
-      if !params[:department].to_s.blank?
-        department = Department.find(params[:department])
-        @courses = department.courses.order('number ASC')
-        @department_select = params[:department]
-      else
-        @courses = []
-      end
-    elsif @institution.current_term.data_mode == 2
-      # API
       @departments = get_departments_api(@institution.current_term).order('name ASC')
 
       if !params[:department].to_s.blank?

@@ -65,7 +65,11 @@ Rails.application.routes.draw do
   get '/institutions/:id/users', to: 'institutions#users', as: 'institution_users'
   scope '/admin' do
     resources :institutions do
-      resources :terms, only: [:new, :create, :edit, :update, :destroy]
+      resources :terms, only: [:new, :create, :edit, :update, :destroy] do
+        member do
+          post 'update_data'
+        end
+      end
     end
     resources :messages, only: [:index]
   end
