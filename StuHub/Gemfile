@@ -62,6 +62,9 @@ gem 'dropbox-api'
 # dullard for XLSX parsing
 gem 'dullard', git: 'https://github.com/thirtyseven/dullard.git'
 
+# resque for background jobs
+gem 'resque', "~> 1.22.0"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

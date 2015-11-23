@@ -3,9 +3,6 @@ class TermsController < ApplicationController
   before_action :valid_term, except: [:new, :create]
   layout 'admin'
 
-  require 'net/http'
-  require 'dullard'
-
   def new
     @institution = Institution.find(params[:institution_id])
     @term = Term.new(institution_id: @institution.id)
@@ -20,7 +17,7 @@ class TermsController < ApplicationController
         @institution.current_term_id = @term.id
         @institution.save
       end
-      flash[:info] = "Term created."
+      flash[:info] = "Term Created. If you enabled database seeding, click Update."
       redirect_to institution_path(id: @institution.id)
     else
       render 'new'
@@ -34,7 +31,7 @@ class TermsController < ApplicationController
   def update
     @term = Term.find_by id:params[:id]
     if @term.update_attributes(term_params)
-      flash[:success] = "Term Updated"
+      flash[:success] = "Term Updated.  If you enabled database seeding, click Update."
       redirect_to institution_path(id: @term.institution.id)
     else
       render 'edit'
@@ -50,48 +47,10 @@ class TermsController < ApplicationController
 
   def update_data
     term = Term.find_by id:params[:id]
-    institution = Institution.find_by id:params[:institution_id]
 
-    numberAdded = 0
     if term.data_mode == 1
-      uri = URI.parse(term.database_url)
-      Net::HTTP.start(uri.host, uri.port) do |http|
-        data = http.get(uri.path)
-        temp = Tempfile.open("db-#{institution.id}-#{term.term_reference}.xlsx")
-        begin
-          temp.binmode
-          temp.write(data.body)
-          temp.flush
-
-          workbook = Dullard::Workbook.new temp
-          workbook.sheets[0].rows.each_with_index do |row, index|
-            if index > 5
-              department = term.departments.find_by(name: row[2])
-              if department.nil?
-                department = Department.new(name: row[2])
-                term.departments << department
-              end
-
-              course = department.courses.find_by(number: row[3])
-              if course.nil?
-                course = Course.new(number: row[3], name: row[6])
-                department.courses << course
-                numberAdded += 1
-              end
-
-              department.save
-            end
-          end
-
-          term.save
-        ensure
-          temp.close
-          temp.unlink
-        end
-      end
-
-      term.touch :data_last_updated
-      flash[:success] = "Term \"#{term.term_name}\" Data Updated: Total # Departments = #{term.departments.size}, Total # Courses = #{term.courses.size}, # Courses Added = #{numberAdded}"
+      UpdateTerm.perform_later(term)
+      flash[:success] = "An Update for Term #{term.term_name_long} has been scheduled."
     else
       flash[:danger] = "That Term does not use an XLSX DB for its data."
     end
