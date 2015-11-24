@@ -33,6 +33,7 @@ class Term < ActiveRecord::Base
           dayString = ""
           workbook = Dullard::Workbook.new temp
           workbook.sheets[0].rows.each_with_index do |row, index|
+            break if index > 35000
             if index > 5
               if row[0] != dayString
                 dayString = row[0]
