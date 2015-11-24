@@ -47,8 +47,7 @@ gem 'rest-client'
 
 #gems for real-time chat
 gem 'nifty-generators'
-gem 'private_pub', :git => 'https://github.com/PeritusSolutions/private_pub.git'
-gem 'thin'
+gem 'private_pub', git: 'https://github.com/PeritusSolutions/private_pub.git'
 
 # redcarpet for markdown support
 gem 'redcarpet', '~> 3.3.1'
