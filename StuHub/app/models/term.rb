@@ -28,13 +28,21 @@ class Term < ActiveRecord::Base
           temp.write(data.body)
           temp.flush
 
+          numberAdded = 0
+          dayCounter = -1
+          dayString = ""
           workbook = Dullard::Workbook.new temp
           workbook.sheets[0].rows.each_with_index do |row, index|
             if index > 5
-              department = departments.find_by(name: row[2])
+              if row[0] != dayString
+                dayString = row[0]
+                dayCounter += 1
+              end
+
+              department = self.departments.find_by(name: row[2])
               if department.nil?
                 department = Department.new(name: row[2])
-                departments << department
+                self.departments << department
               end
 
               course = department.courses.find_by(number: row[3])
@@ -44,13 +52,27 @@ class Term < ActiveRecord::Base
                 numberAdded += 1
               end
 
-              department.save
+              if self.database_contains_enrollment
+                # 0 is date, 7 is key, 9 is max, 11 is actual
+                if course.enrollment.blank?
+                  course.enrollment = {}
+                end
+                if course.enrollment[row[7]].nil?
+                  course.enrollment[row[7]] = []
+                end
+                if course.enrollment[row[7]][dayCounter].nil? or course.enrollment[row[7]][dayCounter]["date"] != dayString
+                  course.enrollment[row[7]][dayCounter] = {"date" => dayString, "actual" => row[11], "max" => row[9]}
+                end
+                course.save!
+              end
+
+              department.save!
             end
           end
 
-          touch :data_last_updated
-          self.update_attribute(:updating, false)
+          self.touch :data_last_updated
         ensure
+          self.update_attribute(:updating, false)
           temp.close
           temp.unlink
         end

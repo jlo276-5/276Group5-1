@@ -51,6 +51,7 @@ Rails.application.routes.draw do
     member do
       get 'users', to: 'courses#course_members'
       get 'info', to: 'courses#info', as: 'get_info'
+      get 'enrollment', to: 'courses#enrollment'
     end
     collection do
       get 'get_terms',       to: 'courses#get_terms'

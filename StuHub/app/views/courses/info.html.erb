@@ -35,8 +35,18 @@
 
 <% @course.associated_classes.order('number ASC').each do |ac| %>
 
-  <h3>Section Group <%= ac.sections.first.key %>
-    <small><%= link_to 'Course Outline', "https://www.sfu.ca/outlines.html?#{@course.department.term.year}/#{@course.department.term.name}/#{@course.department.name}/#{@course.number}/#{ac.sections.first.key}".downcase, target: '_blank' %></small></h3>
+  <h3>
+    Section Group <%= ac.sections.first.key %>
+    <small>
+      <%= link_to 'Course Outline', "https://www.sfu.ca/outlines.html?#{@course.department.term.year}/#{@course.department.term.name}/#{@course.department.name}/#{@course.number}/#{ac.sections.first.key}".downcase, target: '_blank' %>
+      <% if !@course.enrollment.blank? and !@course.enrollment[ac.sections.first.key].nil? %>
+        <% latest = @course.enrollment[ac.sections.first.key].last %>
+        (<%= link_to "Enrollment #{latest["actual"].to_i}/#{latest["max"].to_i} as of #{latest["date"].strftime('%b %d')}", enrollment_course_path(@course) %>)
+      <% else %>
+        (Enrollment Unknown)
+      <% end %>
+    </small>
+  </h3>
 
   <div class="table-responsive">
     <table class="table table-striped table-hover table-condensed" id="sections">

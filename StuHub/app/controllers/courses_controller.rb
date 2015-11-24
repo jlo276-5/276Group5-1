@@ -60,6 +60,32 @@ class CoursesController < ApplicationController
     end
   end
 
+  def enrollment
+    @course = Course.find_by(id: params[:id])
+
+    @datasets = []
+
+    unless @course.enrollment.blank?
+      @course.enrollment.each do |key, value|
+        actualValues = {}
+        remainValues = {}
+        maxValues = {}
+        max = 0
+        value.each do |v|
+          actualValues[v["date"]] = v["actual"].to_i
+          maxValues[v["date"]] = v["max"].to_i
+          remainValues[v["date"]] = (v["max"].to_i - v["actual"].to_i)
+          if v["max"] > max
+            max = v["max"]
+          end
+        end
+        @datasets << {"key" => key, "max" => max, "data" => [{name: "Capacity", data: maxValues},
+                                                             {name: "Enrollment", data: actualValues},
+                                                             {name: "Remaining", data: remainValues}]}
+      end
+    end
+  end
+
   def show
     @course = Course.find_by(id: params[:id])
 
