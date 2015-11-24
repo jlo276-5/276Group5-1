@@ -10,7 +10,7 @@
             <h1 class="panel-title">Courses</h1>
           </div>
           <div class="list-group">
-            <% current_user.courses.each do |course| %>
+            <% (current_user.courses.sort {|a,b| "#{a.department.name} #{a.number}" <=> "#{b.department.name} #{b.number}"}).each do |course| %>
               <%= link_to course, class: 'list-group-item' do %>
                 <%= "#{course.department.name} #{course.number}" %> <small style="white-space:pre;"><%= course.department.term.term_name %></small>
               <% end %>

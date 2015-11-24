@@ -55,7 +55,7 @@
           <th width="10%">Section #</th>
           <th width="25%">Instructors</th>
           <th width="50%">Location and Time</th>
-          <th width="15%">Add to Schedule</th>
+          <% unless @cm.nil? %><th width="15%">Add to Schedule</th><% end %>
         </tr>
       </thead>
 
@@ -84,7 +84,11 @@
             <% else %>
               <% s.section_times.each do |st| %>
                 <strong><%= "#{st.days} #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')}" %></strong>
-                <%= "#{st.building} #{st.room} at #{st.campus}" %>
+                <% if st.room.nil? %>
+                  &nbsp;Location Unknown
+                <% else %>
+                  <%= "in #{st.building} #{st.room} at #{st.campus}" %>
+                <% end %>
                 <% if st != s.section_times.last %>
                   <br>
                 <% end %>
@@ -96,22 +100,26 @@
             <% else %>
               <% s.exams.order('exam_start ASC').each do |e| %>
                 <strong><%= "#{e.exam_start.strftime("%a")} #{e.exam_start.strftime("%D")} #{e.exam_start.in_time_zone.strftime('%I:%M %p')} - #{e.exam_end.in_time_zone.strftime('%I:%M %p')}" %></strong>
-                <%= "#{e.building} #{e.room} at #{e.campus}" %>
+                <% if e.room.nil? %>
+                  &nbsp;Location Unknown
+                <% else %>
+                  <%= "in #{e.building} #{e.room} at #{e.campus}" %>
+                <% end %>
                 <% if e != s.exams.last %>
                   <br>
                 <% end %>
               <% end %>
             <% end %>
           </td>
-          <td>
-            <% if !@cm.nil? %>
+          <% unless @cm.nil? %>
+            <td>
               <% if @cm.sectionInMembership?(s.id) %>
                 <%= link_to "Remove", remove_sec_course_membership_path(@cm, section_id: s.id), method: "delete", class: "btn btn-danger btn-block", role: "button" %></td>
               <% else %>
                 <%= link_to "Add", add_sec_course_membership_path(id: @cm.id, section_id: s.id), method: "post", class: "btn btn-primary btn-block", role: "button" %></td>
               <% end %>
-            <% end %>
-          </td>
+            </td>
+          <% end %>
         </tr>
         <% end %>
       </tbody>
