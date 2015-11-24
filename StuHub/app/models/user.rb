@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   validates :role, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2}
 
   def name
-    read_attribute(:name) || read_attribute(:email)
+    read_attribute(:name) || read_attribute(:email).partition('@').first
   end
 
   ## check email format
@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
                       format: { with: VALID_EMAIL_REGEX },
                       uniqueness: { case_sensitive: false }
 
-  validate :validate_email_domain, on: :create
+  validate :validate_email_domain, on: :create, if: 'cas_identifier.nil?'
 
   ##activate
   def activate
