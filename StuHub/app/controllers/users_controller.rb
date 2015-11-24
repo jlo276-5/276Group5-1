@@ -15,8 +15,11 @@ class UsersController < ApplicationController
   end
 
   def index
-    @userscount = User.all.count
-    @users = User.paginate(page: params[:page], per_page: 25).order('created_at ASC')
+    if current_user.admin?
+      @users = User.paginate(page: params[:page], per_page: 25).order('created_at ASC')
+    else
+      @users = User.where(institution_id: current_user.id).paginate(page: params[:page], per_page: 25).order('created_at ASC')
+    end
   end
 
   def new
