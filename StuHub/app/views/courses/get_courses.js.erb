@@ -2,11 +2,13 @@ $('.year_select').prop('disabled', false)
 $('.term_select').prop('disabled', false)
 $('.department_select').prop('disabled', false)
 $('#course_list').empty()
+<% if @courses.size == 0 %>
+tr = document.createElement("tr")
+  tr.innerHTML = '<tr style="text-align: center;"><td colspan="3">No Courses Available</td></tr>'
+  $('#course_list').append(tr)
+<% else %>
 <% @courses.each do |course| %>
   tr = document.createElement("tr")
-  // <% if course.name.blank? %>
-  //   tr.className = "warning"
-  // <% end %>
   td1 = document.createElement("td")
   td1.innerHTML = '<td><%= link_to get_info_course_url(course) do %><%= course.department.name + " " + course.number %><% end %></td>'
   td2 = document.createElement("td")
@@ -18,7 +20,8 @@ $('#course_list').empty()
     td3.innerHTML = '<td><%= link_to "Add", course_memberships_path(user_id: current_user, course_id: course), method: "post", class: "btn btn-primary btn-block", role: "button" %></td>'
   <% end %>
   tr.appendChild(td1)
-  // tr.appendChild(td2)
+  tr.appendChild(td2)
   tr.appendChild(td3)
   $('#course_list').append(tr)
+<% end %>
 <% end %>

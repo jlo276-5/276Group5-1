@@ -51,6 +51,7 @@ Rails.application.routes.draw do
     member do
       get 'users', to: 'courses#course_members'
       get 'info', to: 'courses#info', as: 'get_info'
+      get 'enrollment', to: 'courses#enrollment'
     end
     collection do
       get 'get_terms',       to: 'courses#get_terms'
@@ -62,11 +63,17 @@ Rails.application.routes.draw do
   # Routes for Administration
   get 'admin', to: 'admin#index'
   get 'admin/users', to: 'admin#user_management'
+  get '/institutions/:id/users', to: 'institutions#users', as: 'institution_users'
   scope '/admin' do
-    resources :institutions, only: [:new, :index, :create, :edit, :update, :destroy]
+    resources :institutions do
+      resources :terms, only: [:new, :create, :edit, :update, :destroy] do
+        member do
+          post 'update_data'
+        end
+      end
+    end
     resources :messages, only: [:index]
   end
-  resources :institutions, only: [:show]
 
   # Routes for Sessions
   get    'login'  => 'sessions#new'

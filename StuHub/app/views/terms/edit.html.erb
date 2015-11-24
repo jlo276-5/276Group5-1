@@ -1,0 +1,20 @@
+<% provide(:title, "Editing Term #{@term.term_name} - #{@term.institution.name}") %>
+
+<ol class="breadcrumb">
+  <li><%= link_to 'Institutions', institutions_path %></li>
+  <li><%= link_to @term.institution.name, @term.institution %></li>
+  <li class="active">Edit <%= @term.term_name %></li>
+</ol>
+
+<div class="row">
+  <div class="col-xs-12" style="text-align: center;">
+    <h2>Edit <%= @term.term_name %> <small><%= @term.term_reference %></small></h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1">
+    <div style="margin: 10px 0;">
+      <%= render partial: 'form', locals: {dest: institution_term_path} %>
+    </div>
+  </div>
+</div>

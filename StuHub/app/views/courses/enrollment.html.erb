@@ -1,4 +1,6 @@
-<% provide(:title, "#{@course.department.name}#{@course.number}'s Members") %>
+<% provide(:title, "Enrollment - #{@course.department.name}#{@course.number}") %>
+
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
 
 <ol class="breadcrumb">
   <li><%= link_to 'Courses', courses_path %></li>
@@ -12,16 +14,26 @@
   <li><%= link_to @course.department.term.term_name, courses_path %></li>
   <li><%= @course.department.name %></li>
   <% end %>
-  <li><%= link_to "#{@course.department.name} #{@course.number}", course_path(@course) %></li>
-  <li class="active">Members</li>
+  <li><%= link_to "#{@course.department.name} #{@course.number}", @course %></li>
+  <li class="active">Course Enrollment</li>
 </ol>
 
-<div class="row">
-  <div class="col-xs-10 col-xs-offset-1" style="text-align: center">
-    <h1><%= "#{@course.department.name}#{@course.number} - #{@course.name}" %> <small><%= @course.department.term.term_name %></small></h1>
-  </div>
-</div>
+<h1><%= "#{@course.department.name}#{@course.number} - #{@course.name}" %> <small><%= @course.department.term.term_name %></small></h1>
 
 <hr>
 
-<%= render partial: 'users/list' %>
+<% if @datasets.size > 0 %>
+
+<% @datasets.each do |ds| %>
+
+<h2>Section Group <%= ds["key"] %></h2>
+
+<%= line_chart(ds["data"], max: ds["max"], library: {legend: 'bottom', chartArea: {width: '90%', height: '70%'}, hAxis: {format: 'yyyy/MM/d'}}) %>
+
+<% end %>
+
+<% else %>
+
+<h3 style="text-align: center;">Enrollment data not available for this course. </h3>
+
+<% end %>
