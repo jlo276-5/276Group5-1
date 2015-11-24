@@ -40,7 +40,7 @@ gem 'fullcalendar-rails'
 # Bootstrap and Pagination
 gem 'bootstrap-sass', '~> 3.3.5'
 gem 'will_paginate'
-gem 'bootstrap-will_paginate'
+gem 'will_paginate-bootstrap'
 
 # REST Client for access to REST APIs
 gem 'rest-client'
