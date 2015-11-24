@@ -72,11 +72,13 @@ class CoursesController < ApplicationController
         maxValues = {}
         max = 0
         value.each do |v|
-          actualValues[v["date"]] = v["actual"].to_i
-          maxValues[v["date"]] = v["max"].to_i
-          remainValues[v["date"]] = (v["max"].to_i - v["actual"].to_i)
-          if v["max"] > max
-            max = v["max"]
+          unless v.nil?
+            actualValues[v["date"].utc.strftime('%b %d, %Y')] = v["actual"].to_i
+            maxValues[v["date"].utc.strftime('%b %d, %Y')] = v["max"].to_i
+            remainValues[v["date"].utc.strftime('%b %d, %Y')] = (v["max"].to_i - v["actual"].to_i)
+            if v["max"] > max
+              max = v["max"]
+            end
           end
         end
         @datasets << {"key" => key, "max" => max, "data" => [{name: "Capacity", data: maxValues},
