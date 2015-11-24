@@ -2,7 +2,7 @@
 
 <ol class="breadcrumb">
   <li><%= link_to 'Courses', courses_path %></li>
-  <% if @course.department.term = @course.department.term.institution.next_term %>
+  <% if @course.department.term == @course.department.term.institution.next_term %>
   <li><%= link_to @course.department.term.term_name, courses_path(next_term: true) %></li>
   <li><%= link_to @course.department.name, courses_path(next_term: true, department: @course.department.id) %></li>
   <% elsif @course.department.term = @course.department.term.institution.current_term %>
