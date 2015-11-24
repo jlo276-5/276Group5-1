@@ -28,6 +28,7 @@
             <%= link_to 'Courses', courses_user_path(@user), class: "list-group-item #{'active' if current_page?(courses_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) || @user.privacy_setting.display_courses %>
             <%= link_to 'Groups', groups_user_path(@user), class: "list-group-item #{'active' if current_page?(groups_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) || @user.privacy_setting.display_groups %>
             <%= link_to 'Edit Profile', customize_user_path(@user), class: "list-group-item #{'active' if current_page?(customize_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
+            <%= link_to 'Connected Accounts', accounts_user_path(@user), class: "list-group-item #{'active' if current_page?(accounts_user_path(@user))}" if (current_user?(@user) || current_user.superuser?) %>
             <%= link_to 'Account Settings', edit_user_path(@user), class: "list-group-item #{'active' if current_page?(edit_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
             </div>
         </div>

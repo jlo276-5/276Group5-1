@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151110074632) do
+ActiveRecord::Schema.define(version: 20151124045101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,8 +50,9 @@ ActiveRecord::Schema.define(version: 20151110074632) do
     t.string   "name"
     t.string   "number"
     t.integer  "department_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.text     "enrollment",    default: ""
   end
 
   add_index "courses", ["department_id"], name: "index_courses_on_department_id", using: :btree
@@ -129,12 +130,16 @@ ActiveRecord::Schema.define(version: 20151110074632) do
     t.string   "state"
     t.string   "country"
     t.string   "email_constraint"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.string   "website"
     t.string   "image"
     t.string   "city"
+    t.boolean  "uses_cas",         default: false
+    t.string   "cas_endpoint"
   end
+
+  add_index "institutions", ["uses_cas"], name: "index_institutions_on_uses_cas", using: :btree
 
   create_table "instructors", force: :cascade do |t|
     t.string   "first_name"
@@ -209,13 +214,25 @@ ActiveRecord::Schema.define(version: 20151110074632) do
 
   create_table "terms", force: :cascade do |t|
     t.string   "name"
-    t.integer  "year_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.string   "year"
+    t.string   "term_reference"
+    t.string   "data_url"
+    t.datetime "data_last_updated"
+    t.integer  "institution_id"
+    t.date     "enrollment_start_date"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.date     "exams_end_date"
+    t.integer  "data_mode",                    default: 0
+    t.string   "database_url"
+    t.boolean  "database_contains_enrollment", default: false
+    t.boolean  "updating",                     default: false
   end
 
-  add_index "terms", ["name", "year_id"], name: "index_terms_on_name_and_year_id", unique: true, using: :btree
-  add_index "terms", ["year_id"], name: "index_terms_on_year_id", using: :btree
+  add_index "terms", ["institution_id", "term_reference"], name: "index_terms_on_institution_id_and_term_reference", unique: true, using: :btree
+  add_index "terms", ["institution_id"], name: "index_terms_on_institution_id", using: :btree
 
   create_table "user_interests", force: :cascade do |t|
     t.string   "interest"
@@ -254,16 +271,16 @@ ActiveRecord::Schema.define(version: 20151110074632) do
     t.datetime "email_change_requested_at"
     t.string   "password_change_digest"
     t.datetime "password_change_requested_at"
+    t.string   "cas_identifier"
+    t.boolean  "cas_login_active",             default: false
+    t.string   "dropbox_token"
+    t.string   "dropbox_secret"
+    t.string   "dropbox_uid"
   end
 
+  add_index "users", ["cas_identifier"], name: "index_users_on_cas_identifier", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["institution_id"], name: "index_users_on_institution_id", using: :btree
-
-  create_table "years", force: :cascade do |t|
-    t.string   "number"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   add_foreign_key "associated_classes", "courses"
   add_foreign_key "course_memberships", "courses"
@@ -279,6 +296,6 @@ ActiveRecord::Schema.define(version: 20151110074632) do
   add_foreign_key "privacy_settings", "users"
   add_foreign_key "section_times", "sections"
   add_foreign_key "sections", "associated_classes"
-  add_foreign_key "terms", "years"
+  add_foreign_key "terms", "institutions"
   add_foreign_key "user_interests", "users"
 end

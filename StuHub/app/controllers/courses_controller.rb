@@ -1,53 +1,41 @@
 class CoursesController < ApplicationController
+  before_action :valid_institution
   before_action :valid_course, only: [:show, :info, :course_members]
   before_action :verify_membership, only: [:show]
   require 'rest-client'
   require 'date'
 
-  SFU_CO_API = "http://www.sfu.ca/bin/wcm/course-outlines"
-
   def index
-    if Year.count == 0 or (Time.now-(Year.order('updated_at').last.updated_at)) > 1.month
-      request_years = JSON.parse(RestClient.get SFU_CO_API)
-      request_years.each do |y|
-        year_obj = Year.find_by(number: y["text"])
-        if !year_obj
-          year_obj = Year.new
-          year_obj.number = y["text"]
-          year_obj.save
-        else
-          year_obj.touch
-        end
+    @next_term = params[:next_term] == "true" ? true : false
+    @institution = current_user.institution
+    @term = @institution.current_term
+    if @next_term
+      if @term.nil?
+        flash[:warning] = "Next Term Data not yet available"
+        redirect_to courses_path
       end
+      @term = @institution.next_term
     end
+    if @term == nil
+      flash[:danger] = "Your Institution has not set up their data properly. Please contact your Institution."
+      redirect_to home_path
+    elsif @term.updating
+      flash[:warning] = "A Data Update is in progress, please try again later."
+      redirect_to home_path
+    elsif @term.data_mode == 1
+      # XLSX DB
+      @departments = get_departments_api(@term).order('name ASC')
 
-    @years = Year.order('number ASC').all
-    if !params[:year].to_s.blank?
-      year = Year.find(params[:year])
-      @terms = get_terms_api(year).order('name ASC')
-      @year_select = params[:year]
+      if !params[:department].to_s.blank?
+        department = Department.find(params[:department])
+        @courses = get_courses_api(department).order('number ASC')
+        @department_select = params[:department]
+      else
+        @courses = []
+      end
     else
-      @terms = []
+      # MANUAL ENTRY
     end
-    if !params[:term].to_s.blank?
-      term = Term.find(params[:term])
-      @departments = get_departments_api(term).order('name ASC')
-      @term_select = params[:term]
-    else
-      @departments = []
-    end
-    if !params[:department].to_s.blank?
-      department = Department.find(params[:department])
-      @courses = get_courses_api(department).order('number ASC')
-      @department_select = params[:department]
-    else
-      @courses = []
-    end
-  end
-
-  def get_terms
-    year = Year.find(params[:year_id])
-    @terms = get_terms_api(year).order('name ASC')
   end
 
   def get_departments
@@ -57,15 +45,45 @@ class CoursesController < ApplicationController
 
   def get_courses
     department = Department.find(params[:department_id])
-
     @courses = get_courses_api(department).order('number ASC')
   end
 
   def info
     @course = Course.find_by(id: params[:id])
-    @cm = current_user.course_memberships.find_by(course_id: @course.id)
+    if @course.department.term.updating
+      flash[:warning] = "A Data Update is in progress, please try again later."
+      redirect_to home_path
+    else
+      @cm = current_user.course_memberships.find_by(course_id: @course.id)
 
-    get_course_api(@course)
+      get_course_api(@course)
+    end
+  end
+
+  def enrollment
+    @course = Course.find_by(id: params[:id])
+
+    @datasets = []
+
+    unless @course.enrollment.blank?
+      @course.enrollment.each do |key, value|
+        actualValues = {}
+        remainValues = {}
+        maxValues = {}
+        max = 0
+        value.each do |v|
+          actualValues[v["date"]] = v["actual"].to_i
+          maxValues[v["date"]] = v["max"].to_i
+          remainValues[v["date"]] = (v["max"].to_i - v["actual"].to_i)
+          if v["max"] > max
+            max = v["max"]
+          end
+        end
+        @datasets << {"key" => key, "max" => max, "data" => [{name: "Capacity", data: maxValues},
+                                                             {name: "Enrollment", data: actualValues},
+                                                             {name: "Remaining", data: remainValues}]}
+      end
+    end
   end
 
   def show
@@ -86,35 +104,12 @@ class CoursesController < ApplicationController
 
   private
 
-  def get_terms_api(year)
-    terms = year.terms
-
-    if terms.count == 0 or (Time.now-(terms.order('updated_at').last.updated_at)) > 1.month
-      request_terms = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}")
-      request_terms.each do |t|
-        term_obj = year.terms.find_by(name: t["text"])
-        if !term_obj
-          term_obj = Term.new
-          term_obj.name = t["text"]
-          year.terms << term_obj
-        else
-          term_obj.touch
-        end
-      end
-      year.save
-    end
-
-    return terms
-  end
-
   def get_departments_api(term)
-    year = term.year
     departments = term.departments
 
     if departments.count == 0 or (Time.now-(departments.order('updated_at').last.updated_at)) > 1.month
-      request_departments = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}")
+      request_departments = JSON.parse(RestClient.get "#{term.data_url}?#{term.year}/#{term.name}")
       request_departments.each do |d|
-        # department_obj = Department.find_by(name: d["text"], term_id: term.id)
         department_obj = term.departments.find_by(name: d["text"])
         if !department_obj
           department_obj = Department.new
@@ -131,25 +126,23 @@ class CoursesController < ApplicationController
   end
 
   def get_courses_api(department)
-    term = department.term
-    year = term.year
     courses = department.courses
 
     if courses.count == 0 or (Time.now-(courses.order('updated_at').last.updated_at)) > 2.weeks
       begin
-        request_courses = JSON.parse(RestClient.get "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}")
+        request_courses = JSON.parse(RestClient.get "#{department.term.data_url}?#{department.term.year}/#{department.term.name}/#{department.name}")
       rescue => e
-        puts "#{SFU_CO_API}?#{year.number}/#{term.name}/#{department.name}"
+        puts "#{department.term.data_url}?#{department.term.year}/#{department.term.name}/#{department.name}"
         puts e.response
         courses = []
         return
       end
       request_courses.each do |c|
-        # course_obj = Course.find_by(number: c["text"], department_id: department.id)
         course_obj = department.courses.find_by(number: c["text"])
         if !course_obj
           course_obj = Course.new
           course_obj.number = c["text"]
+          course_obj.name = c["title"]
           department.courses << course_obj
         else
           course_obj.touch
@@ -169,9 +162,9 @@ class CoursesController < ApplicationController
         sections_fetch_error_count = 0
 
         begin
-          request_sections = JSON.parse(RestClient.get "#{SFU_CO_API}?#{course.department.term.year.number}/#{course.department.term.name}/#{course.department.name}/#{course.number}")
+          request_sections = JSON.parse(RestClient.get "#{course.department.term.data_url}?#{course.department.term.year}/#{course.department.term.name}/#{course.department.name}/#{course.number}")
         rescue => e
-          puts "#{SFU_CO_API}?#{course.department.term.year.number}/#{course.department.term.name}/#{course.department.name}/#{course.number}"
+          puts "#{course.department.term.data_url}?#{course.department.term.year}/#{course.department.term.name}/#{course.department.name}/#{course.number}"
           puts e.response # Redo.
           if sections_fetch_error_count < 2
             sections_fetch_error_count += 1
@@ -204,9 +197,9 @@ class CoursesController < ApplicationController
           section_fetch_error_count = 0
 
           begin
-            request_section = JSON.parse(RestClient.get ("#{SFU_CO_API}?#{course.department.term.year.number}/#{course.department.term.name}/#{course.department.name}/#{course.number}/#{section_obj.key}".downcase))
+            request_section = JSON.parse(RestClient.get ("#{course.department.term.data_url}?#{course.department.term.year}/#{course.department.term.name}/#{course.department.name}/#{course.number}/#{section_obj.key}".downcase))
           rescue => e
-            puts "#{SFU_CO_API}?#{course.department.term.year.number}/#{course.department.term.name}/#{course.department.name}/#{course.number}/#{section_obj.key}".downcase
+            puts "#{course.department.term.data_url}?#{course.department.term.year}/#{course.department.term.name}/#{course.department.name}/#{course.number}/#{section_obj.key}".downcase
             puts e.response
             if section_fetch_error_count < 2
               section_fetch_error_count += 1
@@ -317,6 +310,14 @@ class CoursesController < ApplicationController
 
   private
 
+  def valid_institution
+    @institution = current_user.institution
+    if @institution.nil?
+      flash[:danger] = "You must be associated with an Institution to access Courses. Contact an Administrator if you need help."
+      redirect_to home_path
+    end
+  end
+
   def valid_course
     @course = Course.find_by(id: params[:id])
     if @course.nil?
@@ -326,10 +327,10 @@ class CoursesController < ApplicationController
   end
 
   def verify_membership
-    course = Course.find_by(id: params[:id])
-    if course and !current_user.memberOfCourse?(course)
+    @course = Course.find_by(id: params[:id])
+    if @course and !current_user.memberOfCourse?(@course)
       flash[:warning] = "You are not a member of this course yet."
-      redirect_to get_info_course_path(course)
+      redirect_to get_info_course_path(@course)
     end
   end
 end

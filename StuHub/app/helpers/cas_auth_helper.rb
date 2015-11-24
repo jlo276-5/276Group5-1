@@ -1,0 +1,2 @@
+module CasAuthHelper
+end

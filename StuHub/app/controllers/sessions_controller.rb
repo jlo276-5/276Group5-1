@@ -25,12 +25,25 @@ class SessionsController < ApplicationController
 
   def destroy
     if logged_in?
-      log_out
-      flash[:success] = 'Successfully logged out.'
+      if current_user.cas_login_active and !current_user.institution.nil? and !current_user.institution.cas_endpoint.blank?
+        cas_endpoint = current_user.institution.cas_endpoint
+        current_user.cas_login_active = false
+        current_user.save
+        log_out
+        redirect_to "#{cas_endpoint}/appLogout?app=StuHub"
+      else
+        if current_user.institution.nil? and current_user.cas_login_active
+          current_user.cas_login_active = false
+          current_user.save
+        end
+        log_out
+        flash[:success] = 'Successfully logged out.'
+        redirect_to root_path
+      end
     else
       flash[:warning] = 'You are not logged in.'
+      redirect_to login_path
     end
-    redirect_to root_url
   end
 
   private

@@ -1,0 +1,128 @@
+<%= javascript_tag do %>
+  DataSource = function() {
+    var sourceVal = $('input[name="term[data_mode]"]:checked').val();
+
+    if (sourceVal == 1) {
+      $('#data_url_field').removeProp('disabled');
+      $('#database_url_field').removeProp('disabled');
+      $('#database_contains_enrollment_field').removeProp('disabled');
+    } else {
+      $('#data_url_field').prop('disabled', true);
+      $('#database_url_field').prop('disabled', true);
+      $('#database_contains_enrollment_field').prop('disabled', true);
+    }
+  }
+  $(document).ready(function() {
+    DataSource()
+  })
+<% end %>
+
+<%= form_for(@term, url: dest, html: {class: 'form-horizontal'}) do |f| %>
+  <%= render partial: 'shared/error_messages', locals: {obj: @term} %>
+
+  <div class="form-group">
+    <%= f.label :name, 'Term Name', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.text_field :name, class: 'form-control', placeholder: 'Name or Season' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :year, 'Term Year', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.number_field :year, in: 1900..2100, step: 1, class: 'form-control', placeholder: 'Year' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :term_reference, 'Unique ID', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.text_field :term_reference, class: 'form-control', placeholder: 'Examples: 1161, spring2016' %>
+      <span id="helpBlock" class="help-block">Should be a unique value, preferrably one internally used.</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <h4>Term Data Source</h4>
+
+  <div class="form-group">
+    <%= f.label :data_mode, 'Data Source', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <label class="radio-inline">
+        <%= f.radio_button :data_mode, 0, onclick: 'DataSource()' %> Manual
+      </label>
+      <label class="radio-inline">
+        <%= f.radio_button :data_mode, 1, onclick: 'DataSource()' %> Automatic
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :data_url, 'Data URL', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.url_field :data_url, class: 'form-control', placeholder: 'API Endpoint', id: 'data_url_field', disabled: 'disabled' %>
+      <span id="helpBlock" class="help-block">Needs to follow a specified <a href="/help/institutions#api_format">format</a>.</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :database_url, 'Database URL (Optional)', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.url_field :database_url, class: 'form-control', placeholder: 'Database URL, XLSX format', id: 'database_url_field', disabled: 'disabled' %>
+      <div class="checkbox">
+        <label>
+          <%= f.check_box :database_contains_enrollment, id: 'database_contains_enrollment_field', disabled: 'disabled' %> Database contains enrollment data.
+        </label>
+      </div>
+      <span id="helpBlock" class="help-block">Used to seed course and (optionally) enrollment data.<br>Needs to follow a specified <a href="/help/institutions#db_format">format</a>.</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :data_last_updated, 'Last Updated', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.text_field :data_last_updated, class: 'form-control', placeholder: 'Never', disabled: 'disabled' %>
+    </div>
+  </div>
+
+  <hr>
+
+  <h4>Term Dates</h4>
+
+  <div class="form-group">
+    <%= f.label :enrollment_start_date, 'Enrollments Start', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.date_field :enrollment_start_date, class: 'form-control', placeholder: 'Enrollments Start Date' %>
+      <span id="helpBlock" class="help-block">Enrollments continue until classes start.</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :start_date, 'Classes Start', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.date_field :start_date, class: 'form-control', placeholder: 'Classes Start Date' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :end_date, 'Classes End', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.date_field :end_date, class: 'form-control', placeholder: 'Classes End Date' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :exams_end_date, 'Exams End', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.date_field :exams_end_date, class: 'form-control', placeholder: 'Exams End Date' %>
+      <span id="helpBlock" class="help-block">Exams start after classes end.</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+      <%= f.submit 'Save', class: "btn btn-primary btn-block", id: 'submit_btn' %>
+    </div>
+  </div>
+<% end %>
