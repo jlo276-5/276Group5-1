@@ -8,7 +8,13 @@ class GroupsController < ApplicationController
   end
 
   def index
-    @groups = Group.paginate(page: params[:page], per_page: 25).order('created_at ASC')
+    if params[:sort_by] == "NAME"
+      @groups = Group.paginate(page: params[:page], per_page: 25).order('name ASC')
+    elsif params[:sort_by] == "NAME_DESC"
+      @groups = Group.paginate(page: params[:page], per_page: 25).order('name DESC')
+    else
+      @groups = Group.paginate(page: params[:page], per_page: 25).order('created_at DESC')
+    end
     @paginate = true
   end
 
