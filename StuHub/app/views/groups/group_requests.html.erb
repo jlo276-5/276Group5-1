@@ -10,7 +10,7 @@
         <h4>Join Approvals not required for this Group</h4>
       <% else %>
         <%= will_paginate @requests, style: 'margin: 0;' %><br>
-        <%= page_entries_info @requests if @requests.count > 0 %>
+        <%= page_entries_info @requests, model: "Request" if @requests.count > 0 %>
       <% end %>
     </div>
   </div>
