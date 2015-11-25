@@ -203,6 +203,17 @@ class User < ActiveRecord::Base
     return (!gm.nil? and gm.role == 1)
   end
 
+  def current_course_memberships
+    ccm = []
+    self.course_memberships.each do |cm|
+      t = cm.course.term
+      if t == self.institution.current_term
+        ccm << cm
+      end
+    end
+    return ccm
+  end
+
   private
 
     def validate_email_domain

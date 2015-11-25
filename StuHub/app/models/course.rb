@@ -1,6 +1,6 @@
 class Course < ActiveRecord::Base
   serialize :enrollment
-  
+
   belongs_to :department
   has_many :associated_classes, dependent: :destroy
   has_many :course_memberships, dependent: :destroy
@@ -8,4 +8,8 @@ class Course < ActiveRecord::Base
 
   validates :number, length: {minimum: 1}
   validates :department_id, presence: true
+
+  def term
+    return self.department.term
+  end
 end

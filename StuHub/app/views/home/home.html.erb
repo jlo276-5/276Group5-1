@@ -10,9 +10,11 @@
             <h1 class="panel-title">Courses</h1>
           </div>
           <div class="list-group">
-            <% (current_user.courses.sort {|a,b| "#{a.department.name} #{a.number}" <=> "#{b.department.name} #{b.number}"}).each do |course| %>
-              <%= link_to course, class: 'list-group-item' do %>
-                <%= "#{course.department.name} #{course.number}" %> <small style="white-space:pre;"><%= course.department.term.term_name %></small>
+            <% (current_user.courses.sort_by {|x| [x.term.year, x.term.term_order, x.department.name, x.number]}).each do |course| %>
+              <% if course.term == current_user.institution.current_term or course.term == current_user.institution.next_term %>
+                <%= link_to course, class: 'list-group-item' do %>
+                  <%= "#{course.department.name} #{course.number}" %> <small style="white-space:pre;"><%= course.department.term.term_name %></small>
+                <% end %>
               <% end %>
             <% end %>
             <%= link_to courses_url, class: 'list-group-item' do %>
@@ -76,7 +78,7 @@
             <% if current_user.course_memberships.size == 0 %>
               <li class="list-group-item">No Schedules</li>
             <% else %>
-              <% (current_user.course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
+              <% (current_user.current_course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
                 <% if cm.sections.count == 0 %>
                   <% course = cm.course %>
                   <li class="list-group-item">
