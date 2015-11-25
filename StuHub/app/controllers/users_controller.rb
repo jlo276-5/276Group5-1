@@ -140,14 +140,34 @@ class UsersController < ApplicationController
     elsif !current_user?(@user) and !current_user.more_powerful(true, @user)
       flash[:danger] = "You do not have the permission to do that."
       redirect_to @user
-    elsif params[:user].has_key?(:email)
+    elsif params.has_key?(:new_email)
       user = @user.try(:authenticate, params[:current_password])
       if !user && !current_user.more_powerful(true, @user)
         @user.errors[:current_password] = 'is incorrect.'
         render 'edit'
-      elsif (user || current_user.more_powerful(true, @user)) && @user.update_attributes(user_params)
-        flash[:success] = "Account Settings Updated"
-        redirect_to @user
+      elsif (user || current_user.more_powerful(true, @user))
+        if !params[:new_email].blank?
+          if current_user.more_powerful(true, @user)
+            params[:user][:email] = params[:new_email]
+          else
+            user.create_email_change_digest
+            params[:user][:email_change_new] = params[:new_email]
+          end
+        end
+        if @user.update_attributes(user_params)
+          if !params[:user][:email_change_new].blank?
+            flash[:success] = "Account Updated. Please check your email for a confirmation."
+            @user.send_email_change_email
+          else
+            flash[:success] = "Account Updated. Please update your records."
+          end
+          if !params[:user][:password_confirmation].blank?
+            @user.send_password_change_success_email
+          end
+          redirect_to @user
+        else
+          render 'edit'
+        end
       else
         render 'edit'
       end
@@ -195,7 +215,7 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :institution_id, :cas_identifier, :tos_agree)
+      params.require(:user).permit(:email, :email_change_new, :password, :password_confirmation, :institution_id, :cas_identifier, :tos_agree)
     end
 
     def customization_params

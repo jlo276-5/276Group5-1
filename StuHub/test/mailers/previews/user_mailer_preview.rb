@@ -31,6 +31,7 @@ class UserMailerPreview < ActionMailer::Preview
 
   def email_change
     user = User.first
+    user.email_change_token = User.new_token
     UserMailer.email_change(user)
   end
 
