@@ -103,9 +103,11 @@ class UsersController < ApplicationController
   def promote
     @user = User.find_by id:params[:id]
     if (!@user.more_powerful(false, current_user) and @user.role < 2)
+      old_role = @user.role_string_long
       @user.role += 1
       if @user.save
-        flash[:success] = "Promoted #{@user.name} to #{@user.role_string_long}"
+        flash[:success] = "Promoted #{@user.name} from #{old_role} to #{@user.role_string_long}"
+        UserMailer.promotion(@user, old_role)
       else
         flash[:danger] = "Could not promote #{@user.name}"
       end
@@ -119,9 +121,11 @@ class UsersController < ApplicationController
   def demote
     @user = User.find_by id:params[:id]
     if (!@user.more_powerful(false, current_user) and @user.role > 0)
+      old_role = @user.role_string_long
       @user.role -= 1
       if @user.save
-        flash[:success] = "Demoted #{@user.name} to #{@user.role_string_long}"
+        flash[:success] = "Demoted #{@user.name} from #{old_role} to #{@user.role_string_long}"
+        UserMailer.demotion(@user, old_role)
       else
         flash[:danger] = "Could not demote #{@user.name}"
       end
