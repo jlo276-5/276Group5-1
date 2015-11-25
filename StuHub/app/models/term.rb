@@ -8,6 +8,7 @@ class Term < ActiveRecord::Base
   validates :term_reference, length: {minimum: 1}
   validates :institution_id, :enrollment_start_date, :start_date, :end_date, :exams_end_date, presence: true
   validates :data_url, length: {minimum: 11}, if: "data_mode == 1"
+  validates :term_order, numericality: {integer_only: true, minimum: 1}
 
   def term_name
     return "#{name} #{year}"
