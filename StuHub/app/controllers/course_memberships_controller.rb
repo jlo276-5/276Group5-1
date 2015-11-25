@@ -12,7 +12,9 @@ class CourseMembershipsController < ApplicationController
       @cm = CourseMembership.new(course: course, user: user)
       @cm.join_date = DateTime.now
       if @cm.save
-        # flash[:success] = "Course Membership Created"
+        if user.notification_emails
+          CourseMailer.joined_course(user, course).deliver_now
+        end
         redirect_to join_success_course_membership_path(@cm)
       else
         flash[:danger] = "Could not create Course Membership"
@@ -53,10 +55,12 @@ class CourseMembershipsController < ApplicationController
 
   def destroy
     cm = CourseMembership.find(params[:id])
-    user = cm.user
     cm.destroy
-    flash[:success] = "Course Membership Destroyed"
-    redirect_to user
+    if cm.user.notification_emails
+      CourseMailer.dropped_course(cm.user, cm.course).deliver_now
+    end
+    flash[:success] = "Dropped Course #{cm.course.department.name} #{cm.course.number}"
+    redirect_to courses_path
   end
 
   private

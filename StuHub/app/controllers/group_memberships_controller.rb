@@ -17,7 +17,10 @@ class GroupMembershipsController < ApplicationController
     else
       @gm = GroupMembership.new(group: group, user: user)
       if @gm.save
-        flash[:success] = "Group Membership Created"
+        flash[:success] = "Joined Group #{group.name}"
+        if user.notification_emails
+          GroupMailer.joined_group(user, group).deliver_now
+        end
         redirect_to group_path(group)
       else
         flash[:danger] = "Could not create Group Membership"
@@ -39,6 +42,9 @@ class GroupMembershipsController < ApplicationController
       flash[:success] = "Left Group #{gm.group.name}, set #{gm_n.user.name} as new Administrator."
     else
       flash[:success] = "Left Group #{gm.group.name}"
+    end
+    if params[:leave] == "true" and gm.user.notification_emails
+      GroupMailer.left_group(gm.user, gm.group).deliver_now
     end
     redirect_to groups_path
   end

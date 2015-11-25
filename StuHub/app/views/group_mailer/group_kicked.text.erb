@@ -1,0 +1,9 @@
+<% provide(:email_title, "Kicked from Group : #{@group.name}") %>
+
+You have been kicked from the group <%= @group.name %>.
+
+If you believe this is in error, please contact the administrators of the group.
+
+You can view all groups at: 
+
+<%= groups_url %>

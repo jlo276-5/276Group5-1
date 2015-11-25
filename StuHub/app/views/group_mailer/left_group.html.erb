@@ -1,0 +1,5 @@
+<% provide(:email_title, "Left Group : #{@group.name}") %>
+
+<p>You have left the group <%= @group.name %>.</p>
+
+<p>You can view all groups at: <%= link_to 'Groups', groups_url %></p>

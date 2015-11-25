@@ -1,0 +1,5 @@
+<% provide(:email_title, "Joined Group : #{@group.name}") %>
+
+<p>You have joined the group <%= @group.name %>.</p>
+
+<p>You can view the group at: <%= link_to @group.name, @group %></p>
