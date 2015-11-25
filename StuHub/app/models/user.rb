@@ -84,6 +84,15 @@ class User < ActiveRecord::Base
     UserMailer.password_change_success(self).deliver_now
   end
 
+  def lock_account
+    update_attribute(:account_locked, true)
+    UserMailer.account_locked(self).deliver_now
+  end
+
+  def unlock_account
+    update_attribute(:account_locked, false)
+  end
+
   #check if password exist
   has_secure_password
 

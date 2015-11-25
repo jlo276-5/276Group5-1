@@ -56,4 +56,9 @@ class UserMailer < ApplicationMailer
     mail to: user.email, subject: '[StuHub] Account Deletion'
   end
 
+  def account_locked(user)
+    @user = User
+    mail to: user.email, subject: '[StuHub] Account Locked'
+  end
+
 end

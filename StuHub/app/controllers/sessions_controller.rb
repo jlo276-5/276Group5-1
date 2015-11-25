@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by(email: params[:session][:email].downcase)
-    if user && user.authenticate(params[:session][:password])
+    if user && user.authenticate(params[:session][:password]) and !user.account_locked?
       if user.activated?
         log_in user
         params[:session][:remember_me] == '1' ? remember(user) : forget(user)
@@ -18,6 +18,12 @@ class SessionsController < ApplicationController
         redirect_to login_url
       end
     else
+      unless user.nil?
+        user.update_attribute(:failed_login_attempts, user.failed_login_attempts+1)
+        if user.failed_login_attempts >= 5 and !user.account_locked?
+          user.lock_account
+        end
+      end
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124101559) do
+ActiveRecord::Schema.define(version: 20151124112047) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -278,6 +278,8 @@ ActiveRecord::Schema.define(version: 20151124101559) do
     t.string   "dropbox_uid"
     t.boolean  "account_emails",               default: true
     t.boolean  "notification_emails",          default: false
+    t.integer  "failed_login_attempts",        default: 0
+    t.boolean  "account_locked",               default: false
   end
 
   add_index "users", ["cas_identifier"], name: "index_users_on_cas_identifier", unique: true, using: :btree
