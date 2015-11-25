@@ -10,7 +10,8 @@ class EmailChangesController < ApplicationController
       user.update_attribute(:email, user.email_change_new)
       user.reset_email_change_digest
       flash[:success] = "Your email has been changed. Please update any password managers."
-      UserMailer.email_change_success(user, old_email).deliver_now
+      UserMailer.email_change_success(user.email).deliver_now
+      UserMailer.email_change_success(old_email).deliver_now
       redirect_to user
     else
       flash[:danger] = "Invalid activation link. Please verify that the link is correct."
