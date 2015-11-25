@@ -34,7 +34,7 @@ class UserMailer < ApplicationMailer
     mail to: user.email_change_new, subject: '[StuHub] Email Change Request'
   end
 
-  def email_change_success(email)
+  def email_change_success(user, email)
     @user = user
     mail to: email, subject: '[StuHub] Email Change Successful'
   end

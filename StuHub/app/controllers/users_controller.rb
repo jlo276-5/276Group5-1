@@ -107,7 +107,7 @@ class UsersController < ApplicationController
       @user.role += 1
       if @user.save
         flash[:success] = "Promoted #{@user.name} from #{old_role} to #{@user.role_string_long}"
-        UserMailer.promotion(@user, old_role)
+        UserMailer.promotion(@user, old_role).deliver_now
       else
         flash[:danger] = "Could not promote #{@user.name}"
       end
@@ -125,7 +125,7 @@ class UsersController < ApplicationController
       @user.role -= 1
       if @user.save
         flash[:success] = "Demoted #{@user.name} from #{old_role} to #{@user.role_string_long}"
-        UserMailer.demotion(@user, old_role)
+        UserMailer.demotion(@user, old_role).deliver_now
       else
         flash[:danger] = "Could not demote #{@user.name}"
       end
