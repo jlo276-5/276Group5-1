@@ -1,0 +1,9 @@
+<% provide(:email_title, "Demoted in Group : #{@group.name}") %>
+
+You have been demoted in the group <%= @group.name %> from <%= @old_role %> to <%= @new_role %>.
+
+If you believe this is in error, please contact the administrators of the group.
+
+You can view the group at:
+
+<%= group_url(@group) %>

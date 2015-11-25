@@ -1,0 +1,13 @@
+<% provide(:email_title, 'Account Locked') %>
+
+<p>Your account on StuHub has been locked due to too many failed login attempts.</p>
+
+<p>You will not be able to login to your account until you reset your password: </p>
+
+<%= link_to "Reset your Password", new_password_reset_url %>
+
+<p>If the link above does not work, copy and paste the following url into your browser:</p>
+
+<%= new_password_reset_url %>
+
+<p>Please contact us directly if you require any assistance.</p>

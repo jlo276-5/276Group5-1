@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
   before_action :verify_membership, only: [:show, :edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
   before_action :group_admin, only: [:edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
+  before_action :valid_membership, only: [:promote_member, :demote_member, :kick_member]
   layout 'group_admin', only: [:edit, :group_members, :group_requests]
 
   def new
@@ -52,6 +53,9 @@ class GroupsController < ApplicationController
       gm.role += 1
       if gm.save
         flash[:success] = "Promoted #{gm.user.name} to Administrator in this Group"
+        if gm.user.notification_emails
+          GroupMailer.group_promoted(gm.user, gm.group, "Member", "Administrator").deliver_now
+        end
       else
         flash[:danger] = "Could not promote #{gm.user.name}"
       end
@@ -74,6 +78,9 @@ class GroupsController < ApplicationController
         else
           flash[:success] = "Demoted #{gm.user.name} to Member in this Group"
         end
+        if gm.user.notification_emails
+          GroupMailer.group_demoted(gm.user, gm.group, "Administrator", "Member").deliver_now
+        end
       else
         flash[:danger] = "Could not demote #{gm.user.name}"
       end
@@ -87,10 +94,13 @@ class GroupsController < ApplicationController
     gm = GroupMembership.find_by(id: params[:gm_id])
     if gm.destroy
       flash[:success] = "Kicked #{gm.user.name} from this Group"
+      if gm.user.notification_emails
+        GroupMailer.group_kicked(gm.user, gm.group).deliver_now
+      end
     else
       flash[:danger] = "Could not kick #{gm.user.name}"
     end
-    redirect_to users_group_path(gm.group)
+    redirect_to users_group_path(Group.find_by(id: params[:id]))
   end
 
   def create
@@ -138,6 +148,14 @@ class GroupsController < ApplicationController
 
   def group_params
     params.require(:group).permit(:name, :creator, :limited, :description)
+  end
+
+  def valid_membership
+    @gm = GroupMembership.find_by(id: params[:gm_id])
+    if @gm.nil?
+      flash[:danger] = "No such Group Membership Exists"
+      redirect_to users_group_path(Group.find_by(id: params[:id]))
+    end
   end
 
   def verify_membership
