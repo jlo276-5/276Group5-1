@@ -57,7 +57,7 @@ class UserMailer < ApplicationMailer
   end
 
   def account_locked(user)
-    @user = User
+    @user = user
     mail to: user.email, subject: '[StuHub] Account Locked'
   end
 
