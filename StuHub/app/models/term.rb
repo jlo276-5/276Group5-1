@@ -18,6 +18,10 @@ class Term < ActiveRecord::Base
     return "#{name} #{year} (#{term_reference})"
   end
 
+  def in_exam_period
+    return true if (self.end_date..self.exams_end_date).cover?(Time.now)
+  end
+
   def update_from_database
     if data_mode == 1
       uri = URI.parse(database_url)

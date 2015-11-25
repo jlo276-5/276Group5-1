@@ -93,11 +93,21 @@
                       <% course = s.associated_class.course %>
                       <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %><br><small><%= course.department.term.term_name %></small></h4>
                       <p class="list-group-item-text">
-                        <% if s.section_times.count == 0 %>
-                          No Schedules
+                        <% if course.term.in_exam_period %>
+                          <% if s.exams.count == 0 %>
+                            No Exams
+                          <% else %>
+                            <% s.exams.each do |e| %>
+                              <%= "#{e.exam_start.strftime("%a")} #{e.exam_start.strftime("%D")} #{e.exam_start.in_time_zone.strftime('%I:%M %p')} - #{e.exam_end.in_time_zone.strftime('%I:%M %p')}" %><br>
+                            <% end %>
+                          <% end %>
                         <% else %>
-                          <% s.section_times.each do |st| %>
-                            <%= "#{st.days} #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')}" %><br>
+                          <% if s.section_times.count == 0 %>
+                            No Schedules
+                          <% else %>
+                            <% s.section_times.each do |st| %>
+                              <%= "#{st.days} #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')}" %><br>
+                            <% end %>
                           <% end %>
                         <% end %>
                       </p>
