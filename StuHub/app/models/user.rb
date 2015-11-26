@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :privacy_setting
   accepts_nested_attributes_for :user_interests, allow_destroy: true
 
+  before_destroy :send_deletion_email
+
   attr_accessor :remember_token, :activation_token, :reset_token, :email_change_token
   ##check upper case
   before_save   :downcase_email
@@ -83,6 +85,10 @@ class User < ActiveRecord::Base
 
   def send_password_change_success_email
     UserMailer.password_change_success(self).deliver_now
+  end
+
+  def send_deletion_email
+    UserMailer.account_deletion(self).deliver_now
   end
 
   def lock_account
