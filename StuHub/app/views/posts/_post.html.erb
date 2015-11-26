@@ -3,7 +3,7 @@
 <div class="row" id="post_<%= post.id %>">
   <div class="col-xs-12">
     <div class="panel panel-default post_panel">
-      <div class="panel-body">
+      <div class="panel-body" id="post_<%= post.id %>_body">
         <div class="media">
           <div class="media-left media-top">
             <% if user.nil? %>
@@ -15,11 +15,19 @@
           <div class="media-body post_body">
             <h4 class="media-heading">
               <span class="post_user"><%= user.nil? ? "Unknown" : (link_to user.name, user, target: '_blank') %></span>
-              <small><span style="float: right" class="post_created_at"><%= "#{post.created_at.strftime("%x") + " " if post.created_at.in_time_zone < Date.today} #{post.created_at.strftime("%l:%m:%S %p")}" %></span></small>
+              <small>
+                <span style="float: right" class="post_created_at">
+                  <%= "#{post.created_at.in_time_zone.strftime("%x") if post.created_at.to_date != Date.today} #{post.created_at.in_time_zone.strftime("%l:%m:%S %p")}" %><br>
+                  <%= link_to 'Edit', edit_post_path(post), remote: true %> | <%= link_to 'Delete', post_path(post), remote: true, method: 'delete' %>
+                </span>
+              </small>
             </h4>
             <span class="post_body">
               <% unless post.title.blank? %><h5><%= post.title %></h5><% end %>
               <%= markdown(post.body) %>
+            </span>
+            <span class="post_functions">
+
             </span>
           </div>
         </div>

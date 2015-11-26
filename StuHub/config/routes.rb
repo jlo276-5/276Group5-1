@@ -38,7 +38,7 @@ Rails.application.routes.draw do
 
   # Routes for Messages and Posts
   resources :messages, only: [:create]
-  resources :posts, only: [:create]
+  resources :posts, only: [:create, :edit, :update, :destroy]
 
   # Routes for Courses
   resources :course_memberships, only: [:destroy, :create] do
