@@ -11,5 +11,7 @@
     <%= render partial: 'messages/interface', locals: {chat_channel_type: @chat_channel_type,
                                                               channel_id: @course.id, nav: false, obj: nil, obj_name: ''} %>
   </div>
-
 </div>
+
+<%= subscribe_to "/courses/#{@course.id}/messages" %>
+<%= subscribe_to "/courses/#{@course.id}/posts" %>
