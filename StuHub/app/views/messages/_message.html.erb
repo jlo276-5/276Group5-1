@@ -15,7 +15,7 @@
           <div class="media-body message_content">
             <h4 class="media-heading">
               <span class="message_created_at"><%= user.nil? ? "Unknown" : (link_to user.name, user, target: '_blank') %></span>
-              <small><span style="float: right" class="message_created_at"><%= "#{message.created_at.in_time_zone.strftime("%x") if message.created_at.to_date != Date.today} #{message.created_at.in_time_zone.strftime("%l:%m:%S %p")}" %></span></small>
+              <small><span style="float: right" class="message_created_at"><%= "#{message.created_at.in_time_zone.strftime("%x") if message.created_at.to_date != Date.today} #{message.created_at.in_time_zone.strftime("%l:%M:%S %p")}" %></span></small>
             </h4>
             <!-- Does not handle long words well. -->
             <span class="message_content"><%= markdown(message.content) %></span>
