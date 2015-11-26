@@ -52,7 +52,7 @@
     <div class="col-sm-8 col-md-9">
       <%= f.collection_select :institution_id, Institution.all.order('name ASC'), :id, :name, {}, (@disable_institution ? {class: 'form-control', disabled: ''} : {class: 'form-control'})  %>
       <% if !current_page?(root_path) %>
-        <span id="helpBlock" class="help-block">Note: The email used for registration must match domains specified by the institution.</span>
+        <% if @user.cas_identifier.nil? %><span id="helpBlock" class="help-block">Note: The email used for registration must match domains specified by the institution.</span><% end %>
       <% end %>
     </div>
   </div>

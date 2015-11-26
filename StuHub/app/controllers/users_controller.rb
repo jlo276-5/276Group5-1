@@ -46,6 +46,7 @@ class UsersController < ApplicationController
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
     else
+      @user.tos_agree = false
       render 'new'
     end
   end
