@@ -1,0 +1,32 @@
+<% content_for :content do %>
+
+<div class="row">
+  <div class="col-sm-9">
+    <div class="page-header">
+      <h1><%= yield(:page_title) %></h1>
+    </div>
+    <%= yield %>
+  </div>
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title">StuHub Help</h1>
+      </div>
+      <div class="list-group">
+        <%= link_to 'Help Index', help_path, class: "list-group-item #{'active' if current_page?(help_path)}" %>
+        <% if logged_in? %>
+        <%= link_to 'Recent Changes', help_item_path(page: 'changes'), class: "list-group-item #{'active' if current_page?(help_item_path(page: 'changes'))}" %>
+
+        <% end %>
+        <%= link_to 'About Us', about_path, class: "list-group-item #{'active' if current_page?(about_path)}" %>
+        <%= link_to 'Terms of Use', terms_path, class: "list-group-item #{'active' if current_page?(terms_path)}" %>
+        <%= link_to 'FAQ', faq_path, class: "list-group-item #{'active' if current_page?(faq_path)}" %>
+        <%= link_to 'Contact Us', contact_path, class: "list-group-item #{'active' if current_page?(contact_path)}" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% end %>
+
+<%= render template: "layouts/application" %>

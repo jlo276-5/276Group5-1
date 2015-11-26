@@ -1,4 +1,5 @@
-<% content_for :title, 'Terms of Use' %>
+<% provide(:title, 'Terms of Use') %>
+<% provide(:page_title, 'Terms of Use') %>
 
 <div class="row">
   <div class="col-xs-10 col-xs-offset-1">

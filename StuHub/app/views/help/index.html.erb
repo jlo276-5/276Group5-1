@@ -1,0 +1,119 @@
+<% provide(:title, "Help") %>
+
+<% if logged_in? %>
+<div class="alert alert-info" role="alert">
+  NOTE: StuHub is under constant development. Please read about our <%= link_to 'latest changes', help_item_path(page: 'changes'), class: 'alert-link' %>.
+</div>
+<% end %>
+
+<div class="jumbotron" style="text-align: center;">
+  <h1>Help</h1>
+  <p>StuHub is designed to be simple to use, but sometimes things get tough.<br>Use this help guide to find your way around.</p>
+  <p>If you still can't find your way, contact us directly!</p>
+  <p><%= link_to 'Contact Us', help_item_path(page: 'contact'), class: 'btn btn-primary btn-lg', role: 'button' %></p>
+</div>
+
+<div class="row">
+  <div class="col-sm-4 <%= 'col-sm-offset-4' unless logged_in? %>">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">General</h3>
+      </div>
+      <div class="panel-body">
+        <p>Want to find out more about StuHub?</p>
+        <p>This contains anything and everything about StuHub and its developers.</p>
+      </div>
+      <div class="list-group">
+        <%= link_to 'About StuHub', about_path, class: 'list-group-item' %>
+        <%= link_to 'Recent Changes', help_item_path(page: 'changes'), class: 'list-group-item' if logged_in? %>
+        <%= link_to 'Terms of Use', terms_path, class: 'list-group-item' %>
+        <%#= link_to 'Privacy Policy', about_path, class: 'list-group-item' %>
+        <%#= link_to 'University Affiliations', about_path, class: 'list-group-item' %>
+        <%= link_to 'FAQ', faq_path, class: 'list-group-item' %>
+        <%= link_to 'Contact Us', contact_path, class: 'list-group-item' %>
+      </div>
+    </div>
+  </div>
+  <% if logged_in? %>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Panel title</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Panel title</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Panel title</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+      <ul class="list-group">
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+      </ul>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Panel title</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Panel title</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-4 col-sm-offset-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Panel title</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+      <ul class="list-group">
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+      </ul>
+    </div>
+  </div>
+  <% end %>
+</div>
