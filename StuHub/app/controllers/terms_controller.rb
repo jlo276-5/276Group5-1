@@ -32,6 +32,9 @@ class TermsController < ApplicationController
   def update
     @term = Term.find_by id:params[:id]
     if @term.update_attributes(term_params)
+      if @term.database_url.blank?
+        @term.update_attributes(:data_last_updated => nil, :database_last_line => 0)
+      end
       flash[:success] = "Term Updated.  If you enabled database seeding, click Update."
       redirect_to institution_path(id: @term.institution.id)
     else

@@ -33,17 +33,20 @@ class Term < ActiveRecord::Base
           temp.write(data.body)
           temp.flush
 
+          lineNumber = 0
           numberAdded = 0
           dayCounter = -1
           dayString = ""
           workbook = Dullard::Workbook.new temp
           workbook.sheets[0].rows.each_with_index do |row, index|
-            break if index > 35000
+            lineNumber = index
             if index > 5
               if row[0] != dayString
                 dayString = row[0]
                 dayCounter += 1
               end
+
+              next if index < self.database_last_line
 
               department = self.departments.find_by(name: row[2])
               if department.nil?
@@ -75,6 +78,8 @@ class Term < ActiveRecord::Base
               department.save!
             end
           end
+
+          self.update_attribute(:database_last_line, lineNumber)
 
           self.touch :data_last_updated
         ensure
