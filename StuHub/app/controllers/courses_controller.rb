@@ -21,8 +21,16 @@ class CoursesController < ApplicationController
       flash[:danger] = "Your Institution has not set up their data properly. Please contact your Institution."
       redirect_to home_path
     elsif @term.updating
-      flash[:warning] = "A Data Update is in progress, please try again later."
-      redirect_to home_path
+      if @next_term && !@institution.current_term.nil? && !@institution.current_term.updating
+        flash[:warning] = "A Data Update is in progress for the next term, only the current term is available."
+        redirect_to courses_path
+      elsif !@next_term && !@institution.next_term.nil? && !@institution.next_term.updating
+        flash[:warning] = "A Data Update is in progress for the next term, only the current term is available."
+        redirect_to courses_path(next_term: true)
+      else
+        flash[:warning] = "A Data Update is in progress, please try again later."
+        redirect_to home_path
+      end
     elsif @term.data_mode == 1
       # XLSX DB
       @departments = get_departments_api(@term).order('name ASC')
