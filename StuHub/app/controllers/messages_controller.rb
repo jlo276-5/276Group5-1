@@ -10,18 +10,12 @@ class MessagesController < ApplicationController
   def create
     @message = Message.new(message_params)
     if @message.save
-      @channel = "/messages/new"
+      @channel = "/messages/new" # Type 0
       @type = params[:message][:channel_id]
       if params[:message][:channel_type].to_i == 1 # Course Chat
         @channel = "/courses/#{params[:message][:channel_id]}/messages"
       elsif params[:message][:channel_type].to_i == 2 # Group Chat
         @channel = "/groups/#{params[:message][:channel_id]}/messages"
-      elsif params[:message][:channel_type].to_i == 3
-        @channel = "/posts/new"
-      elsif params[:message][:channel_type].to_i == 4 # Course Post
-        @channel = "/courses/#{params[:message][:channel_id]}/posts"
-      elsif params[:message][:channel_type].to_i == 5 # Group Post
-        @channel = "/groups/#{params[:message][:channel_id]}/posts"
       end
       PrivatePub.publish_to(@channel, message: @message)
     end

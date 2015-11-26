@@ -2,6 +2,7 @@ class CoursesController < ApplicationController
   before_action :valid_institution
   before_action :valid_course, only: [:show, :info, :course_members]
   before_action :verify_membership, only: [:show]
+  layout 'course', only: [:show, :info, :enrollment, :course_members]
   require 'rest-client'
   require 'date'
 
@@ -94,9 +95,9 @@ class CoursesController < ApplicationController
     get_course_api(@course)
 
     @chat_channel_type = 1;
-    @post_channel_type = 4;
+    @post_channel_type = 1;
     @messages = Message.where(channel_type: @chat_channel_type, channel_id: @course.id).last(30)
-    @posts = Message.where(channel_type: @post_channel_type, channel_id: @course.id).last(30)
+    @posts = Post.where(channel_type: @post_channel_type, channel_id: @course.id).order('created_at DESC')
   end
 
   def course_members

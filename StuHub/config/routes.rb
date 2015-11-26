@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
+  # The priority is based upon order of creation: first created -> highest priority.
+  # See how all your routes lay out with "rake routes".
+
   post 'dropbox_link', to: 'dropbox_auth#link'
   post 'dropbox_unlink', to: 'dropbox_auth#unlink'
   get 'dropbox_callback', to: 'dropbox_auth#callback'
-
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
 
   # Routes for CAS Auth
   post 'cas_auth', to: 'cas_auth#auth'
@@ -36,8 +36,9 @@ Rails.application.routes.draw do
     end
   end
 
-  # Routes for Messages
+  # Routes for Messages and Posts
   resources :messages, only: [:create]
+  resources :posts, only: [:create]
 
   # Routes for Courses
   resources :course_memberships, only: [:destroy, :create] do

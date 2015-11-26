@@ -1,24 +1,6 @@
-<% provide(:title, "Info - #{@course.department.name}#{@course.number}") %>
-
-<ol class="breadcrumb">
-  <li><%= link_to 'Courses', courses_path %></li>
-  <% if @course.department.term == @course.department.term.institution.next_term %>
-  <li><%= link_to @course.department.term.term_name, courses_path(next_term: true) %></li>
-  <li><%= link_to @course.department.name, courses_path(next_term: true, department: @course.department.id) %></li>
-  <% elsif @course.department.term = @course.department.term.institution.current_term %>
-  <li><%= link_to @course.department.term.term_name, courses_path %></li>
-  <li><%= link_to @course.department.name, courses_path(department: @course.department.id) %></li>
-  <% else %>
-  <li><%= link_to @course.department.term.term_name, courses_path %></li>
-  <li><%= @course.department.name %></li>
-  <% end %>
-  <li><%= link_to "#{@course.department.name} #{@course.number}", @course %></li>
-  <li class="active">Course Info</li>
-</ol>
-
-<h1><%= "#{@course.department.name}#{@course.number} - #{@course.name}" %> <small><%= @course.department.term.term_name %></small></h1>
-
-<hr>
+<% provide(:title, "<Information></Information> - #{@course.department.name}#{@course.number}") %>
+<% provide(:main_title, "#{@course.department.name}#{@course.number} - #{@course.name}") %>
+<% provide(:sub_title, @course.department.term.term_name) %>
 
 <div class="row">
   <div class="col-xs-12 col-sm-8">

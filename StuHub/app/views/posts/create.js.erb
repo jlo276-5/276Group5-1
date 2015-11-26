@@ -1,12 +1,12 @@
-<% if @message.valid? %>
+<% if @post.valid? %>
   <% publish_to @channel do %>
-    $("#chat").append("<%= j render(@message) %>");
-    $("#chat").animate({scrollTop:$("#chat")[0].scrollHeight}, 500);
-    $(".new_message")[0].reset();
+    $("#posts").prepend("<%= j render(@post) %>");
+    $("#posts").animate({scrollTop:0}, 500);
+    $(".new_post")[0].reset();
   <% end %>
 <% else %>
   errorString = "The following errors occured:\n\n"
-  <% @message.errors.full_messages.each do |msg| %>
+  <% @post.errors.full_messages.each do |msg| %>
     errorString += '<%= msg %>\n';
   <% end %>
   errorString += '\nPlease check and send again.';

@@ -1,11 +1,11 @@
-// Place all the styles related to the messages controller here.
+// Place all the styles related to the Posts controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.message_panel > div.panel-body {
+.post_panel > div.panel-body {
   padding: 8px;
 }
-.message_content {
+.post_body {
   // http://stackoverflow.com/questions/3058866/how-to-force-a-line-break-in-a-loooooong-word-in-a-div
   -ms-word-break: break-all;
   word-break: break-all;
@@ -16,20 +16,20 @@
       -ms-hyphens: auto;
           hyphens: auto;
 }
-.message_content img {
+.post_body img {
   width: 100%;
 }
-.messenger_column {
+.posts_column {
   margin-bottom: 16px;
 }
-.messenger_view {
-  height: 200px;
+.post_view {
+  height: 500px;
   margin-bottom: 16px;
 }
 @for $i from 1 through 7 {
-  @media (min-height: (600px + ($i * 100px))) {
-  .messenger_view {
-    height: 200px + ($i * 100px);
+  @media (min-height: (500px + ($i * 100px))) {
+  .post_view {
+    height: 500px + ($i * 100px);
   }
   }
 }

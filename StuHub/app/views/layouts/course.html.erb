@@ -1,0 +1,49 @@
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+
+<% content_for :content do %>
+
+<ol class="breadcrumb">
+  <li><%= link_to 'Courses', courses_path %></li>
+  <% if @course.department.term == @course.department.term.institution.next_term %>
+  <li><%= link_to @course.department.term.term_name, courses_path(next_term: true) %></li>
+  <li><%= link_to @course.department.name, courses_path(next_term: true, department: @course.department.id) %></li>
+  <% elsif @course.department.term = @course.department.term.institution.current_term %>
+  <li><%= link_to @course.department.term.term_name, courses_path %></li>
+  <li><%= link_to @course.department.name, courses_path(department: @course.department.id) %></li>
+  <% else %>
+  <li><%= link_to @course.department.term.term_name, courses_path %></li>
+  <li><%= @course.department.name %></li>
+  <% end %>
+  <li class="active"><%= "#{@course.department.name} #{@course.number}" %></li>
+</ol>
+
+<h1><%= yield(:main_title) %> <small><%= yield(:sub_title) %></small></h1>
+
+<hr>
+
+<div class="row">
+  <div class="col-sm-9 col-sm-push-3">
+
+    <%= yield %>
+
+  </div>
+  <div class="col-sm-3 col-sm-pull-9">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title">Course Menu</h1>
+      </div>
+      <div class="list-group">
+        <%= link_to 'Posts', @course, class: "list-group-item #{'active' if current_page?(@course)}" if current_user.memberOfCourse?(@course) %>
+        <%= link_to 'Resources (Not Functional)', @course, class: "list-group-item #{'active' if current_page?(@course)}" if current_user.memberOfCourse?(@course) %>
+        <%= link_to 'Members', users_course_path(@course), class: "list-group-item #{'active' if current_page?(users_course_path(@course))}" if current_user.memberOfCourse?(@course) %>
+        <%= link_to 'Information', get_info_course_path(@course), class: "list-group-item #{'active' if current_page?(get_info_course_path(@course))}" %>
+        <%= link_to 'Enrollment', enrollment_course_path(@course), class: "list-group-item #{'active' if current_page?(enrollment_course_path(@course))}" if current_page?(enrollment_course_path(@course)) %>
+        <%= link_to 'Management', @course, class: "list-group-item #{'active' if current_page?(@course)}" if current_user.memberOfCourse?(@course) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% end %>
+
+<%= render template: "layouts/application" %>
