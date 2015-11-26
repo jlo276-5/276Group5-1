@@ -1,10 +1,8 @@
 <% content_for :content do %>
 
-<ol class="breadcrumb">
-  <li><%= link_to 'Groups', groups_path %></li>
-  <li><%= link_to @group.name, @group %></li>
-  <li class="active">Group Management</li>
-</ol>
+<h1><%= yield(:main_title) %> <small><%= yield(:sub_title) %></small></h1>
+
+<hr>
 
 <div class="row">
   <div class="col-sm-9 col-sm-push-3">
@@ -16,8 +14,10 @@
         <h1 class="panel-title">Group Management</h1>
       </div>
       <div class="list-group">
+        <%= link_to 'Posts', @group, class: "list-group-item #{'active' if current_page?(@group)}" %>
+        <%= link_to 'Resources (Non-Functional)', @group, class: "list-group-item #{'active' if current_page?(@group)}" %>
         <%= link_to 'Edit Group', edit_group_path(@group), class: "list-group-item #{'active' if current_page?(edit_group_path(@group))}" if current_user.adminOfGroup?(@group) %>
-        <%= link_to 'User Management', users_group_path(@group), class: "list-group-item #{'active' if current_page?(users_group_path(@group))}" %>
+        <%= link_to 'Group Members', users_group_path(@group), class: "list-group-item #{'active' if current_page?(users_group_path(@group))}" %>
         <%= link_to 'Requests', requests_group_path(@group), class: "list-group-item #{'active' if current_page?(requests_group_path(@group))}" if current_user.adminOfGroup?(@group) %>
       </div>
     </div>

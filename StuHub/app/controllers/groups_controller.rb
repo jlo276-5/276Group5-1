@@ -2,7 +2,7 @@ class GroupsController < ApplicationController
   before_action :verify_membership, only: [:show, :edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
   before_action :group_admin, only: [:edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
   before_action :valid_membership, only: [:promote_member, :demote_member, :kick_member]
-  layout 'group_admin', only: [:edit, :group_members, :group_requests]
+  layout 'group', only: [:show, :edit, :group_members, :group_requests]
 
   def new
     @group = Group.new
@@ -32,9 +32,9 @@ class GroupsController < ApplicationController
     @group = Group.find_by(id: params[:id])
 
     @chat_channel_type = 2;
-    @post_channel_type = 5;
+    @post_channel_type = 2;
     @messages = Message.where(channel_type: @chat_channel_type, channel_id: @group.id).last(30)
-    @posts = Message.where(channel_type: @post_channel_type, channel_id: @group.id).last(30)
+    @posts = Post.where(channel_type: @post_channel_type, channel_id: @group.id).order('created_at DESC')
   end
 
   def group_members
