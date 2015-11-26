@@ -34,6 +34,7 @@ class User < ActiveRecord::Base
                      format: { with: VALID_EMAIL_REGEX },
                      uniqueness: { scope: :email, case_sensitive: false }
   validate :validate_email_domain, on: :create, if: 'cas_identifier.nil?'
+  validate :validate_new_email_unique, on: :update, if: '!email_change_new.nil?'
 
   ##activate
   def activate
@@ -219,6 +220,12 @@ class User < ActiveRecord::Base
     def validate_email_domain
       unless self.institution_id.nil? or (!self.institution_id.blank? and !self.email.blank? and (self.email.ends_with?("@" + Institution.find(self.institution_id).email_constraint) or self.email.ends_with?("." + Institution.find(self.institution_id).email_constraint)))
         errors.add(:email, "contains an invalid domain for the selected institution")
+      end
+    end
+
+    def validate_new_email_unique
+      unless User.find_by(email: self.email_change_new).nil?
+        errors.add(:new_email, "must be unique")
       end
     end
 
