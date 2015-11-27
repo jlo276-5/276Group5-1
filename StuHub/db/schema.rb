@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151126114032) do
+ActiveRecord::Schema.define(version: 20151127021115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,7 +75,10 @@ ActiveRecord::Schema.define(version: 20151126114032) do
     t.datetime "end_time"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "user_id"
   end
+
+  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "exams", force: :cascade do |t|
     t.string   "building"
@@ -306,6 +309,7 @@ ActiveRecord::Schema.define(version: 20151126114032) do
   add_foreign_key "course_memberships", "users"
   add_foreign_key "courses", "departments"
   add_foreign_key "departments", "terms"
+  add_foreign_key "events", "users"
   add_foreign_key "exams", "sections"
   add_foreign_key "group_membership_requests", "groups"
   add_foreign_key "group_membership_requests", "users"
