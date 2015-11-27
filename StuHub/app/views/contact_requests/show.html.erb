@@ -1,0 +1,58 @@
+<% provide(:title, "#{@cr.id} - Contact Requests - Admin") %>
+
+<div class="page-header" style="text-align: center;">
+  <h1>Contact Request #<%= @cr.id %> <small><%= '[RESOLVED]' if @cr.resolved %></small></h1>
+</div>
+
+<%= form_for(@cr, url: resolve_contact_request_path, method: 'post', html: {class: 'form-horizontal'}) do |f| %>
+  <div class="form-group">
+    <%= f.label :name, class: 'col-sm-3 col-md-2 control-label' %>
+    <div class="col-sm-9 col-md-10">
+      <p class="form-control-static"><%= @cr.name %></p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email, class: 'col-sm-3 col-md-2 control-label' %>
+    <div class="col-sm-9 col-md-10">
+      <p class="form-control-static"><%= @cr.email %></p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :contact_type, 'Type of Contact', class: 'col-sm-3 col-md-2 control-label' %>
+    <div class="col-sm-9 col-md-10">
+      <p class="form-control-static"><%= @cr.type_string %></p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :reply, 'Reply Requested', class: 'col-sm-3 col-md-2 control-label' %>
+    <div class="col-sm-9 col-md-10">
+      <p class="form-control-static"><%= @cr.reply ? "YES" : "NO" %></p>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="form-group">
+    <%= f.label :title, class: 'col-sm-3 col-md-2 control-label' %>
+    <div class="col-sm-9 col-md-10">
+      <p class="form-control-static"><strong><%= @cr.title %></strong></p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-xs-12">
+      <p class="form-control-static"><%= @cr.body %></p>
+    </div>
+  </div>
+
+  <% unless @cr.resolved %>
+    <div class="row">
+      <div class="col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <%= f.submit 'Mark as Resolved', class: "btn btn-primary btn-block", id: 'resolve_btn' %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

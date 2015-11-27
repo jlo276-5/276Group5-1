@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151126033930) do
+ActiveRecord::Schema.define(version: 20151127094031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,14 +27,15 @@ ActiveRecord::Schema.define(version: 20151126033930) do
   add_index "associated_classes", ["number", "course_id"], name: "index_associated_classes_on_number_and_course_id", unique: true, using: :btree
 
   create_table "contact_requests", force: :cascade do |t|
-    t.string   "name",                       null: false
-    t.string   "email",                      null: false
-    t.string   "title",      default: ""
+    t.string   "name",                         null: false
+    t.string   "email",                        null: false
+    t.string   "title",        default: ""
     t.text     "body"
-    t.integer  "type",       default: 0
-    t.boolean  "reply",      default: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "contact_type", default: 0
+    t.boolean  "reply",        default: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.boolean  "resolved",     default: false
   end
 
   create_table "course_memberships", force: :cascade do |t|
@@ -86,7 +87,10 @@ ActiveRecord::Schema.define(version: 20151126033930) do
     t.datetime "end_time"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "user_id"
   end
+
+  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "exams", force: :cascade do |t|
     t.string   "building"
@@ -208,6 +212,24 @@ ActiveRecord::Schema.define(version: 20151126033930) do
 
   add_index "privacy_settings", ["user_id"], name: "index_privacy_settings_on_user_id", using: :btree
 
+  create_table "resources", force: :cascade do |t|
+    t.string   "name",                               null: false
+    t.text     "description",           default: ""
+    t.string   "resource_file_name",                 null: false
+    t.string   "resource_content_type",              null: false
+    t.integer  "resource_file_size",                 null: false
+    t.datetime "resource_updated_at",                null: false
+    t.integer  "group_id"
+    t.integer  "course_id"
+    t.integer  "user_id"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "resources", ["course_id"], name: "index_resources_on_course_id", using: :btree
+  add_index "resources", ["group_id"], name: "index_resources_on_group_id", using: :btree
+  add_index "resources", ["user_id"], name: "index_resources_on_user_id", using: :btree
+
   create_table "section_times", force: :cascade do |t|
     t.string   "building"
     t.string   "room"
@@ -317,6 +339,7 @@ ActiveRecord::Schema.define(version: 20151126033930) do
   add_foreign_key "course_memberships", "users"
   add_foreign_key "courses", "departments"
   add_foreign_key "departments", "terms"
+  add_foreign_key "events", "users"
   add_foreign_key "exams", "sections"
   add_foreign_key "group_membership_requests", "groups"
   add_foreign_key "group_membership_requests", "users"
@@ -324,6 +347,9 @@ ActiveRecord::Schema.define(version: 20151126033930) do
   add_foreign_key "group_memberships", "users"
   add_foreign_key "instructors", "sections"
   add_foreign_key "privacy_settings", "users"
+  add_foreign_key "resources", "courses"
+  add_foreign_key "resources", "groups"
+  add_foreign_key "resources", "users"
   add_foreign_key "section_times", "sections"
   add_foreign_key "sections", "associated_classes"
   add_foreign_key "terms", "institutions"
