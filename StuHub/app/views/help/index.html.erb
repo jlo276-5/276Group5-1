@@ -38,7 +38,7 @@
   <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Panel title</h3>
+        <h3 class="panel-title">Registration</h3>
       </div>
       <div class="panel-body">
         Panel content
@@ -48,72 +48,78 @@
   <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Panel title</h3>
+        <h3 class="panel-title">General</h3>
       </div>
       <div class="panel-body">
         Panel content
       </div>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-sm-4">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Panel title</h3>
-      </div>
-      <div class="panel-body">
-        Panel content
-      </div>
-      <ul class="list-group">
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-      </ul>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Panel title</h3>
-      </div>
-      <div class="panel-body">
-        Panel content
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Panel title</h3>
-      </div>
-      <div class="panel-body">
-        Panel content
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-sm-4 col-sm-offset-4">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Panel title</h3>
-      </div>
-      <div class="panel-body">
-        Panel content
-      </div>
-      <ul class="list-group">
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-      </ul>
     </div>
   </div>
   <% end %>
 </div>
+<% if logged_in? %>
+<div class="row">
+  <div class="col-sm-4 <%= 'col-sm-offset-2' unless current_user.admin? %>">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Courses</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+      <ul class="list-group">
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+      </ul>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Groups</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+    </div>
+  </div>
+  <% if current_user.admin? %>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Administration</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
+<% end %>
+<% if logged_in? and current_user.admin? %>
+<div class="row">
+  <div class="col-sm-4 col-sm-offset-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Institutions</h3>
+      </div>
+      <div class="panel-body">
+        Panel content
+      </div>
+      <ul class="list-group">
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+        <a href="#" class="list-group-item">Cras justo odio</a>
+      </ul>
+    </div>
+  </div>
+</div>
+<% end %>
