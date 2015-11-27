@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151126114032) do
+ActiveRecord::Schema.define(version: 20151127025604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -197,6 +197,24 @@ ActiveRecord::Schema.define(version: 20151126114032) do
 
   add_index "privacy_settings", ["user_id"], name: "index_privacy_settings_on_user_id", using: :btree
 
+  create_table "resources", force: :cascade do |t|
+    t.string   "name",                               null: false
+    t.text     "description",           default: ""
+    t.string   "resource_file_name",                 null: false
+    t.string   "resource_content_type",              null: false
+    t.integer  "resource_file_size",                 null: false
+    t.datetime "resource_updated_at",                null: false
+    t.integer  "group_id"
+    t.integer  "course_id"
+    t.integer  "user_id"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "resources", ["course_id"], name: "index_resources_on_course_id", using: :btree
+  add_index "resources", ["group_id"], name: "index_resources_on_group_id", using: :btree
+  add_index "resources", ["user_id"], name: "index_resources_on_user_id", using: :btree
+
   create_table "section_times", force: :cascade do |t|
     t.string   "building"
     t.string   "room"
@@ -313,6 +331,9 @@ ActiveRecord::Schema.define(version: 20151126114032) do
   add_foreign_key "group_memberships", "users"
   add_foreign_key "instructors", "sections"
   add_foreign_key "privacy_settings", "users"
+  add_foreign_key "resources", "courses"
+  add_foreign_key "resources", "groups"
+  add_foreign_key "resources", "users"
   add_foreign_key "section_times", "sections"
   add_foreign_key "sections", "associated_classes"
   add_foreign_key "terms", "institutions"
