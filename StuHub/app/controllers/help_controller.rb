@@ -8,7 +8,12 @@ class HelpController < ApplicationController
 
   def show
     if valid_page?
-      render template: "help/#{params[:page]}"
+      if !current_user.admin? && (params[:page].downcase == 'admin' || params[:page].downcase == 'institutions')
+        flash[:danger] = "You do not have the permission to see that."
+        redirect_to help_path
+      else
+        render template: "help/#{params[:page]}"
+      end
     else
       # raise ActionController::RoutingError.new('Not Found')
       flash[:danger] = "No Such Help Page Found"

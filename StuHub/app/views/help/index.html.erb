@@ -27,8 +27,6 @@
         <%= link_to 'About StuHub', about_path, class: 'list-group-item' %>
         <%= link_to 'Recent Changes', help_item_path(page: 'changes'), class: 'list-group-item' if logged_in? %>
         <%= link_to 'Terms of Use', terms_path, class: 'list-group-item' %>
-        <%#= link_to 'Privacy Policy', about_path, class: 'list-group-item' %>
-        <%#= link_to 'University Affiliations', about_path, class: 'list-group-item' %>
         <%= link_to 'FAQ', faq_path, class: 'list-group-item' %>
         <%= link_to 'Contact Us', contact_path, class: 'list-group-item' %>
       </div>
@@ -38,20 +36,20 @@
   <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Registration</h3>
+        <h3 class="panel-title"><%= link_to 'Registration', help_item_path(page: 'registration') %></h3>
       </div>
-      <div class="panel-body">
-        Panel content
+      <div class="list-group">
+        <%= link_to 'Empty', help_item_path(page: 'registration'), class: 'list-group-item' %>
       </div>
     </div>
   </div>
   <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">General</h3>
+        <h3 class="panel-title"><%= link_to 'General', help_item_path(page: 'general') %></h3>
       </div>
-      <div class="panel-body">
-        Panel content
+      <div class="list-group">
+        <%= link_to 'Empty', help_item_path(page: 'general'), class: 'list-group-item' %>
       </div>
     </div>
   </div>
@@ -62,28 +60,20 @@
   <div class="col-sm-4 <%= 'col-sm-offset-2' unless current_user.admin? %>">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Courses</h3>
+        <h3 class="panel-title"><%= link_to 'Courses', help_item_path(page: 'courses') %></h3>
       </div>
-      <div class="panel-body">
-        Panel content
+      <div class="list-group">
+        <%= link_to 'Empty', help_item_path(page: 'courses'), class: 'list-group-item' %>
       </div>
-      <ul class="list-group">
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-      </ul>
     </div>
   </div>
   <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Groups</h3>
+        <h3 class="panel-title"><%= link_to 'Groups', help_item_path(page: 'groups') %></h3>
       </div>
-      <div class="panel-body">
-        Panel content
+      <div class="list-group">
+        <%= link_to 'Empty', help_item_path(page: 'groups'), class: 'list-group-item' %>
       </div>
     </div>
   </div>
@@ -91,10 +81,10 @@
   <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Administration</h3>
+        <h3 class="panel-title"><%= link_to 'Administration', help_item_path(page: 'admin') %></h3>
       </div>
-      <div class="panel-body">
-        Panel content
+      <div class="list-group">
+        <%= link_to 'Empty', help_item_path(page: 'admin'), class: 'list-group-item' %>
       </div>
     </div>
   </div>
@@ -106,19 +96,11 @@
   <div class="col-sm-4 col-sm-offset-4">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Institutions</h3>
+        <h3 class="panel-title"><%= link_to 'Institutions', help_item_path(page: 'institutions') %></h3>
       </div>
-      <div class="panel-body">
-        Panel content
+      <div class="list-group">
+        <%= link_to 'Empty', help_item_path(page: 'institutions'), class: 'list-group-item' %>
       </div>
-      <ul class="list-group">
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-        <a href="#" class="list-group-item">Cras justo odio</a>
-      </ul>
     </div>
   </div>
 </div>
