@@ -1,14 +1,21 @@
 class GroupsController < ApplicationController
   before_action :verify_membership, only: [:show, :edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
   before_action :group_admin, only: [:edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
-  layout 'group_admin', only: [:edit, :group_members, :group_requests]
+  before_action :valid_membership, only: [:promote_member, :demote_member, :kick_member]
+  layout 'group', only: [:show, :edit, :group_members, :group_requests]
 
   def new
     @group = Group.new
   end
 
   def index
-    @groups = Group.paginate(page: params[:page], per_page: 25).order('created_at ASC')
+    if params[:sort_by] == "NAME"
+      @groups = Group.paginate(page: params[:page], per_page: 25).order('name ASC')
+    elsif params[:sort_by] == "NAME_DESC"
+      @groups = Group.paginate(page: params[:page], per_page: 25).order('name DESC')
+    else
+      @groups = Group.paginate(page: params[:page], per_page: 25).order('created_at DESC')
+    end
     @paginate = true
   end
 
@@ -25,9 +32,9 @@ class GroupsController < ApplicationController
     @group = Group.find_by(id: params[:id])
 
     @chat_channel_type = 2;
-    @post_channel_type = 5;
+    @post_channel_type = 2;
     @messages = Message.where(channel_type: @chat_channel_type, channel_id: @group.id).last(30)
-    @posts = Message.where(channel_type: @post_channel_type, channel_id: @group.id).last(30)
+    @posts = Post.where(channel_type: @post_channel_type, channel_id: @group.id).order('created_at DESC')
   end
 
   def group_members
@@ -46,6 +53,9 @@ class GroupsController < ApplicationController
       gm.role += 1
       if gm.save
         flash[:success] = "Promoted #{gm.user.name} to Administrator in this Group"
+        if gm.user.notification_emails
+          GroupMailer.group_promoted(gm.user, gm.group, "Member", "Administrator").deliver_now
+        end
       else
         flash[:danger] = "Could not promote #{gm.user.name}"
       end
@@ -68,6 +78,9 @@ class GroupsController < ApplicationController
         else
           flash[:success] = "Demoted #{gm.user.name} to Member in this Group"
         end
+        if gm.user.notification_emails
+          GroupMailer.group_demoted(gm.user, gm.group, "Administrator", "Member").deliver_now
+        end
       else
         flash[:danger] = "Could not demote #{gm.user.name}"
       end
@@ -81,10 +94,13 @@ class GroupsController < ApplicationController
     gm = GroupMembership.find_by(id: params[:gm_id])
     if gm.destroy
       flash[:success] = "Kicked #{gm.user.name} from this Group"
+      if gm.user.notification_emails
+        GroupMailer.group_kicked(gm.user, gm.group).deliver_now
+      end
     else
       flash[:danger] = "Could not kick #{gm.user.name}"
     end
-    redirect_to users_group_path(gm.group)
+    redirect_to users_group_path(Group.find_by(id: params[:id]))
   end
 
   def create
@@ -132,6 +148,14 @@ class GroupsController < ApplicationController
 
   def group_params
     params.require(:group).permit(:name, :creator, :limited, :description)
+  end
+
+  def valid_membership
+    @gm = GroupMembership.find_by(id: params[:gm_id])
+    if @gm.nil?
+      flash[:danger] = "No such Group Membership Exists"
+      redirect_to users_group_path(Group.find_by(id: params[:id]))
+    end
   end
 
   def verify_membership

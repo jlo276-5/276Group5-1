@@ -7,7 +7,7 @@ $(document).ready ->
     header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'month,basicWeek,basicDay'
+        right: 'month,agendaWeek,agendaDay'
     },
     events: '/events.json'
   })

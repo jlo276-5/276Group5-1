@@ -1,29 +1,17 @@
 <% provide(:title, "#{@course.department.name}#{@course.number}") %>
-
-<ol class="breadcrumb">
-  <li><%= link_to 'Courses', courses_path %></li>
-  <li><%= link_to @course.department.term.year.number, courses_path(year: @course.department.term.year.id) %></li>
-  <li><%= link_to @course.department.term.name, courses_path(year: @course.department.term.year.id, term: @course.department.term.id) %></li>
-  <li><%= link_to @course.department.name, courses_path(year: @course.department.term.year.id, term: @course.department.term.id, department: @course.department.id) %></li>
-  <li class="active"><%= "#{@course.department.name} #{@course.number}" %></li>
-</ol>
-
-<h1><%= "#{@course.department.name}#{@course.number} - #{@course.name}" %> <small><%= "#{@course.department.term.name} #{@course.department.term.year.number}" %></small></h1>
-
-<hr>
+<% provide(:main_title, "#{@course.department.name}#{@course.number} - #{@course.name}") %>
+<% provide(:sub_title, @course.department.term.term_name) %>
 
 <div class="row">
-  <div class="col-xs-6">
-    <%= link_to "Course Info", get_info_course_path(@course), class: "btn btn-primary btn-block", role: "button" %>
+  <div class="col-sm-7">
+    <%= render partial: 'posts/interface', locals: {post_channel_type: @post_channel_type,
+                                                           channel_id: @course.id, nav: false, obj: nil, obj_name: ''} %>
   </div>
-  <div class="col-xs-6">
-    <%= link_to "Course Members", users_course_path(@course), class: "btn btn-primary btn-block", role: "button" %>
+  <div class="col-sm-5">
+    <%= render partial: 'messages/interface', locals: {chat_channel_type: @chat_channel_type,
+                                                              channel_id: @course.id, nav: false, obj: nil, obj_name: ''} %>
   </div>
 </div>
-
-<%= render partial: 'messages/interface', locals: {chat_channel_type: @chat_channel_type,
-                                                   post_channel_type: @post_channel_type,
-                                                   channel_id: @course.id, nav: false, obj: nil, obj_name: ''} %>
 
 <%= subscribe_to "/courses/#{@course.id}/messages" %>
 <%= subscribe_to "/courses/#{@course.id}/posts" %>

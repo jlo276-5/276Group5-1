@@ -1,17 +1,6 @@
-<% provide(:title, "Info - #{@course.department.name}#{@course.number}") %>
-
-<ol class="breadcrumb">
-  <li><%= link_to 'Courses', courses_path %></li>
-  <li><%= link_to @course.department.term.year.number, courses_path(year: @course.department.term.year.id) %></li>
-  <li><%= link_to @course.department.term.name, courses_path(year: @course.department.term.year.id, term: @course.department.term.id) %></li>
-  <li><%= link_to @course.department.name, courses_path(year: @course.department.term.year.id, term: @course.department.term.id, department: @course.department.id) %></li>
-  <li><%= link_to "#{@course.department.name} #{@course.number}", @course %></li>
-  <li class="active">Course Info</li>
-</ol>
-
-<h1><%= "#{@course.department.name}#{@course.number} - #{@course.name}" %> <small><%= "#{@course.department.term.name} #{@course.department.term.year.number}" %></small></h1>
-
-<hr>
+<% provide(:title, "<Information></Information> - #{@course.department.name}#{@course.number}") %>
+<% provide(:main_title, "#{@course.department.name}#{@course.number} - #{@course.name}") %>
+<% provide(:sub_title, @course.department.term.term_name) %>
 
 <div class="row">
   <div class="col-xs-12 col-sm-8">
@@ -28,8 +17,18 @@
 
 <% @course.associated_classes.order('number ASC').each do |ac| %>
 
-  <h3>Section Group <%= ac.sections.first.key %>
-    <small><%= link_to 'Course Outline', "https://www.sfu.ca/outlines.html?#{@course.department.term.year.number}/#{@course.department.term.name}/#{@course.department.name}/#{@course.number}/#{ac.sections.first.key}".downcase, target: '_blank' %></small></h3>
+  <h3>
+    Section Group <%= ac.sections.first.key %>
+    <small>
+      <%= link_to 'Course Outline', "https://www.sfu.ca/outlines.html?#{@course.department.term.year}/#{@course.department.term.name}/#{@course.department.name}/#{@course.number}/#{ac.sections.first.key}".downcase, target: '_blank' %>
+      <% if !@course.enrollment.blank? and !@course.enrollment[ac.sections.first.key].nil? %>
+        <% latest = @course.enrollment[ac.sections.first.key].last %>
+        (<%= link_to "Enrollment #{latest["actual"].to_i}/#{latest["max"].to_i} as of #{latest["date"].strftime('%b %d')}", enrollment_course_path(@course) %>)
+      <% else %>
+        (Enrollment Unknown)
+      <% end %>
+    </small>
+  </h3>
 
   <div class="table-responsive">
     <table class="table table-striped table-hover table-condensed" id="sections">
@@ -38,7 +37,7 @@
           <th width="10%">Section #</th>
           <th width="25%">Instructors</th>
           <th width="50%">Location and Time</th>
-          <th width="15%">Add to Schedule</th>
+          <% unless @cm.nil? %><th width="15%">Add to Schedule</th><% end %>
         </tr>
       </thead>
 
@@ -67,7 +66,11 @@
             <% else %>
               <% s.section_times.each do |st| %>
                 <strong><%= "#{st.days} #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')}" %></strong>
-                <%= "#{st.building} #{st.room} at #{st.campus}" %>
+                <% if st.room.nil? %>
+                  &nbsp;Location Unknown
+                <% else %>
+                  <%= "in #{st.building} #{st.room} at #{st.campus}" %>
+                <% end %>
                 <% if st != s.section_times.last %>
                   <br>
                 <% end %>
@@ -79,22 +82,26 @@
             <% else %>
               <% s.exams.order('exam_start ASC').each do |e| %>
                 <strong><%= "#{e.exam_start.strftime("%a")} #{e.exam_start.strftime("%D")} #{e.exam_start.in_time_zone.strftime('%I:%M %p')} - #{e.exam_end.in_time_zone.strftime('%I:%M %p')}" %></strong>
-                <%= "#{e.building} #{e.room} at #{e.campus}" %>
+                <% if e.room.nil? %>
+                  &nbsp;Location Unknown
+                <% else %>
+                  <%= "in #{e.building} #{e.room} at #{e.campus}" %>
+                <% end %>
                 <% if e != s.exams.last %>
                   <br>
                 <% end %>
               <% end %>
             <% end %>
           </td>
-          <td>
-            <% if !@cm.nil? %>
+          <% unless @cm.nil? %>
+            <td>
               <% if @cm.sectionInMembership?(s.id) %>
                 <%= link_to "Remove", remove_sec_course_membership_path(@cm, section_id: s.id), method: "delete", class: "btn btn-danger btn-block", role: "button" %></td>
               <% else %>
                 <%= link_to "Add", add_sec_course_membership_path(id: @cm.id, section_id: s.id), method: "post", class: "btn btn-primary btn-block", role: "button" %></td>
               <% end %>
-            <% end %>
-          </td>
+            </td>
+          <% end %>
         </tr>
         <% end %>
       </tbody>

@@ -13,7 +13,7 @@
         <% if cm.sections.count == 0 %>
           <% course = cm.course %>
           <li class="list-group-item">
-            <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number}", get_info_course_path(course) %> <small><%= "#{course.department.term.name} #{course.department.term.year.number}" %></small></h4>
+            <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number}", get_info_course_path(course) %> <small><%= course.department.term.term_name %></small></h4>
             <p class="list-group-item-text">
               No Schedules
             </p>
@@ -22,7 +22,7 @@
           <% cm.sections.each do |s| %>
               <li class="list-group-item">
                 <% course = s.associated_class.course %>
-                <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %> <small><%= "#{course.department.term.name} #{course.department.term.year.number}, " %><% s.instructors.each do |i| %><%= "#{i.first_name} #{i.last_name} #{(i == s.instructors.last ? '' : ', ')}" %><% end %></small></h4>
+                <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %> <small><%= "#{course.department.term.term_name}, " %><% s.instructors.each do |i| %><%= "#{i.first_name} #{i.last_name} #{(i == s.instructors.last ? '' : ', ')}" %><% end %></small></h4>
                 <p class="list-group-item-text">
                   <% s.section_times.each do |st| %>
                     <%= "#{s.code} on #{st.days} at #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')} in #{st.building} #{st.room}" %><br>

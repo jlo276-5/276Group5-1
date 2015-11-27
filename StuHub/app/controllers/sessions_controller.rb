@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by(email: params[:session][:email].downcase)
-    if user && user.authenticate(params[:session][:password])
+    if user && user.authenticate(params[:session][:password]) and !user.account_locked?
       if user.activated?
         log_in user
         params[:session][:remember_me] == '1' ? remember(user) : forget(user)
@@ -18,6 +18,12 @@ class SessionsController < ApplicationController
         redirect_to login_url
       end
     else
+      unless user.nil?
+        user.update_attribute(:failed_login_attempts, user.failed_login_attempts+1)
+        if user.failed_login_attempts >= 5 and !user.account_locked?
+          user.lock_account
+        end
+      end
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
     end
@@ -25,12 +31,25 @@ class SessionsController < ApplicationController
 
   def destroy
     if logged_in?
-      log_out
-      flash[:success] = 'Successfully logged out.'
+      if current_user.cas_login_active and !current_user.institution.nil? and !current_user.institution.cas_endpoint.blank?
+        cas_endpoint = current_user.institution.cas_endpoint
+        current_user.cas_login_active = false
+        current_user.save
+        log_out
+        redirect_to "#{cas_endpoint}/appLogout?app=StuHub"
+      else
+        if current_user.institution.nil? and current_user.cas_login_active
+          current_user.cas_login_active = false
+          current_user.save
+        end
+        log_out
+        flash[:success] = 'Successfully logged out.'
+        redirect_to root_path
+      end
     else
       flash[:warning] = 'You are not logged in.'
+      redirect_to login_path
     end
-    redirect_to root_url
   end
 
   private

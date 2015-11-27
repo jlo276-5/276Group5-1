@@ -1,26 +1,21 @@
 <% user = (User.exists?(id: message.user_id) ? User.find(message.user_id) : nil) %>
 
 <div class="row">
-  <% if message.isPost? %>
   <div class="col-xs-12">
-  <% else %>
-  <div class="col-xs-10 col-md-8 <%= 'col-xs-offset-2 col-md-offset-4' if user and current_user?(user) %>">
-  <!-- THIS IS EVAL ON ONE SIDE ONLY -->
-  <% end %>
     <div class="panel panel-default message_panel">
       <div class="panel-body">
         <div class="media">
           <div class="media-left media-top">
             <% if user.nil? %>
-              <%= image_tag 'https://secure.gravatar.com/avatar/?s=200', width: 54, class: 'media-object media-middle img-rounded' %>
+              <%= image_tag 'https://secure.gravatar.com/avatar/?s=200', width: 24, class: 'media-object media-middle img-rounded' %>
             <% else %>
-              <%= link_to user, target: '_blank' do %><%= gravatar_for user, size: 54, class: 'media-object media-middle img-rounded' %><% end %>
+              <%= link_to user, target: '_blank' do %><%= gravatar_for user, size: 24, class: 'media-object media-middle img-rounded' %><% end %>
             <% end %>
           </div>
           <div class="media-body message_content">
             <h4 class="media-heading">
               <span class="message_created_at"><%= user.nil? ? "Unknown" : (link_to user.name, user, target: '_blank') %></span>
-              <small><span style="float: right" class="message_created_at"><%= "#{message.created_at.strftime("%x") + " " if message.created_at.in_time_zone < Date.today} #{message.created_at.strftime("%l:%m:%S %p")}" %></span></small>
+              <small><span style="float: right" class="message_created_at"><%= "#{message.created_at.in_time_zone.strftime("%x") if message.created_at.to_date != Date.today} #{message.created_at.in_time_zone.strftime("%l:%M:%S %p")}" %></span></small>
             </h4>
             <!-- Does not handle long words well. -->
             <span class="message_content"><%= markdown(message.content) %></span>

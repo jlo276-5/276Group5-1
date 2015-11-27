@@ -73,3 +73,16 @@
 * Basic calendar
 
 #### **__Iteration 2 Complete__**
+
+## Iteration 3
+
+### 2015.11.11
+* Accounts panel for Users to manage linked accounts
+* JASIG CAS Authentication
+* Dropbox Account Linking
+* reCAPTCHA support
+
+### 2015.11.14 - 2015.11.21
+* Various Fixes
+
+### 2015.11.22

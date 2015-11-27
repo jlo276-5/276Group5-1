@@ -1,30 +1,23 @@
-<% provide(:title, "#{@group.name}") %>
-
-<ol class="breadcrumb">
-  <li><%= link_to 'Groups', groups_path %></li>
-  <li class="active"><%= @group.name %></li>
-</ol>
-
-<h1><%= @group.name %></h1>
-
-<% if !@group.description.blank? %>
-  <p><%= markdown(@group.description) %></p>
-<% end %>
-
-<hr>
+<% provide(:title, @group.name) %>
+<% provide(:main_title, @group.name) %>
 
 <div class="row">
-  <div class="col-xs-6">
-    <%= link_to "Group Management", edit_group_path(@group), class: "btn btn-primary btn-block", role: "button" %>
+  <div class="col-sm-7">
+    <% if !@group.description.blank? %>
+      <h4>Welcome Message:</h4>
+      <p><%= markdown(@group.description) %></p>
+    <% end %>
+
+    <hr>
+    
+    <%= render partial: 'posts/interface', locals: {post_channel_type: @post_channel_type,
+                                                           channel_id: @group.id, nav: false, obj: nil, obj_name: ''} %>
   </div>
-  <div class="col-xs-6">
-    <%= link_to "Group Members", users_group_path(@group), class: "btn btn-primary btn-block", role: "button" %>
+  <div class="col-sm-5">
+    <%= render partial: 'messages/interface', locals: {chat_channel_type: @chat_channel_type,
+                                                              channel_id: @group.id, nav: false, obj: nil, obj_name: ''} %>
   </div>
 </div>
-
-<%= render partial: 'messages/interface', locals: {chat_channel_type: @chat_channel_type,
-                                                   post_channel_type: @post_channel_type,
-                                                   channel_id: @group.id, nav: false, obj: nil, obj_name: ''} %>
 
 <%= subscribe_to "/groups/#{@group.id}/messages" %>
 <%= subscribe_to "/groups/#{@group.id}/posts" %>

@@ -6,10 +6,19 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-User.create!(name:  "Administrator",
-             email: "example@railstutorial.org",
-             password: "adminuser",
-             password_confirmation: "adminuser",
+Institution.create!(name: "Simon Fraser University",
+                    city: "Burnaby",
+                    state: "British Columbia",
+                    country: "Canada",
+                    email_constraint: "sfu.ca",
+                    website: "http://www.sfu.ca",
+                    uses_cas: true,
+                    cas_endpoint: "https://cas.sfu.ca/cas")
+
+User.create!(name:  "Superuser",
+             email: "email@example.me",
+             password: "superuser",
+             password_confirmation: "superuser",
              role: 2,
              activated: true,
              activated_at: Time.zone.now)

@@ -1,0 +1,5 @@
+<% provide(:email_title, "Dropped Course : #{@course.department.name} #{@course.number} (#{@course.department.term.term_name})") %>
+
+<p>You have dropped the course <%= "#{@course.department.name} #{@course.number} - #{@course.name}" %> for the term <%= @course.department.term.term_name %>.</p>
+
+<p>You can readd the course at: <%= link_to "#{@course.department.name} #{@course.number} Info", get_info_course_url(@course) %></p>

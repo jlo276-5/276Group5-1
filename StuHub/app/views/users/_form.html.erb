@@ -1,36 +1,24 @@
-<%= javascript_tag do %>
-  <!-- Investigate native Rails solution? -->
-  VerifyTOSAccept = function() {
-    var submitBtn = document.getElementById("submit_btn");
-    var acceptCM = document.getElementById("user_tos_agree");
-    if (acceptCM.checked == true) {
-      submitBtn.removeAttribute("disabled");
-    }
-    else {
-      var disable = document.createAttribute("disabled");
-      disable.value = "disabled";
-      submitBtn.setAttributeNode(disable);
-    }
-  }
-<% end %>
-
 <%= form_for(@user, html: {class: 'form-horizontal'}) do |f| %>
 <%= render partial: 'shared/error_messages', locals: {obj: @user} %>
 
+  <%= f.hidden_field :cas_identifier %>
   <div class="form-group">
-    <%= f.label :name, class: 'col-sm-4 col-md-3 control-label' %>
+    <%= label_tag nil, 'Current Email', class: 'col-sm-4 col-md-3 control-label' %>
     <div class="col-sm-8 col-md-9">
-      <%= f.text_field :name, class: 'form-control', placeholder: 'Name' %>
+      <p class="form-control-static"><%= @user.email %></p>
     </div>
   </div>
-  <div class="form-group">
-    <%= f.label :email, class: 'col-sm-4 col-md-3 control-label' %>
+  <div class="form-group <%= 'field_with_errors' if @user.errors[:new_email].present? %>">
+    <%= label_tag nil, 'New Email', class: 'col-sm-4 col-md-3 control-label' %>
     <div class="col-sm-8 col-md-9">
-      <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
+      <%= email_field_tag :new_email, nil, class: 'form-control', placeholder: 'New Email' %>
     </div>
   </div>
+
+  <hr>
+
   <div class="form-group">
-    <%= f.label :password, class: 'col-sm-4 col-md-3 control-label' %>
+    <%= f.label :password, 'New Password', class: 'col-sm-4 col-md-3 control-label' %>
     <div class="col-sm-8 col-md-9">
       <div class="input-group">
         <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
@@ -49,52 +37,28 @@
     </div>
   </div>
 
-  <% if current_page?(root_path) or current_page?(register_path) or controller.action_name == "create" or controller.action_name == "new" %>
-    <div class="form-group">
-      <%= f.label :institution_id, class: 'col-sm-4 col-md-3 control-label' %>
-      <div class="col-sm-8 col-md-9">
-        <%= f.collection_select :institution_id, Institution.all.order('name ASC'), :id, :name, {}, {class: 'form-control'} %>
-        <% if !current_page?(root_path) %>
-          <span id="helpBlock" class="help-block">Note: The email used for registration must match domains specified by the institution.</span>
-        <% end %>
-      </div>
-    </div>
-    <div class="form-group" style="text-align: center;">
-      <div class="checkbox">
-        <label>
-          <%= f.check_box :tos_agree, onclick: 'VerifyTOSAccept()' %>  I agree to the <%= link_to 'Terms', terms_path %>.
-        </label>
-      </div>
-    </div>
-  <% end %>
+  <hr>
 
-  <% if !current_page?(root_path) and !current_page?(register_path) and controller.action_name != "create" %>
-    <div class="form-group" style="text-align: center;">
-      <h4>StuHub uses avatars from Gravatar</h4>
-      <p><a href="http://gravatar.com/emails" target="_blank">Manage your avatars directly on their site.</a></p>
+  <div class="form-group">
+    <%= label_tag nil, 'Delete Account', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <p class="form-control-static">Contact an Administrator if you would like to delete your account.</p>
     </div>
-  <% end %>
-  <% if !current_page?(root_path) and !current_page?(register_path) and !(controller.action_name == "create" or controller.action_name == "new") and !current_user.more_powerful(true, @user) %>
-    <div class="form-group" style="text-align: center;">
-      <% if @user.superuser? %>
-        You will need to use your super powers to delete your account.
-      <% elsif @user.admin? %>
-        Contact a Super User if you would like to delete your account.
-      <% else %>
-        Contact an Administrator if you would like to delete your account.
-      <% end %>
+  </div>
+
+  <hr>
+
+  <div class="form-group" style="text-align: center;">
+    Please enter your current password to make any changes.
+  </div>
+
+  <div class="form-group <%= 'field_with_errors' if @user.errors[:current_password].present? %>">
+    <label class="col-sm-4 col-md-3 control-label" for="user_current_password">Current Password</label>
+    <div class="col-sm-8 col-md-9">
+      <%= password_field_tag :current_password, '', class: 'form-control', placeholder: 'Current Password' %>
     </div>
-    <hr>
-    <div class="form-group" style="text-align: center;">
-      Changing any of these settings requires your current password.
-    </div>
-    <div class="form-group <%= 'field_with_errors' if @user.errors[:current_password].present? %>">
-      <label class="col-sm-4 col-md-3 control-label" for="user_current_password">Current Password</label>
-      <div class="col-sm-8 col-md-9">
-        <%= password_field_tag :current_password, '', class: 'form-control', placeholder: 'Current Password' %>
-      </div>
-    </div>
-  <% end %>
+  </div>
+
   <div class="row">
     <div class="col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
       <%= f.submit yield(:save_button_title), class: "btn btn-primary btn-block", id: 'submit_btn', disabled: 'disabled' %>

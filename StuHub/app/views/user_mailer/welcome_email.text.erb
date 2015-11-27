@@ -4,9 +4,11 @@ Welcome to StuHub!
 
 Your account details are as follows:
 
-Name: <%= @user.name %>
 Email: <%= CGI::escape(@user.email) %>
+Password: As you entered on the registration form
 
 Please login to your account at the following url:
 
 <%= login_url %>
+
+If your Institution supports CAS Authentication, configure it in your settings.

@@ -1,0 +1,46 @@
+<div class="row" id="post_<%= post.id %>_edit">
+  <script type="text/javascript">
+    $("#cancel_edit_post_<%= post.id %>").click(function(e) {
+      $("#post_<%= post.id %>_edit").remove();
+      $("#post_<%= post.id %>").show();
+      e.preventDefault();
+    });
+  </script>
+  <div class="col-xs-12">
+    <div class="panel panel-default post_panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Editing Post</h3>
+      </div>
+      <div class="panel-body">
+        <%= form_for post, method: 'patch', remote: true, html: {class: 'form-horizontal edit_post'} do |f| %>
+          <%= f.hidden_field :user_id, value: post.user_id %>
+          <%= f.hidden_field :channel_type, value: post.channel_type %>
+          <%= f.hidden_field :channel_id, value: post.channel_id %>
+
+          <div class="form-group">
+            <div class="col-xs-12">
+              <%= f.text_field :title, class: 'form-control', placeholder: 'Post Title' %>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-xs-12">
+              <%= f.text_area :body, class: 'form-control', placeholder: 'Post Content', rows: 3, style: 'max-width: 100%;' %>
+              <span id="helpBlock" class="help-block">Markdown formatting supported. See <a href="https://daringfireball.net/projects/markdown/basics" target="_blank">Guide</a> for help.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-xs-4">
+              <-- Attachment? -->
+            </div>
+            <div class="col-xs-4">
+              <a id="cancel_edit_post_<%= post.id %>" href="#" class="btn btn-danger btn-block">Cancel</a>
+            </div>
+            <div class="col-xs-4">
+              <%= f.submit "Submit", class: "btn btn-primary btn-block" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

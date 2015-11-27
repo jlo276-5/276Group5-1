@@ -8,3 +8,4 @@ institution:
   website: http://www.example.com/iot
   image: http://thenextweb.com/wp-content/blogs.dir/1/files/2010/03/gravatar.jpg
   email_constraint: example.com
+  uses_cas: false

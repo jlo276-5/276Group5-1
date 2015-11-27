@@ -1,0 +1,2 @@
+$("#post_<%= @post.id %>").before("<%= j render(partial: 'edit', locals: {post: @post}) %>");
+$("#post_<%= @post.id %>").hide();
