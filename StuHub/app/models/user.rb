@@ -11,14 +11,20 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :privacy_setting
   accepts_nested_attributes_for :user_interests, allow_destroy: true
 
-  attr_accessor :remember_token, :activation_token, :reset_token
+  before_destroy :send_deletion_email
+
+  attr_accessor :remember_token, :activation_token, :reset_token, :email_change_token
   ##check upper case
   before_save   :downcase_email
   before_create :create_activation_digest
   ## check name exist and length
-  validates :name, presence: true, length: { maximum: 50 }
+  validates :name, length: { maximum: 50 }
   validates :tos_agree, acceptance: true
   validates :role, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2}
+
+  def name
+    read_attribute(:name) || read_attribute(:email).partition('@').first
+  end
 
   ## check email format
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -27,14 +33,17 @@ class User < ActiveRecord::Base
    validates :email, presence: true, length: { maximum: 255 },
                       format: { with: VALID_EMAIL_REGEX },
                       uniqueness: { case_sensitive: false }
-
-  validate :validate_email_domain, on: :create
+  validates :email_change_new, allow_nil: true, length: { maximum: 255 },
+                     format: { with: VALID_EMAIL_REGEX },
+                     uniqueness: { scope: :email, case_sensitive: false }
+  validate :validate_email_domain, on: :create, if: 'cas_identifier.nil?'
+  validate :validate_new_email_unique, on: :update, if: '!email_change_new.nil?'
 
   ##activate
   def activate
     update_attribute(:activation_digest, nil)
-    update_attribute(:activated,           true)
-    update_attribute(:activated_at,        Time.zone.now)
+    update_attribute(:activated,         true)
+    update_attribute(:activated_at,      Time.zone.now)
   end
 
   # send activation email
@@ -54,9 +63,42 @@ class User < ActiveRecord::Base
     update_attribute(:reset_sent_at, nil)
   end
 
+  def create_email_change_digest
+    self.email_change_token = User.new_token
+    update_attribute(:email_change_digest, User.digest(email_change_token))
+    update_attribute(:email_change_requested_at, Time.zone.now)
+  end
+
+  def reset_email_change_digest
+    update_attribute(:email_change_digest, nil)
+    update_attribute(:email_change_new, nil)
+    update_attribute(:email_change_requested_at, nil)
+  end
+
   # Sends password reset email.
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
+  end
+
+  def send_email_change_email
+    UserMailer.email_change(self).deliver_now
+  end
+
+  def send_password_change_success_email
+    UserMailer.password_change_success(self).deliver_now
+  end
+
+  def send_deletion_email
+    UserMailer.account_deletion(self).deliver_now
+  end
+
+  def lock_account
+    update_attribute(:account_locked, true)
+    UserMailer.account_locked(self).deliver_now
+  end
+
+  def unlock_account
+    update_attribute(:account_locked, false)
   end
 
   #check if password exist
@@ -96,6 +138,10 @@ class User < ActiveRecord::Base
   # returns true if not expired
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  def email_change_expired?
+    email_change_requested_at < 2.hours.ago
   end
 
   # The Power
@@ -165,11 +211,28 @@ class User < ActiveRecord::Base
     return (!gm.nil? and gm.role == 1)
   end
 
+  def current_course_memberships
+    ccm = []
+    self.course_memberships.each do |cm|
+      t = cm.course.term
+      if t == self.institution.current_term
+        ccm << cm
+      end
+    end
+    return ccm
+  end
+
   private
 
     def validate_email_domain
       unless self.institution_id.nil? or (!self.institution_id.blank? and !self.email.blank? and (self.email.ends_with?("@" + Institution.find(self.institution_id).email_constraint) or self.email.ends_with?("." + Institution.find(self.institution_id).email_constraint)))
         errors.add(:email, "contains an invalid domain for the selected institution")
+      end
+    end
+
+    def validate_new_email_unique
+      unless User.find_by(email: self.email_change_new).nil?
+        errors.add(:new_email, "must be unique")
       end
     end
 

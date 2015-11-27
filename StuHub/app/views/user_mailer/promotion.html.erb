@@ -1,0 +1,7 @@
+<% provide(:email_title, 'Account Promotion') %>
+
+<p>Your account on StuHub has been promoted from <%= @old_role %> to <%= @user.role_string_long %>.</p>
+
+<p>Please check your profile for any issues: <%= link_to 'Profile', @user %></p>
+
+<p>If you have any concerns, please contact us immediately.</p>

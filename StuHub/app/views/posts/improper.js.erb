@@ -1,0 +1,2 @@
+$("#post_<%= @post.id %>").prepend('<div id="post_<%= @post.id %>_warning" class="alert alert-warning" role="alert">You do not have permission to do that.</div>')
+$("#post_<%= @post.id %>_warning").delay(1000).fadeOut(500, function() { $("#post_<%= @post.id %>_warning").remove(); });

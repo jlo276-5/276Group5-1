@@ -6,7 +6,7 @@ class AccountActivationsController < ApplicationController
     if user && !user.activated? && user.authenticated?(:activation, params[:id])
       user.activate
       log_in user
-      flash[:success] = "Your account has been activated."
+      flash[:success] = "Your account has been activated. Please set your profile as soon as possible."
       UserMailer.welcome_email(user).deliver_now
       redirect_to user
     elsif user && user.activated?

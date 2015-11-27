@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20151127021115) do
+=======
+ActiveRecord::Schema.define(version: 20151126114032) do
+>>>>>>> 0cfda4c41f289f775a93c70240c770ff4ebf852c
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,8 +54,9 @@ ActiveRecord::Schema.define(version: 20151127021115) do
     t.string   "name"
     t.string   "number"
     t.integer  "department_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.text     "enrollment",    default: ""
   end
 
   add_index "courses", ["department_id"], name: "index_courses_on_department_id", using: :btree
@@ -132,12 +137,16 @@ ActiveRecord::Schema.define(version: 20151127021115) do
     t.string   "state"
     t.string   "country"
     t.string   "email_constraint"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.string   "website"
     t.string   "image"
     t.string   "city"
+    t.boolean  "uses_cas",         default: false
+    t.string   "cas_endpoint"
   end
+
+  add_index "institutions", ["uses_cas"], name: "index_institutions_on_uses_cas", using: :btree
 
   create_table "instructors", force: :cascade do |t|
     t.string   "first_name"
@@ -164,6 +173,19 @@ ActiveRecord::Schema.define(version: 20151127021115) do
   end
 
   add_index "messages", ["channel_type", "channel_id"], name: "index_messages_on_channel_type_and_channel_id", using: :btree
+
+  create_table "posts", force: :cascade do |t|
+    t.string   "title"
+    t.text     "body"
+    t.integer  "channel_type", default: 0, null: false
+    t.integer  "channel_id",   default: 0, null: false
+    t.integer  "user_id",                  null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "posts", ["channel_id", "channel_type"], name: "index_posts_on_channel_id_and_channel_type", using: :btree
+  add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
 
   create_table "privacy_settings", force: :cascade do |t|
     t.boolean  "display_institution", default: true
@@ -212,13 +234,27 @@ ActiveRecord::Schema.define(version: 20151127021115) do
 
   create_table "terms", force: :cascade do |t|
     t.string   "name"
-    t.integer  "year_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.string   "year"
+    t.string   "term_reference"
+    t.string   "data_url"
+    t.datetime "data_last_updated"
+    t.integer  "institution_id"
+    t.date     "enrollment_start_date"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.date     "exams_end_date"
+    t.integer  "data_mode",                    default: 0
+    t.string   "database_url"
+    t.boolean  "database_contains_enrollment", default: false
+    t.boolean  "updating",                     default: false
+    t.integer  "term_order",                   default: 1
+    t.integer  "database_last_line",           default: 0
   end
 
-  add_index "terms", ["name", "year_id"], name: "index_terms_on_name_and_year_id", unique: true, using: :btree
-  add_index "terms", ["year_id"], name: "index_terms_on_year_id", using: :btree
+  add_index "terms", ["institution_id", "term_reference"], name: "index_terms_on_institution_id_and_term_reference", unique: true, using: :btree
+  add_index "terms", ["institution_id"], name: "index_terms_on_institution_id", using: :btree
 
   create_table "user_interests", force: :cascade do |t|
     t.string   "interest"
@@ -233,35 +269,44 @@ ActiveRecord::Schema.define(version: 20151127021115) do
   create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
     t.string   "password_digest"
     t.string   "remember_digest"
     t.string   "activation_digest"
-    t.boolean  "activated",         default: false
+    t.boolean  "activated",                    default: false
     t.datetime "activated_at"
     t.string   "reset_digest"
     t.datetime "reset_sent_at"
-    t.integer  "role",              default: 0
+    t.integer  "role",                         default: 0
     t.datetime "last_active_at"
-    t.string   "time_zone",         default: "Pacific Time (US & Canada)"
-    t.string   "major",             default: ""
-    t.text     "about_me",          default: ""
-    t.string   "website",           default: ""
+    t.string   "time_zone",                    default: "Pacific Time (US & Canada)"
+    t.string   "major",                        default: ""
+    t.text     "about_me",                     default: ""
+    t.string   "website",                      default: ""
     t.date     "birthday"
-    t.integer  "gender",            default: 0
+    t.integer  "gender",                       default: 0
     t.integer  "institution_id"
     t.datetime "last_login_at"
+    t.string   "email_change_digest"
+    t.string   "email_change_new"
+    t.datetime "email_change_requested_at"
+    t.string   "password_change_digest"
+    t.datetime "password_change_requested_at"
+    t.string   "cas_identifier"
+    t.boolean  "cas_login_active",             default: false
+    t.string   "dropbox_token"
+    t.string   "dropbox_secret"
+    t.string   "dropbox_uid"
+    t.boolean  "account_emails",               default: true
+    t.boolean  "notification_emails",          default: false
+    t.integer  "failed_login_attempts",        default: 0
+    t.boolean  "account_locked",               default: false
   end
 
+  add_index "users", ["cas_identifier"], name: "index_users_on_cas_identifier", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["institution_id"], name: "index_users_on_institution_id", using: :btree
-
-  create_table "years", force: :cascade do |t|
-    t.string   "number"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   add_foreign_key "associated_classes", "courses"
   add_foreign_key "course_memberships", "courses"
@@ -278,6 +323,6 @@ ActiveRecord::Schema.define(version: 20151127021115) do
   add_foreign_key "privacy_settings", "users"
   add_foreign_key "section_times", "sections"
   add_foreign_key "sections", "associated_classes"
-  add_foreign_key "terms", "years"
+  add_foreign_key "terms", "institutions"
   add_foreign_key "user_interests", "users"
 end

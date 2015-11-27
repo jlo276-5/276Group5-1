@@ -1,0 +1,19 @@
+<% provide(:title, "Enrollment - #{@course.department.name}#{@course.number}") %>
+<% provide(:main_title, "#{@course.department.name}#{@course.number} - #{@course.name}") %>
+<% provide(:sub_title, @course.department.term.term_name) %>
+
+<% if @datasets.size > 0 %>
+
+<% @datasets.each do |ds| %>
+
+<h2>Section Group <%= ds["key"] %></h2>
+
+<%= line_chart(ds["data"], max: ds["max"], library: {legend: 'bottom', chartArea: {width: '90%', height: '70%'}, hAxis: {format: 'yyyy/MM/d'}}) %>
+
+<% end %>
+
+<% else %>
+
+<h3 style="text-align: center;">Enrollment data not available for this course. </h3>
+
+<% end %>

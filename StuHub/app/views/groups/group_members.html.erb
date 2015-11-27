@@ -1,4 +1,5 @@
 <% provide(:title, "User Management - #{@group.name}") %>
+<% provide(:main_title, @group.name) %>
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -7,7 +8,7 @@
   <div class="row">
     <div class="col-xs-10 col-xs-offset-1" style="text-align: center;">
       <%= will_paginate @members, style: 'margin: 0;' %><br>
-      <%= page_entries_info @members %>
+      <%= page_entries_info @members, model: "Member" %>
     </div>
   </div>
   <div class="table-responsive">

@@ -1,0 +1,23 @@
+<% provide(:email_title, 'Account Email Change for ' + @user.email) %>
+
+<p>Someone requested an email change for <%= @user.email %> to <%= @user.email_change_new %>. Click on the link below within the next two hours to complete the change:</p>
+
+<%= link_to 'Change your Email', edit_email_change_url(@user.email_change_token, email: @user.email) %>
+
+<p>If the link above does not work, copy and paste the following url into your browser:</p>
+
+<%= edit_email_change_url(@user.email_change_token, email: @user.email) %>
+
+<p>If you did not request this email change, please immediately go to your
+account settings and change your password:</p>
+
+<%= link_to 'Profile Settings', edit_user_url(@user) %>
+
+<p>If the link above does not work, copy and paste the following url into your browser:</p>
+
+<%= edit_user_url(@user) %>
+
+<p>You should also verify that other accounts which may use the same email
+address and/or password have not been compromised.</p>
+
+Please contact us directly if you require any assistance.

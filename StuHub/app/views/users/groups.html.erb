@@ -22,7 +22,7 @@
             <tr>
               <td><%= link_to gm.group.name, gm.group %><br><small style="white-space: pre;">Joined: <%= gm.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></td>
               <% if current_user?(@user) %>
-                <td><%= link_to "Delete", group_membership_path(gm), method: "delete", class: "btn btn-danger btn-block", role: "button", data: { confirm: "Are you sure you want to leave this group?" } %></td>
+                <td><%= link_to "Leave", group_membership_path(gm, leave: "true"), method: "delete", class: "btn btn-danger btn-block", role: "button", data: { confirm: "Are you sure you want to leave this group?" } %></td>
               <% end %>
             </tr>
           <% end %>

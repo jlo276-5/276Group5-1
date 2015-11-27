@@ -1,0 +1,15 @@
+<% if @post.valid? %>
+  <% publish_to @channel do %>
+    $("#posts").prepend("<%= j render(@post) %>");
+    $("#posts").animate({scrollTop:0}, 500);
+    $(".new_post")[0].reset();
+  <% end %>
+<% else %>
+  errorString = "The following errors occured:<br><br><ul>"
+  <% @post.errors.full_messages.each do |msg| %>
+    errorString += '<li><%= msg %></li>';
+  <% end %>
+  errorString += '</ul><br>Please check and send again.';
+  $(".new_post").before('<div class="alert alert-danger" id="new_post_danger" role="alert">' + errorString + '</div>');
+  $("#new_post_danger").delay(4000).fadeOut(500, function() { $("#new_post_danger").remove(); });
+<% end %>

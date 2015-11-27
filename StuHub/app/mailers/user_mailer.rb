@@ -1,20 +1,14 @@
 class UserMailer < ApplicationMailer
 
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.user_mailer.account_activation.subject
-  #
+  # Subjects can be set in your I18n file at config/locales/en.yml
+  # with:
+  #   en.user_mailer.<mail>.subject
+
   def account_activation(user)
     @user = user
     mail to: user.email, subject: "[StuHub] Account Activation"
   end
 
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.user_mailer.password_reset.subject
-  #
   def password_reset(user)
     @user = user
     mail to: user.email, subject: "[StuHub] Account Password Reset Request"
@@ -27,7 +21,44 @@ class UserMailer < ApplicationMailer
 
   def password_reset_success(user)
     @user = user
-    mail to: user.email, subject: '[StuHub] Account Password Reset Successful'
+    mail to: user.email, subject: '[StuHub] Password Reset Successful'
+  end
+
+  def password_change_success(user)
+    @user = user
+    mail to: user.email, subject: '[StuHub] Password Changed'
+  end
+
+  def email_change(user)
+    @user = user
+    mail to: user.email_change_new, subject: '[StuHub] Email Change Request'
+  end
+
+  def email_change_success(user, email)
+    @user = user
+    mail to: email, subject: '[StuHub] Email Change Successful'
+  end
+
+  def promotion(user, old_role)
+    @user = user
+    @old_role = old_role
+    mail to: user.email, subject: '[StuHub] Account Promotion'
+  end
+
+  def demotion(user, old_role)
+    @user = user
+    @old_role = old_role
+    mail to: user.email, subject: '[StuHub] Account Demotion'
+  end
+
+  def account_deletion(user)
+    @user = user
+    mail to: user.email, subject: '[StuHub] Account Deletion'
+  end
+
+  def account_locked(user)
+    @user = user
+    mail to: user.email, subject: '[StuHub] Account Locked'
   end
 
 end

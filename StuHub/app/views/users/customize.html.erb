@@ -12,6 +12,15 @@
 
         <%= f.fields_for :privacy_setting do |p| %>
         <div class="form-group">
+          <%= f.label :name, class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-8 col-md-9">
+            <%= f.text_field :name, class: 'form-control', placeholder: 'Name' %>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
           <%= f.label :institution, class: 'col-sm-4 col-md-3 control-label' %>
           <div class="col-sm-6 col-md-7">
             <%= f.label :institution, @user.institution.nil? ? "Unknown" : @user.institution.name, class: 'form-control', placeholder: 'Name', readonly: 'readonly' %>
@@ -44,7 +53,7 @@
         <div class="form-group">
           <%= f.label :about_me, 'About Me', class: 'col-sm-4 col-md-3 control-label' %>
           <div class="col-sm-6 col-md-7">
-            <%= f.text_area :about_me, class: 'form-control', placeholder: 'A short description about you.', rows: '6' %>
+            <%= f.text_area :about_me, class: 'form-control', placeholder: 'A short description about you.', rows: '6', style: 'max-width: 100%;' %>
             <span id="helpBlock" class="help-block">Markdown formatting supported. See <a href="https://daringfireball.net/projects/markdown/basics" target="_blank">Guide</a> for help.</span>
           </div>
           <div class="col-sm-2 col-md-2">
@@ -87,7 +96,7 @@
           <div class="col-sm-2 col-md-2">
             <div class="checkbox">
               <label>
-                <%= p.check_box :display_birthday %> Show
+                <%= p.check_box :display_gender %> Show
               </label>
             </div>
           </div>
@@ -126,7 +135,6 @@
             </div>
           </div>
         </div>
-
         <% end %>
 
         <hr>
@@ -136,6 +144,33 @@
           <div class="col-sm-8 col-md-9">
             <%= f.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones, {}, {class: 'form-control', default: "Pacific Time (US & Canada)"} %>
           </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+          <%= label_tag nil, 'Email Control', class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-8 col-md-9">
+            <div class="checkbox">
+              <label>
+                <%= f.check_box :account_emails %> Enable Account Activity emails
+              </label>
+              <span id="helpBlock" class="help-block">These consist of emails about changing emails, passwords, suspicious activity, and other things. <strong>Disable at your own risk.</strong></span>
+            </div>
+            <div class="checkbox">
+              <label>
+                <%= f.check_box :notification_emails %> Enable notification emails
+              </label>
+              <span id="helpBlock" class="help-block">These consist of emails about your course and group activity, as well as any other notification-type emails.</span>
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group" style="text-align: center;">
+          <h4>StuHub uses avatars from Gravatar</h4>
+          <p><a href="http://gravatar.com/emails" target="_blank">Manage your avatars directly on their site.</a></p>
         </div>
 
         <div class="row">

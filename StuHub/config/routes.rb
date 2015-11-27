@@ -1,7 +1,19 @@
 Rails.application.routes.draw do
-  resources :events
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
+
+  post 'dropbox_link', to: 'dropbox_auth#link'
+  post 'dropbox_unlink', to: 'dropbox_auth#unlink'
+  get 'dropbox_callback', to: 'dropbox_auth#callback'
+
+  # Routes for CAS Auth
+  post 'cas_auth', to: 'cas_auth#auth'
+  get 'cas_callback', to: 'cas_auth#callback'
+  post 'cas_enable', to: 'cas_auth#enable'
+  post 'cas_disable', to: 'cas_auth#disable'
+
+  # Routes for events
+  resources :events
 
   # Routes for groups
   resources :group_membership_requests, as: 'gm_request', only: [:new, :create] do
@@ -24,8 +36,9 @@ Rails.application.routes.draw do
     end
   end
 
-  # Routes for Messages
+  # Routes for Messages and Posts
   resources :messages, only: [:create]
+  resources :posts, only: [:create, :edit, :update, :destroy]
 
   # Routes for Courses
   resources :course_memberships, only: [:destroy, :create] do
@@ -39,6 +52,7 @@ Rails.application.routes.draw do
     member do
       get 'users', to: 'courses#course_members'
       get 'info', to: 'courses#info', as: 'get_info'
+      get 'enrollment', to: 'courses#enrollment'
     end
     collection do
       get 'get_terms',       to: 'courses#get_terms'
@@ -50,9 +64,15 @@ Rails.application.routes.draw do
   # Routes for Administration
   get 'admin', to: 'admin#index'
   get 'admin/users', to: 'admin#user_management'
-  resources :institutions, only: [:show]
+  get '/institutions/:id/users', to: 'institutions#users', as: 'institution_users'
   scope '/admin' do
-    resources :institutions, only: [:new, :index, :create, :edit, :update, :destroy]
+    resources :institutions do
+      resources :terms, only: [:new, :create, :edit, :update, :destroy] do
+        member do
+          post 'update_data'
+        end
+      end
+    end
     resources :messages, only: [:index]
   end
 
@@ -64,6 +84,7 @@ Rails.application.routes.draw do
   # Routes for Users
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :account_activations, only: [:edit]
+  resources :email_changes, only: [:edit]
   get 'register' => 'users#new'
   get 'schedule', to: 'users#schedule'
   resources :users, only: [:index, :create, :show, :edit, :update, :destroy] do
@@ -72,6 +93,7 @@ Rails.application.routes.draw do
       post 'demote'
       get 'courses'
       get 'groups'
+      get 'accounts'
       get 'customize'
     end
   end

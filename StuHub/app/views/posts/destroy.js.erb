@@ -1,0 +1,4 @@
+<% publish_to @channel do %>
+  $("#post_<%= @post.id %>").html('<div class="alert alert-success" role="alert">Post Deleted</div>')
+  $("#post_<%= @post.id %>").delay(1000).fadeOut(500, function() { $("#post_<%= @post.id %>").remove(); });
+<% end %>

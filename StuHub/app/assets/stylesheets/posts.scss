@@ -1,0 +1,38 @@
+// Place all the styles related to the Posts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.post_panel > div.panel-body {
+  padding: 8px;
+}
+.post_body {
+  // http://stackoverflow.com/questions/3058866/how-to-force-a-line-break-in-a-loooooong-word-in-a-div
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+
+  -webkit-hyphens: auto;
+     -moz-hyphens: auto;
+      -ms-hyphens: auto;
+          hyphens: auto;
+}
+.post_body img {
+  width: 100%;
+}
+.posts_column {
+  margin-bottom: 16px;
+}
+.post_view {
+  height: 500px;
+  margin-bottom: 16px;
+}
+@for $i from 1 through 7 {
+  @media (min-height: (500px + ($i * 100px))) {
+  .post_view {
+    height: 500px + ($i * 100px);
+  }
+  }
+}
+.post_created_at {
+  text-align: right;
+}
