@@ -1,7 +1,7 @@
 <% provide(:title, 'About Us') %>
 <% provide(:page_title, 'About Us') %>
 
-### We Are
+## We Are
 
 Alexander Sweeten
 
@@ -17,7 +17,7 @@ Together, we are CMPT276 Group 5.
 
 With our passion for software engineering, we strive to make brilliant web apps that are useful to the regular student.
 
-### Origins and Inspiration
+## Origins and Inspiration
 
 Many university students face common experience: lack of shared social and collaboration online hubs tailored to their needs.
 
@@ -29,7 +29,7 @@ Most crucially, we focus on the **chat and social element**. No other service gi
 
 When posed with the question of a topic for a course group project, this came to mind immediately. We could put our skills to use in fixing this problem in a way only students can understand. That is how StuHub can to
 
-### Primary features
+## Primary features
 
 At StuHub, we focus on being a **Course Hub**.
 
@@ -42,6 +42,6 @@ Primary features lay in the realtime chat, online study groups, and schedule and
 
 Many other features exist as well, browse through the help guide for more.
 
-### Future
+## Future
 
 We have many more exciting features in the pipeline for the future, check here again later!
