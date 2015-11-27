@@ -10,7 +10,9 @@ class HelpController < ApplicationController
     if valid_page?
       render template: "help/#{params[:page]}"
     else
-      render file: "public/404.html", status: :not_found
+      # raise ActionController::RoutingError.new('Not Found')
+      flash[:danger] = "No Such Help Page Found"
+      redirect_to help_path
     end
   end
 
