@@ -2,6 +2,14 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
+  get 'contact', to: 'contact_requests#new'
+  post 'contact', to: 'contact_requests#create'
+  get 'faq', to: 'help#faq'
+  get 'terms', to: 'help#terms'
+  get 'about', to: 'help#about'
+  get 'help/*page', to: 'help#show', as: 'help_item'
+  get 'help', to: 'help#index'
+
   post 'dropbox_link', to: 'dropbox_auth#link'
   post 'dropbox_unlink', to: 'dropbox_auth#unlink'
   get 'dropbox_callback', to: 'dropbox_auth#callback'
@@ -66,6 +74,11 @@ Rails.application.routes.draw do
   get 'admin/users', to: 'admin#user_management'
   get '/institutions/:id/users', to: 'institutions#users', as: 'institution_users'
   scope '/admin' do
+    resources :contact_requests, only: [:index, :show, :destroy] do
+      member do
+        post 'resolve'
+      end
+    end
     resources :institutions do
       resources :terms, only: [:new, :create, :edit, :update, :destroy] do
         member do
@@ -97,11 +110,6 @@ Rails.application.routes.draw do
       get 'customize'
     end
   end
-
-  # Routes for Static Pages
-  get 'about' => 'static_pages#about'
-  get 'terms' => 'static_pages#terms'
-  get 'help'  => 'static_pages#help'
 
   # Home page for logged in Users
   get 'home' => 'home#home'

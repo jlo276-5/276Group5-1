@@ -10,4 +10,9 @@ $(document).ready ->
         right: 'month,agendaWeek,agendaDay'
     },
     events: '/events.json'
+    editable: true
+    eventColor:'#B22222'
+    slotEventOverlap: false
+    weekNumbers:true
+    
   })
