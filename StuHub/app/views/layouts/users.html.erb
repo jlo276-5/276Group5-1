@@ -1,3 +1,5 @@
+<% content_for :content do %>
+
 <div class="row">
   <div class="col-sm-9 col-sm-push-3" id="profile_content">
     <div class="row">
@@ -7,7 +9,7 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <%= yield :page_content %>
+        <%= yield %>
       </div>
     </div>
   </div>
@@ -27,12 +29,13 @@
             <%= link_to 'Profile', @user, class: "list-group-item #{'active' if current_page?(@user)}" %>
             <%= link_to 'Courses', courses_user_path(@user), class: "list-group-item #{'active' if current_page?(courses_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) || @user.privacy_setting.display_courses %>
             <%= link_to 'Groups', groups_user_path(@user), class: "list-group-item #{'active' if current_page?(groups_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) || @user.privacy_setting.display_groups %>
-            <%= link_to 'Edit Profile', customize_user_path(@user), class: "list-group-item #{'active' if current_page?(customize_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
-            <%= link_to 'Connected Accounts', accounts_user_path(@user), class: "list-group-item #{'active' if current_page?(accounts_user_path(@user))}" if (current_user?(@user) || current_user.superuser?) %>
-            <%= link_to 'User Settings', edit_user_path(@user), class: "list-group-item #{'active' if current_page?(edit_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
+            <%= link_to 'Settings', customize_user_path(@user), class: "list-group-item #{'active' if current_page?(customize_user_path(@user)) or current_page?(accounts_user_path(@user)) or current_page?(edit_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
             </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<% end %>
+<%= render template: "layouts/application" %>

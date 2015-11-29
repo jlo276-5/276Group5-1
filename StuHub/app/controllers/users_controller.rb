@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
   before_action :check_privacy,  only: [:show, :edit, :customize, :courses, :groups]
+  layout 'application', only: [:index, :new, :create]
 
   ## Use 'find' method to show certain user
   def show

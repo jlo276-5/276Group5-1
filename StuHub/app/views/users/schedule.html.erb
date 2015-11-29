@@ -1,43 +1,39 @@
 <% provide(:title, "User Schedule") %>
 
-<% content_for :page_content do %>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h1 class="panel-title">Schedule</h1>
-    </div>
-    <ul class="list-group">
-      <% if current_user.course_memberships.size <= 0 %>
-        <li class="list-group-item">No Schedules</li>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1 class="panel-title">Schedule</h1>
+  </div>
+  <ul class="list-group">
+    <% if current_user.course_memberships.size <= 0 %>
+      <li class="list-group-item">No Schedules</li>
+    <% else %>
+      <% (current_user.course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
+      <% if cm.sections.count == 0 %>
+        <% course = cm.course %>
+        <li class="list-group-item">
+          <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number}", get_info_course_path(course) %> <small><%= course.department.term.term_name %></small></h4>
+          <p class="list-group-item-text">
+            No Schedules
+          </p>
+        </li>
       <% else %>
-        <% (current_user.course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
-        <% if cm.sections.count == 0 %>
-          <% course = cm.course %>
-          <li class="list-group-item">
-            <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number}", get_info_course_path(course) %> <small><%= course.department.term.term_name %></small></h4>
-            <p class="list-group-item-text">
-              No Schedules
-            </p>
-          </li>
-        <% else %>
-          <% cm.sections.each do |s| %>
-              <li class="list-group-item">
-                <% course = s.associated_class.course %>
-                <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %> <small><%= "#{course.department.term.term_name}, " %><% s.instructors.each do |i| %><%= "#{i.first_name} #{i.last_name} #{(i == s.instructors.last ? '' : ', ')}" %><% end %></small></h4>
-                <p class="list-group-item-text">
-                  <% s.section_times.each do |st| %>
-                    <%= "#{s.code} on #{st.days} at #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')} in #{st.building} #{st.room}" %><br>
-                  <% end %>
-                  <% s.exams.each do |e| %>
-                    <%= "EXAM on #{e.exam_start.strftime("%a")} at #{e.exam_start.strftime("%D")} #{e.exam_start.in_time_zone.strftime('%I:%M %p')} - #{e.exam_end.in_time_zone.strftime('%I:%M %p')}" %><br>
-                  <% end %>
-                </p>
-              </li>
-            <% end %>
+        <% cm.sections.each do |s| %>
+            <li class="list-group-item">
+              <% course = s.associated_class.course %>
+              <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %> <small><%= "#{course.department.term.term_name}, " %><% s.instructors.each do |i| %><%= "#{i.first_name} #{i.last_name} #{(i == s.instructors.last ? '' : ', ')}" %><% end %></small></h4>
+              <p class="list-group-item-text">
+                <% s.section_times.each do |st| %>
+                  <%= "#{s.code} on #{st.days} at #{st.start_time.in_time_zone.strftime('%I:%M %p')} - #{st.end_time.in_time_zone.strftime('%I:%M %p')} in #{st.building} #{st.room}" %><br>
+                <% end %>
+                <% s.exams.each do |e| %>
+                  <%= "EXAM on #{e.exam_start.strftime("%a")} at #{e.exam_start.strftime("%D")} #{e.exam_start.in_time_zone.strftime('%I:%M %p')} - #{e.exam_end.in_time_zone.strftime('%I:%M %p')}" %><br>
+                <% end %>
+              </p>
+            </li>
           <% end %>
         <% end %>
       <% end %>
-    </ul>
-  </div>
-<% end %>
-
-<%= render 'profile_template' %>
+    <% end %>
+  </ul>
+</div>

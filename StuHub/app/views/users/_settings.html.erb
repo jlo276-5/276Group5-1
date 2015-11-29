@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-xs-12">
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="<%= 'active' if current_page?(customize_user_path(@user)) %>"><%=link_to 'Edit Profile', customize_user_path(@user) %></li>
+      <li role="presentation" class="<%= 'active' if current_page?(accounts_user_path(@user)) %>"><%=link_to 'Connected Accounts', accounts_user_path(@user) %></li>
+      <li role="presentation" class="<%= 'active' if current_page?(edit_user_path(@user)) %>"><%=link_to 'Account Settings', edit_user_path(@user) %></li>
+    </ul>
+  </div>
+</div>
+
+<br>
+
+<%= yield :page_content %>

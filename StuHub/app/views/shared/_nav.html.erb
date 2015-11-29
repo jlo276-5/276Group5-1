@@ -79,9 +79,7 @@
               <li class="<%= 'active' if current_page?(contact_path) %>"><%= link_to 'Contact StuHub', contact_path %></li>
               <li role="separator" class="divider"></li>
               <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Profile', current_user %></li>
-              <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Accounts', current_user %></li>
-              <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Edit Profile', current_user %></li>
-              <li class="<%= 'active' if current_page?(edit_user_path(current_user)) %>"><%= link_to 'User Settings', edit_user_path(current_user) %></li>
+              <li class="<%= 'active' if current_page?(customize_user_path(current_user)) or current_page?(accounts_user_path(current_user)) or current_page?(edit_user_path(current_user)) %>"><%= link_to 'Settings', customize_user_path(current_user) %></li>
               <li role="separator" class="divider"></li>
               <li><%= link_to 'Logout', logout_path, method: "delete", data: {confirm: "Are you sure you want to log out?"} %></li>
             </ul>
