@@ -6,6 +6,7 @@ class CoursesController < ApplicationController
   before_action :verify_membership, only: [:show, :course_members, :resources, :new_resource, :create_resource, :get_resource, :edit_resource, :update_resource, :destroy_resource]
   before_action :valid_dropbox, only: [:new_resource, :create_resource]
   before_action :valid_resource, only: [:get_resource, :edit_resource, :update_resource, :destroy_resource]
+  before_action :can_edit_resource, only: [:edit_resource, :update_resource, :destroy_resource]
   layout 'course', only: [:show, :info, :enrollment, :course_members, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
   require 'rest-client'
   require 'date'
@@ -476,6 +477,15 @@ class CoursesController < ApplicationController
     @resource = CourseResource.find_by(id: params[:resource_id])
     if @resource.nil?
       flash[:danger] = "No such resource exists with an id #{params[:resource_id]}"
+      redirect_to resources_course_path(@course)
+    end
+  end
+
+  def can_edit_resource
+    @course = Course.find_by(id: params[:id])
+    @resource = CourseResource.find_by(id: params[:resource_id])
+    unless (!@resource.user.nil? and current_user?(@resource.user)) or current_user.admin?
+      flash[:danger] = "You do not have the permission to do that."
       redirect_to resources_course_path(@course)
     end
   end

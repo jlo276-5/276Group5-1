@@ -6,6 +6,7 @@ class GroupsController < ApplicationController
   before_action :valid_membership, only: [:promote_member, :demote_member, :kick_member]
   before_action :valid_dropbox, only: [:new_resource, :create_resource]
   before_action :valid_resource, only: [:get_resource, :edit_resource, :update_resource, :destroy_resource]
+  before_action :can_edit_resource, only: [:edit_resource, :update_resource, :destroy_resource]
   layout 'group', only: [:show, :edit, :group_members, :group_requests, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
 
   def new
@@ -313,6 +314,15 @@ class GroupsController < ApplicationController
     elsif !current_user.memberOfGroup?(group)
       flash[:danger] = "You are not a member of this group yet."
       redirect_to groups_path
+    end
+  end
+
+  def can_edit_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = CourseResource.find_by(id: params[:resource_id])
+    unless (!@resource.user.nil? and current_user?(@resource.user)) or current_user.adminOfGroup?(@group) or current_user.admin?
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to resources_group_path(@group)
     end
   end
 
