@@ -117,6 +117,9 @@ class CasAuthController < ApplicationController
               if user
                 if user.activated?
                   user.cas_login_active = true
+                  if user.account_locked
+                    user.unlock_account
+                  end
                   log_in(user)
                   flash[:success] = "Successfully logged in via #{institution.name} CAS."
                   redirect_back_or home_url

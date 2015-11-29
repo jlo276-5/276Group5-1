@@ -99,6 +99,7 @@ class User < ActiveRecord::Base
 
   def unlock_account
     update_attribute(:account_locked, false)
+    update_attribute(:failed_login_attempts, 0)
   end
 
   #check if password exist
