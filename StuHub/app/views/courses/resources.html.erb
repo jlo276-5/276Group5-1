@@ -16,7 +16,7 @@
         <% end %>
         <% @resources.each do |r| %>
           <tr>
-            <td rowspan="2"><%= r.name %><br><small><%= r.user.nil? ? "Deleted User" : (link_to r.user.name, r.user) %><br><%= r.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></small></td>
+            <td rowspan="2"><strong><%= r.name %></strong><br><small><%= r.user.nil? ? "Deleted User" : (link_to r.user.name, r.user) %><br><%= r.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></small></td>
             <td colspan="2"><%= markdown(r.description) %></td>
           </tr>
           <tr>
@@ -29,7 +29,7 @@
               </div>
               <div class="col-xs-3">
                 <% if current_user?(r.user) or current_user.admin? %>
-                  <%= link_to "Share", resource_course_path(@course, resource_id: r), class: "btn btn-default btn-block btn-sm", target: '_blank', role: "button" %>
+                  <%= link_to "Share", "#", class: "btn btn-default btn-block btn-sm", target: '_blank', role: "button", onclick: "window.prompt('Copy and Paste the following where you want to share the link (Replace LINK_TITLE with the display name of the link):', '[LINK_TITLE](#{resource_course_url(@course, resource_id: r)})'); return false;"%>
                 <% end %>
               </div>
               <div class="col-xs-3">

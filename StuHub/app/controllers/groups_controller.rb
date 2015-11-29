@@ -295,12 +295,11 @@ class GroupsController < ApplicationController
   def valid_resource
     @group = Group.find_by(id: params[:id])
     @resource = GroupResource.find_by(id: params[:resource_id])
-    if @resource.nil?
+    if @resource.nil? or @resource.group != @group
       flash[:danger] = "No such resource exists with an id #{params[:resource_id]}"
       redirect_to resources_group_path(@group)
     end
   end
-
 
   def valid_membership
     @gm = GroupMembership.find_by(id: params[:gm_id])

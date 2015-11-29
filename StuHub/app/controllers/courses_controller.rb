@@ -478,7 +478,7 @@ class CoursesController < ApplicationController
   def valid_resource
     @course = Course.find_by(id: params[:id])
     @resource = CourseResource.find_by(id: params[:resource_id])
-    if @resource.nil?
+    if @resource.nil? or @resource.course != @course
       flash[:danger] = "No such resource exists with an id #{params[:resource_id]}"
       redirect_to resources_course_path(@course)
     end
