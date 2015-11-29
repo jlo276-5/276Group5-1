@@ -22,7 +22,21 @@
               Courses <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="<%= 'active' if current_page?(courses_user_path(current_user)) %>"><%= link_to 'Your Courses', courses_user_path(current_user) %></li>
+              <% if current_user.current_courses.size > 0 %>
+                <li class="dropdown-header">Current Term</li>
+                <% current_user.current_courses.each do |c| %>
+                  <li class="<%= 'active' if current_page?(c) %>"><%= link_to "#{c.department.name} #{c.number}", c %></li>
+                <% end %>
+                <li role="separator" class="divider"></li>
+              <% end %>
+              <% if current_user.next_courses.size > 0 %>
+                <li class="dropdown-header">Next Term</li>
+                <% current_user.next_courses.each do |c| %>
+                  <li class="<%= 'active' if current_page?(c) %>"><%= link_to "#{c.department.name} #{c.number}", c %></li>
+                <% end %>
+                <li role="separator" class="divider"></li>
+              <% end %>
+              <li class="<%= 'active' if current_page?(courses_user_path(current_user)) %>"><%= link_to 'All Your Courses', courses_user_path(current_user) %></li>
               <li class="<%= 'active' if current_page?(courses_path) %>"><%= link_to 'Course Browser', courses_path %></li>
             </ul>
           </li>
@@ -31,7 +45,12 @@
               Groups <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="<%= 'active' if current_page?(groups_user_path(current_user)) %>"><%= link_to 'Your Groups', groups_user_path(current_user) %></li>
+              <% if current_user.groups.size > 0 %>
+                <% current_user.groups.each do |g| %>
+                  <li class="<%= 'active' if current_page?(g) %>"><%= link_to g.name, g %></li>
+                <% end %>
+                <li role="separator" class="divider"></li>
+              <% end %>
               <li class="<%= 'active' if current_page?(groups_path) %>"><%= link_to 'All Groups', groups_path %></li>
             </ul>
           </li>
