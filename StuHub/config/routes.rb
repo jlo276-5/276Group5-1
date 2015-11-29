@@ -38,6 +38,14 @@ Rails.application.routes.draw do
       post 'demote_member', to: 'groups#demote_member'
       get 'requests', to: 'groups#group_requests'
       get 'users', to: 'groups#group_members'
+      get 'resources', to: 'groups#resources'
+      post 'resources', to: 'groups#create_resource'
+      get 'resources/new', to: 'groups#new_resource', as: 'new_resource'
+      get 'resources/:resource_id/edit', to: 'groups#edit_resource', as: 'edit_resource'
+      get 'resources/:resource_id', to: 'groups#get_resource', as: 'resource'
+      patch 'resources/:resource_id', to: 'groups#update_resource'
+      put 'resources/:resource_id', to: 'groups#update_resource'
+      delete 'resources/:resource_id', to: 'groups#destroy_resource'
     end
     collection do
       get 'search', to: 'groups#search'
@@ -61,6 +69,14 @@ Rails.application.routes.draw do
       get 'users', to: 'courses#course_members'
       get 'info', to: 'courses#info', as: 'get_info'
       get 'enrollment', to: 'courses#enrollment'
+      get 'resources', to: 'courses#resources'
+      post 'resources', to: 'courses#create_resource'
+      get 'resources/new', to: 'courses#new_resource', as: 'new_resource'
+      get 'resources/:resource_id/edit', to: 'courses#edit_resource', as: 'edit_resource'
+      get 'resources/:resource_id', to: 'courses#get_resource', as: 'resource'
+      patch 'resources/:resource_id', to: 'courses#update_resource'
+      put 'resources/:resource_id', to: 'courses#update_resource'
+      delete 'resources/:resource_id', to: 'courses#destroy_resource'
     end
     collection do
       get 'get_terms',       to: 'courses#get_terms'

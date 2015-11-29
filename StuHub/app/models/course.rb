@@ -6,6 +6,8 @@ class Course < ActiveRecord::Base
   has_many :course_memberships, dependent: :destroy
   has_many :users, through: :course_memberships
 
+  has_many :course_resources, dependent: :destroy
+
   validates :number, length: {minimum: 1}
   validates :department_id, presence: true
 

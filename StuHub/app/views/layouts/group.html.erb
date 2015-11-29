@@ -15,7 +15,7 @@
       </div>
       <div class="list-group">
         <%= link_to 'Posts', @group, class: "list-group-item #{'active' if current_page?(@group)}" %>
-        <%= link_to 'Resources (Non-Functional)', @group, class: "list-group-item #{'active' if current_page?(@group)}" %>
+        <%= link_to 'Resources', resources_group_path(@group), class: "list-group-item #{'active' if current_page?(resources_group_path(@group))}" %>
         <%= link_to 'Edit Group', edit_group_path(@group), class: "list-group-item #{'active' if current_page?(edit_group_path(@group))}" if current_user.adminOfGroup?(@group) %>
         <%= link_to 'Group Members', users_group_path(@group), class: "list-group-item #{'active' if current_page?(users_group_path(@group))}" %>
         <%= link_to 'Requests', requests_group_path(@group), class: "list-group-item #{'active' if current_page?(requests_group_path(@group))}" if current_user.adminOfGroup?(@group) %>

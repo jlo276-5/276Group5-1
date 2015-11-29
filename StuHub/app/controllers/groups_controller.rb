@@ -1,8 +1,13 @@
 class GroupsController < ApplicationController
-  before_action :verify_membership, only: [:show, :edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
+  include ActionView::Helpers::NumberHelper
+
+  before_action :verify_membership, only: [:show, :edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member, :resources, :new_resource, :create_resource, :get_resource, :edit_resource, :update_resource, :destroy_resource]
   before_action :group_admin, only: [:edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
   before_action :valid_membership, only: [:promote_member, :demote_member, :kick_member]
-  layout 'group', only: [:show, :edit, :group_members, :group_requests]
+  before_action :valid_dropbox, only: [:new_resource, :create_resource]
+  before_action :valid_resource, only: [:get_resource, :edit_resource, :update_resource, :destroy_resource]
+  before_action :can_edit_resource, only: [:edit_resource, :update_resource, :destroy_resource]
+  layout 'group', only: [:show, :edit, :group_members, :group_requests, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
 
   def new
     @group = Group.new
@@ -144,11 +149,154 @@ class GroupsController < ApplicationController
     end
   end
 
+  def resources
+    @group = Group.find_by(id: params[:id])
+    @resources = GroupResource.where(group_id: params[:id])
+  end
+
+  def new_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = GroupResource.new
+  end
+
+  def create_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = GroupResource.new(resource_params)
+    client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)
+
+    if client.nil?
+      flash[:danger] = "Invalid Connection to Dropbox. Please relink your account."
+      redirect_to accounts_user_path(current_user)
+    elsif params[:group_resource][:file].blank?
+      flash[:danger].now = "You must attach a file."
+      render 'new_resource'
+    else
+      @resource.file_name = params[:group_resource][:file].original_filename
+      @resource.content_type = params[:group_resource][:file].content_type
+      @resource.group = @group
+      @resource.user = current_user
+      existing = nil
+      begin
+        client.find("GroupResources")
+      rescue Dropbox::API::Error::NotFound
+        client.mkdir("GroupResources")
+      end
+      begin
+        existing = client.find("GroupResources/#{@resource.file_name}")
+      rescue Dropbox::API::Error::NotFound
+        existing = nil
+      end
+      begin
+        if existing.nil? && (file = client.chunked_upload("GroupResources/#{@resource.file_name}", params[:group_resource][:file].tempfile)) && @resource.save
+          p file
+          flash[:success] = "New Group Resource Created: File \"#{@resource.file_name}\", Size #{number_to_human_size(file.bytes)}"
+          redirect_to resources_group_path(@group)
+        elsif !existing.nil?
+          flash[:danger].now = "There is already a file named #{@resource.file_name} in your Dropbox. Please name it something different."
+          render 'new_resource'
+        else
+          render 'new_resource'
+        end
+      rescue Dropbox::API::Error => e
+        flash[:danger].now = "Could not upload to Dropbox: #{e.message}."
+        render 'new_resource'
+      end
+    end
+  end
+
+  def get_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = GroupResource.find_by(id: params[:resource_id])
+
+    client = Dropbox::API::Client.new(token: @resource.user.dropbox_token, secret: @resource.user.dropbox_secret)
+
+    if client.nil?
+      flash[:danger] = "That Resource is no longer available."
+      @resource.destroy
+      redirect_to resources_group_path(@group)
+    else
+      begin
+        file = client.find("GroupResources/#{@resource.file_name}")
+        redirect_to file.share_url.url
+      rescue Dropbox::API::Error => e
+        flash[:danger] = "That Resource is no longer available."
+        @resource.destroy
+        redirect_to resources_group_path(@group)
+      end
+    end
+  end
+
+  def edit_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = GroupResource.find_by(id: params[:resource_id])
+  end
+
+  def update_resource
+    @group = Group.find_by(id: params[:id])
+    resource = GroupResource.find_by(id: params[:resource_id])
+    if !params[:group_resource][:file].blank?
+      flash[:warning].now = "You cannot change the file that the Resource points to. Please create a new Resource."
+      render 'edit_resource'
+    elsif resource.update_attributes(resource_params)
+      flash[:success] = "Resource Updated"
+      redirect_to resources_group_path(@group)
+    else
+      render 'edit_resource'
+    end
+  end
+
+  def destroy_resource
+    @group = Group.find_by(id: params[:id])
+    resource = GroupResource.find_by(id: params[:resource_id])
+    client = Dropbox::API::Client.new(token: resource.user.dropbox_token, secret: resource.user.dropbox_secret)
+    if resource.destroy
+      if resource.file_name.blank? or client.nil?
+        flash[:warning] = "Resource Deleted, but could not delete file from Dropbox."
+      else
+        begin
+          client.destroy("GroupResources/#{@resource.file_name}")
+          flash[:success] = "Resource Deleted"
+        rescue Dropbox::API::Error::NotFound
+          flash[:success] = "Resource Deleted"
+        rescue Dropbox::API::Error => e
+          flash[:warning] = "Resource Deleted, but could not delete the file from Dropbox: #{e.message}."
+        end
+      end
+    else
+      flash[:danger] = "Could not delete Resource"
+    end
+    redirect_to resources_group_path(@group)
+  end
+
   private
+
+  def resource_params
+    params.require(:group_resource).permit(:name, :description, :category)
+  end
 
   def group_params
     params.require(:group).permit(:name, :creator, :limited, :description)
   end
+
+  def valid_dropbox
+    @group = Group.find_by(id: params[:id])
+    client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)
+
+    unless !client.nil?
+      flash[:warning] = "You must connect your account to Dropbox to upload files."
+      redirect_to resources_group_path(@group)
+    end
+  end
+
+  def valid_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = GroupResource.find_by(id: params[:resource_id])
+    if @resource.nil?
+      flash[:danger] = "No such resource exists with an id #{params[:resource_id]}"
+      redirect_to resources_group_path(@group)
+    end
+  end
+
 
   def valid_membership
     @gm = GroupMembership.find_by(id: params[:gm_id])
@@ -166,6 +314,15 @@ class GroupsController < ApplicationController
     elsif !current_user.memberOfGroup?(group)
       flash[:danger] = "You are not a member of this group yet."
       redirect_to groups_path
+    end
+  end
+
+  def can_edit_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = CourseResource.find_by(id: params[:resource_id])
+    unless (!@resource.user.nil? and current_user?(@resource.user)) or current_user.adminOfGroup?(@group) or current_user.admin?
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to resources_group_path(@group)
     end
   end
 
