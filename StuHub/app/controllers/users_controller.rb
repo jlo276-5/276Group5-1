@@ -224,7 +224,7 @@ class UsersController < ApplicationController
     end
 
     def customization_params
-      params.require(:user).permit(:name, :major, :about_me, :website, :birthday, :gender, :time_zone, privacy_setting_attributes: [:id, :display_institution, :display_major, :display_about_me, :display_email, :display_website, :display_birthday, :display_gender, :display_courses, :display_groups])
+      params.require(:user).permit(:name, :major, :about_me, :website, :birthday, :gender, :time_zone, :account_emails, :notification_emails, privacy_setting_attributes: [:id, :display_institution, :display_major, :display_about_me, :display_email, :display_website, :display_birthday, :display_gender, :display_courses, :display_groups])
     end
 
     # Filters
