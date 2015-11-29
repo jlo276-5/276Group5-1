@@ -1,9 +1,11 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Events</h1>
+<h1>Calendar</h1>
 
 <table>
+   <!--
   <thead>
+    <!--
     <tr>
       <th>Title</th>
       <th>Description</th>
@@ -26,11 +28,14 @@
       </tr>
     <% end %>
   </tbody>
+  -->
 </table>
 
 <br>
-
-<%= link_to 'New Event', new_event_path %>
+<div class="col-xs-12" style="margin-bottom: 20px;">
+    <a class="btn btn-primary btn-block" role="button" href="/events/new">Create an Event</a>
+</div>
+   <!--<%= link_to 'New Event', new_event_path %>  -->
 
 <br>
 

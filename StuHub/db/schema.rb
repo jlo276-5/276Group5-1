@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20151127021115) do
-=======
-ActiveRecord::Schema.define(version: 20151126114032) do
->>>>>>> 0cfda4c41f289f775a93c70240c770ff4ebf852c
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,6 +234,7 @@ ActiveRecord::Schema.define(version: 20151126114032) do
     t.datetime "updated_at",                                   null: false
     t.string   "year"
     t.string   "term_reference"
+    t.integer  "data_mode",                    default: 0
     t.string   "data_url"
     t.datetime "data_last_updated"
     t.integer  "institution_id"
@@ -245,7 +242,6 @@ ActiveRecord::Schema.define(version: 20151126114032) do
     t.date     "start_date"
     t.date     "end_date"
     t.date     "exams_end_date"
-    t.integer  "data_mode",                    default: 0
     t.string   "database_url"
     t.boolean  "database_contains_enrollment", default: false
     t.boolean  "updating",                     default: false

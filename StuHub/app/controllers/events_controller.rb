@@ -5,6 +5,10 @@ class EventsController < ApplicationController
   # GET /events.json
   def index
     @events = Event.where(user_id:current_user.id)
+    #respond_to do |format|
+    #  format.html # index.html.erb
+    #  format.json { render json: @events }
+    #end
   end
 
   # GET /events/1
