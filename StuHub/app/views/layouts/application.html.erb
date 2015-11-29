@@ -11,7 +11,9 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <% unless StuHubSettings.compact_header %>
   <%= link_to "", root_path, class: "banner_image" %>
+  <% end %>
 
   <%= render "shared/nav" %>
 

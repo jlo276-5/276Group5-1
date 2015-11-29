@@ -29,6 +29,26 @@
 
       <hr>
 
+      <h4>Site Appearance</h4>
+
+      <div class="form-group">
+        <%= f.label :compact_header, 'Header', class: 'col-sm-3 col-md-2 control-label' %>
+        <div class="col-sm-9 col-md-10">
+          <div class="checkbox">
+            <label>
+              <%= f.check_box :compact_header %> Compact Header
+              <span id="helpBlock" class="help-block">Replaces the header with a logo in the Navigation Bar</span>
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <%= f.check_box :compact_navbar %> Compact Navigation Bar
+              <span id="helpBlock" class="help-block">Reduces the height of the Navigation Bar to 30px</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
           <%= f.submit 'Save', class: "btn btn-primary btn-block", id: 'submit_btn' %>

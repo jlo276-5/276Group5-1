@@ -1,18 +1,24 @@
-<nav class="navbar navbar-inverse navbar-static-top navbar-mod">
+<nav class="navbar navbar-inverse navbar-static-top <%= 'navbar-mod' if StuHubSettings.compact_navbar %>">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-content" aria-expanded="false">
         <span class="icon-bar"></span>
-        <!-- Disabled the lower two bars to make it fit on the slim nav bar -->
-        <!-- <span class="icon-bar"></span>
-        <span class="icon-bar"></span> -->
+        <% unless StuHubSettings.compact_navbar %>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <% end %>
       </button>
-      <% if logged_in? %>
-        <%= link_to 'Home', home_path, class: "navbar-brand" %>
+      <% path = logged_in? ? home_path : root_path %>
+      <% if StuHubSettings.compact_header %>
+        <% if StuHubSettings.compact_navbar %>
+        <%= link_to (image_tag("logo-2-03.png", height: '26px')), path, class: 'navbar-brand', style: 'padding: 2px 15px;' %>
+        <% else %>
+        <%= link_to (image_tag("logo-2-03.png", height: '30px')), path, class: 'navbar-brand', style: 'padding: 10px 15px;' %>
+        <% end %>
+        <%= link_to 'StuHub', path, class: "navbar-brand" %>
       <% else %>
-        <%= link_to 'Welcome', root_path, class: "navbar-brand" %>
+        <%= link_to (logged_in? ? 'Home' : 'Welcome'), path, class: "navbar-brand" %>
       <% end %>
-      <%#= link_to (image_tag("logo-2-03.png", height: '30px')), root_path, class: 'navbar-brand' %>
     </div>
     <div class="collapse navbar-collapse" id="navbar-content">
       <% if logged_in? %>
