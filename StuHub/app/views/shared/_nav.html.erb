@@ -58,7 +58,6 @@
         </ul>
       <% end %>
       <ul class="nav navbar-nav navbar-right">
-        <li class="<%= 'active' if current_page?(help_path) %>"><%= link_to 'Help', help_path %></li>
         <% if logged_in? %>
           <% if current_user.admin? %>
             <li class="dropdown <%= 'active' if current_page?(admin_path) %>">
@@ -67,6 +66,7 @@
                 <li class="<%= 'active' if current_page?(admin_path) %>"><%= link_to 'General Settings', admin_path %></li>
                 <li class="<%= 'active' if current_page?(admin_users_path) %>"><%= link_to 'User Management', admin_users_path %></li>
                 <li class="<%= 'active' if current_page?(institutions_path) %>"><%= link_to 'Institutions', institutions_path %></li>
+                <li class="<%= 'active' if current_page?(contact_requests_path) %>"><%= link_to 'Contact Requests', contact_requests_path %></li>
               </ul>
             </li>
           <% end %>
@@ -75,13 +75,19 @@
               <%= gravatar_for current_user, size: 20, class: 'img-rounded' %>&nbsp;&nbsp;<%= current_user.name %> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Your Profile', current_user %></li>
-              <li class="<%= 'active' if current_page?(edit_user_path(current_user)) %>"><%= link_to 'Account Settings', edit_user_path(current_user) %></li>
+              <li class="<%= 'active' if current_page?(help_path) %>"><%= link_to 'Help', help_path %></li>
+              <li class="<%= 'active' if current_page?(contact_path) %>"><%= link_to 'Contact StuHub', contact_path %></li>
+              <li role="separator" class="divider"></li>
+              <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Profile', current_user %></li>
+              <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Accounts', current_user %></li>
+              <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Edit Profile', current_user %></li>
+              <li class="<%= 'active' if current_page?(edit_user_path(current_user)) %>"><%= link_to 'User Settings', edit_user_path(current_user) %></li>
               <li role="separator" class="divider"></li>
               <li><%= link_to 'Logout', logout_path, method: "delete", data: {confirm: "Are you sure you want to log out?"} %></li>
             </ul>
           </li>
         <% else %>
+          <li class="<%= 'active' if current_page?(help_path) %>"><%= link_to 'Help', help_path %></li>
           <li class="<%= 'active' if current_page?(about_path) %>"><%= link_to 'About', about_path %></li>
           <li class="<%= 'active' if current_page?(register_path) %>"><%= link_to 'Register', register_path %></li>
           <li class="<%= 'active' if current_page?(login_path) %>"><%= link_to 'Login', login_path %></li>
