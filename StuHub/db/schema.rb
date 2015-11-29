@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151128102752) do
+ActiveRecord::Schema.define(version: 20151129015542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -213,19 +213,17 @@ ActiveRecord::Schema.define(version: 20151128102752) do
   add_index "privacy_settings", ["user_id"], name: "index_privacy_settings_on_user_id", using: :btree
 
   create_table "resources", force: :cascade do |t|
-    t.string   "name",                               null: false
-    t.text     "description",           default: ""
-    t.string   "resource_file_name",                 null: false
-    t.string   "resource_content_type",              null: false
-    t.integer  "resource_file_size",                 null: false
-    t.datetime "resource_updated_at",                null: false
+    t.string   "name",                      null: false
+    t.text     "description",  default: ""
     t.integer  "group_id"
     t.integer  "course_id"
     t.integer  "user_id"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.string   "type"
-    t.integer  "category",              default: 0
+    t.integer  "category",     default: 0
+    t.string   "file_name",                 null: false
+    t.string   "content_type",              null: false
   end
 
   add_index "resources", ["course_id"], name: "index_resources_on_course_id", using: :btree

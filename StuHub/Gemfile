@@ -55,9 +55,8 @@ gem 'redcarpet', '~> 3.3.1'
 # reCAPTCHA
 gem "recaptcha", require: "recaptcha/rails"
 
-# Dropbox API and Paperclip
+# Dropbox API
 gem 'dropbox-api'
-gem 'paperclip'
 
 # dullard for XLSX parsing
 gem 'dullard', git: 'https://github.com/thirtyseven/dullard.git'
