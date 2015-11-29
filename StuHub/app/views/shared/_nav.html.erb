@@ -78,7 +78,7 @@
               <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Your Profile', current_user %></li>
               <li class="<%= 'active' if current_page?(edit_user_path(current_user)) %>"><%= link_to 'Account Settings', edit_user_path(current_user) %></li>
               <li role="separator" class="divider"></li>
-              <li><%= link_to 'Logout', logout_path, method: "delete" %></li>
+              <li><%= link_to 'Logout', logout_path, method: "delete", data: {confirm: "Are you sure you want to log out?"} %></li>
             </ul>
           </li>
         <% else %>
