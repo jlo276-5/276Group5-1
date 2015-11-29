@@ -50,7 +50,7 @@ $(document).on 'ready page:load', ->
   eventRender: (event, element)-> 
         t = event.start
         element.qtip({
-            content: "Title: " + event.title + ' Description' + event.description
+            content: "Title: " + event.title + ' Description: ' + event.description
             
         })
     
