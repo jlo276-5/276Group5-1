@@ -137,7 +137,10 @@ class CoursesController < ApplicationController
       flash[:danger] = "Invalid Connection to Dropbox. Please relink your account."
       redirect_to accounts_user_path(current_user)
     elsif params[:course_resource][:file].blank?
-      flash[:danger].now = "You must attach a file."
+      @resource.errors.add(:base, "You must attach a file.")
+      render 'new_resource'
+    elsif !Resource.permitted_types.include?(params[:course_resource][:file].content_type)
+      @resource.errors.add(:base, 'Files of this type are not permitted')
       render 'new_resource'
     else
       @resource.file_name = params[:course_resource][:file].original_filename
@@ -161,13 +164,13 @@ class CoursesController < ApplicationController
           flash[:success] = "New Course Resource Created: File \"#{@resource.file_name}\", Size #{number_to_human_size(file.bytes)}"
           redirect_to resources_course_path(@course)
         elsif !existing.nil?
-          flash[:danger].now = "There is already a file named #{@resource.file_name} in your Dropbox. Please name it something different."
+          @resource.errors.add(:base, "There is already a file named #{@resource.file_name} in your Dropbox. Please name it something different.")
           render 'new_resource'
         else
           render 'new_resource'
         end
       rescue Dropbox::API::Error => e
-        flash[:danger].now = "Could not upload to Dropbox: #{e.message}."
+        @resource.errors.add(:base, "Could not upload to Dropbox: #{e.message}.")
         render 'new_resource'
       end
     end
@@ -203,7 +206,7 @@ class CoursesController < ApplicationController
   def update_resource
     resource = CourseResource.find_by(id: params[:resource_id])
     if !params[:course_resource][:file].blank?
-      flash[:warning].now = "You cannot change the file that the Resource points to. Please create a new Resource."
+      @resource.errors.add(:base, "You cannot change the file that the Resource points to. Please create a new Resource.")
       render 'edit_resource'
     elsif resource.update_attributes(resource_params)
       flash[:success].now = "Resource Updated"

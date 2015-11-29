@@ -25,7 +25,7 @@
           <tr>
             <td><%= r.name %><br><small><%= r.user.nil? ? "Deleted User" : (link_to r.user.name, r.user) %><br><%= r.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></small></td>
             <td><%= markdown(r.description) %></td>
-            <td><%= r.content_type %></td>
+            <td><%= r.file_type_string %></td>
             <td style="min-width: 300px;">
               <div class="col-xs-4">
                 <% if current_user?(r.user) or current_user.admin? %>

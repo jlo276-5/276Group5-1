@@ -35,7 +35,7 @@
   <div class="form-group">
     <%= label_tag :file, 'Resource File', class: 'col-sm-4 col-md-3 control-label' %>
     <div class="col-sm-8 col-md-9">
-      <%= f.file_field :file, accept: "image/jpeg,image/png,image/gif,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain", class: 'form-control' %>
+      <%= f.file_field :file, accept: Resource.permitted_types.join(","), class: 'form-control' %>
     </div>
   </div>
 
