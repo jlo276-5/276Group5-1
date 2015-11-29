@@ -222,6 +222,26 @@ class User < ActiveRecord::Base
     return ccm
   end
 
+  def current_courses
+    current = []
+    self.courses.each do |c|
+      if c.term == self.institution.current_term
+        current << c
+      end
+    end
+    return current
+  end
+
+  def next_courses
+    nextcourses = []
+    self.courses.each do |c|
+      if c.term == self.institution.next_term
+        nextcourses << c
+      end
+    end
+    return nextcourses
+  end
+
   private
 
     def validate_email_domain
