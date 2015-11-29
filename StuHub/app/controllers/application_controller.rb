@@ -4,16 +4,38 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   include SessionsHelper
   before_filter :require_login
+  before_filter :maintenance_mode
+  before_filter :maintenance_message
   before_filter :update_last_active
   before_filter :set_time_zone
 
   private
+
+  def maintenance_message
+    if StuHubSettings.maintenance_mode
+      flash.now[:info] = "StuHub is currently in Maintenance Mode."
+      unless StuHubSettings.maintenance_message.blank?
+        flash.now[:info] += "<br>Message from Administrators: <strong>#{StuHubSettings.maintenance_message}</strong>"
+      end
+    end
+  end
 
   def require_login
     unless current_user
       store_location
       flash[:danger] = "Please log in."
       redirect_to login_url
+    end
+  end
+
+  def maintenance_mode
+    if StuHubSettings.maintenance_mode
+      if logged_in? and !current_user.admin?
+        log_out
+      end
+      if !current_user
+        redirect_to root_path
+      end
     end
   end
 

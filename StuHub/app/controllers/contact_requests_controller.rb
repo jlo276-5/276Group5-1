@@ -1,5 +1,6 @@
 class ContactRequestsController < ApplicationController
   skip_before_filter :require_login, only: [:new, :create]
+  skip_before_filter :maintenance_mode, only: [:new, :create]
   before_filter :valid_cr, only: [:show, :destroy, :resolve]
   layout 'admin', except: [:new, :create]
 
