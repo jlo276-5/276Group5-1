@@ -8,6 +8,9 @@ class GroupMembershipsController < ApplicationController
     if group.nil?
       flash[:danger] = "No Group exists with id #{params[:group_id]}"
       redirect_to groups_path
+    elsif group.institution != current_user.institution
+      flash[:danger] = "You do not belong to that Group's Institution."
+      redirect_to groups_path
     elsif !user.groups.find_by(id: group.id).nil?
       flash[:warning] = "You are already a member of this group."
       redirect_to group_path(group)

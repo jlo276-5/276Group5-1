@@ -15,20 +15,20 @@ class GroupsController < ApplicationController
 
   def index
     if params[:sort_by] == "NAME"
-      @groups = Group.paginate(page: params[:page], per_page: 25).order('name ASC')
+      @groups = current_user.institution.groups.paginate(page: params[:page], per_page: 25).order('name ASC')
     elsif params[:sort_by] == "NAME_DESC"
-      @groups = Group.paginate(page: params[:page], per_page: 25).order('name DESC')
+      @groups = current_user.institution.groups.paginate(page: params[:page], per_page: 25).order('name DESC')
     else
-      @groups = Group.paginate(page: params[:page], per_page: 25).order('created_at DESC')
+      @groups = current_user.institution.groups.paginate(page: params[:page], per_page: 25).order('created_at DESC')
     end
     @paginate = true
   end
 
   def search
     if !params[:search].blank?
-      @groups = Group.where("lower(name) LIKE ?", "%#{params[:search].downcase}%").paginate(page: params[:page], per_page: 25).order('created_at ASC')
+      @groups = current_user.institution.groups.where("lower(name) LIKE ?", "%#{params[:search].downcase}%").paginate(page: params[:page], per_page: 25).order('created_at ASC')
     else
-      @groups = Group.paginate(page: params[:page], per_page: 25).order('created_at ASC')
+      @groups = current_user.institution.groups.paginate(page: params[:page], per_page: 25).order('created_at ASC')
     end
     render 'index'
   end
@@ -111,6 +111,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.creator = current_user.name
+    @group.institution = current_user.institution
     if @group.save
       @gm = GroupMembership.new(group: @group, user: current_user)
       @gm.role = 1
