@@ -67,6 +67,8 @@ gem 'resque', "~> 1.22.0"
 # chartkick for displaying graphs
 gem 'chartkick'
 
+gem "rails-settings-cached", "~> 0.5.0"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
