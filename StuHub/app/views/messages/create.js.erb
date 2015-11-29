@@ -1,9 +1,11 @@
 <% if @message.valid? %>
   <% publish_to @channel do %>
-    $("#chat").append("<%= j render(@message) %>");
-    $("#chat").animate({scrollTop:$("#chat")[0].scrollHeight}, 500);
-    $(".new_message")[0].reset();
+    if ($("#message_<%= @message.id %>").length == 0) {
+      $("#chat").append("<%= j render(@message) %>");
+      $("#chat").animate({scrollTop:$("#chat")[0].scrollHeight}, 500);
+    }
   <% end %>
+  $(".new_message")[0].reset();
 <% else %>
   errorString = "The following errors occured:\n\n"
   <% @message.errors.full_messages.each do |msg| %>

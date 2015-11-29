@@ -1,9 +1,9 @@
 <% user = (User.exists?(id: message.user_id) ? User.find(message.user_id) : nil) %>
 
-<div class="row">
+<div class="row" id="message_<%= message.id %>">
   <div class="col-xs-12">
     <div class="panel panel-default message_panel">
-      <div class="panel-body">
+      <div class="panel-body" id="message_<%= message.id %>_body">
         <div class="media">
           <div class="media-left media-top">
             <% if user.nil? %>
