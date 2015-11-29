@@ -11,14 +11,16 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <% unless StuHubSettings.compact_header %>
   <%= link_to "", root_path, class: "banner_image" %>
+  <% end %>
 
   <%= render "shared/nav" %>
 
   <div class="container" id="main_container">
 
     <% flash.each do |message_type, message| %>
-      <% if message_type != "recaptcha_error" %><div class="alert alert-<%= message_type %>"><%= message %></div><% end %>
+      <% if message_type != "recaptcha_error" %><div class="alert alert-<%= message_type %>"><%= message.html_safe %></div><% end %>
     <% end %>
 
     <%= content_for?(:content) ? yield(:content) : yield %>

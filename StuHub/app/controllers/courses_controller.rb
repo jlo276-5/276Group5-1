@@ -209,7 +209,7 @@ class CoursesController < ApplicationController
       @resource.errors.add(:base, "You cannot change the file that the Resource points to. Please create a new Resource.")
       render 'edit_resource'
     elsif resource.update_attributes(resource_params)
-      flash[:success].now = "Resource Updated"
+      flash.now[:success] = "Resource Updated"
       redirect_to resources_course_path(@course)
     else
       render 'edit_resource'

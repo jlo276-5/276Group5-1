@@ -87,6 +87,7 @@ Rails.application.routes.draw do
 
   # Routes for Administration
   get 'admin', to: 'admin#index'
+  post 'admin', to: 'admin#update_settings'
   get 'admin/users', to: 'admin#user_management'
   get '/institutions/:id/users', to: 'institutions#users', as: 'institution_users'
   scope '/admin' do

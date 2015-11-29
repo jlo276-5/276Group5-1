@@ -1,6 +1,7 @@
 # http://blog.teamtreehouse.com/static-pages-ruby-rails
 class HelpController < ApplicationController
   skip_before_filter :require_login, only: [:index, :about, :faq, :terms, :contact, :submit_contact]
+  skip_before_filter :maintenance_mode
   layout 'help_layout', except: [:index]
 
   def index

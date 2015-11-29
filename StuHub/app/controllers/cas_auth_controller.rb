@@ -1,5 +1,6 @@
 class CasAuthController < ApplicationController
   skip_before_filter :require_login, only: [:auth, :callback]
+  skip_before_filter :maintenance_mode, only: [:auth, :callback]
   before_filter :allowed_user, only: [:enable, :disable]
   require 'rest-client'
 
@@ -97,7 +98,7 @@ class CasAuthController < ApplicationController
             authSuccess = data["serviceResponse"]["authenticationSuccess"]
 
             user_token = authSuccess["user"]
-            if !params[:user_id].blank?
+            if !params[:user_id].blank? # Adding CAS to User
               user = User.find_by(id: params[:user_id])
               if user
                 user.cas_identifier = user_token
@@ -112,14 +113,22 @@ class CasAuthController < ApplicationController
                 flash[:warning] = "Invalid User ID #{params[:user_id]}"
                 redirect_to register_path(institution_id: institution.id, cas_identifier: user_token)
               end
-            else
+            else # Log In with CAS
               user = User.find_by(cas_identifier: user_token)
               if user
                 if user.activated?
-                  user.cas_login_active = true
-                  log_in(user)
-                  flash[:success] = "Successfully logged in via #{institution.name} CAS."
-                  redirect_back_or home_url
+                  if !StuHubSettings.maintenance_mode or user.admin?
+                    user.cas_login_active = true
+                    if user.account_locked
+                      user.unlock_account
+                    end
+                    log_in(user)
+                    flash[:success] = "Successfully logged in via #{institution.name} CAS."
+                    redirect_back_or home_url
+                  else
+                    flash[:warning] = "You are not an Administrator. Please come back at a later time."
+                    redirect_to root_url
+                  end
                 else
                   flash[:warning] = "This account is not activated. Please check your email for the activation link."
                   redirect_to login_url

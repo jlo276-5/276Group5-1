@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_filter :require_login, except: [:destroy]
+  skip_before_filter :maintenance_mode
   before_filter :logged_out, except: [:destroy]
 
   def new
@@ -9,10 +10,15 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password]) and !user.account_locked?
       if user.activated?
-        log_in user
-        params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-        flash[:success] = 'Successfully logged in.'
-        redirect_back_or home_url
+        if !StuHubSettings.maintenance_mode or user.admin?
+          log_in user
+          params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+          flash[:success] = 'Successfully logged in.'
+          redirect_back_or home_url
+        else
+          flash[:warning] = "You are not an Administrator. Please come back at a later time."
+          redirect_to root_url
+        end
       else
         flash[:warning] = "This account is not activated. Please check your email for the activation link."
         redirect_to login_url
