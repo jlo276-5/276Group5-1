@@ -5,10 +5,13 @@ class EventsController < ApplicationController
   # GET /events.json
   def index
     @events = Event.where(user_id:current_user.id)
+<<<<<<< HEAD
     #respond_to do |format|
     #  format.html # index.html.erb
     #  format.json { render json: @events }
     #end
+=======
+>>>>>>> 96dc53030c5c664eafe9e5ae4aeb51ca3f9f5bbf
   end
 
   # GET /events/1
