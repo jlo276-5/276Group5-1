@@ -39,10 +39,10 @@ $(document).on 'ready page:load', ->
   $('#calendar2').fullCalendar({
     header: {
         left: '',
-        center: '',
+        center: 'title',
         right: ''
     },
-    height: 350
+    height: 600
 ## Attributes
     events: '/events.json'
     editable: true
