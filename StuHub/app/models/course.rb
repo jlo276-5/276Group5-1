@@ -14,4 +14,8 @@ class Course < ActiveRecord::Base
   def term
     return self.department.term
   end
+
+  def course_number
+    "#{self.department.name} #{self.number}"
+  end
 end

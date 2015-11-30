@@ -8,4 +8,8 @@ class Section < ActiveRecord::Base
   validates :key, length: {minimum: 1}
   validates :code, length: {minimum: 1}
   validates :associated_class_id, presence: true
+
+  def course
+    self.associated_class.course
+  end
 end

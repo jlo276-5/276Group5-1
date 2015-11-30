@@ -5,7 +5,18 @@ class EventsController < ApplicationController
   # GET /events.json
   def index
     @events = Event.where(user_id:current_user.id)
-
+    @schedule = []
+    @exams = []
+    current_user.course_memberships.each do |cm|
+      cm.sections.each do |s|
+        s.section_times.each do |st|
+          @schedule << st
+        end
+        s.exams.each do |e|
+          @exams << e
+        end
+      end
+    end
   end
 
   # GET /events/1
@@ -70,6 +81,6 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:title, :description, :strat_time, :end_time)
+      params.require(:event).permit(:title, :description, :start_time, :end_time)
     end
 end

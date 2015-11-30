@@ -21,8 +21,18 @@ $(document).on 'ready page:load', ->
     slotEventOverlap: false
     weekNumbers:true
     businessHours:true
+    ## http://stackoverflow.com/questions/15161654/recurring-events-in-fullcalendar via http://js2.coffee
+    eventRender: (event) ->
+      if event.ranges?
+        event.ranges.filter((range) ->
+          # test event against all the ranges
+          event.start.isBefore(range.end) and event.end.isAfter(range.start)
+        ).length > 0
+        #if it isn't in one of the ranges, don't render it (by returning false)
+      else
+        true
   })
-  
+
   #######################################################
   ## HomePage Calendar
   $(document).on 'ready page:load', ->
@@ -53,6 +63,5 @@ $(document).on 'ready page:load', ->
         element.qtip({
             content:  event.title ,
         })
-    
-  })
 
+  })

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151130072401) do
+ActiveRecord::Schema.define(version: 20151130112041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 20151130072401) do
   create_table "events", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
-    t.datetime "strat_time"
+    t.datetime "start_time"
     t.datetime "end_time"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -332,7 +332,6 @@ ActiveRecord::Schema.define(version: 20151130072401) do
     t.datetime "updated_at",                                   null: false
     t.integer  "year"
     t.string   "term_reference"
-    t.integer  "data_mode",                    default: 0
     t.string   "data_url"
     t.datetime "data_last_updated"
     t.integer  "institution_id"
@@ -340,6 +339,7 @@ ActiveRecord::Schema.define(version: 20151130072401) do
     t.date     "start_date"
     t.date     "end_date"
     t.date     "exams_end_date"
+    t.integer  "data_mode",                    default: 0
     t.string   "database_url"
     t.boolean  "database_contains_enrollment", default: false
     t.boolean  "updating",                     default: false
