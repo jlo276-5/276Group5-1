@@ -109,8 +109,8 @@ class CoursesController < ApplicationController
 
     @chat_channel_type = 1;
     @post_channel_type = 1;
-    @messages = Message.where(channel_type: @chat_channel_type, channel_id: @course.id).last(30)
-    @posts = Post.where(channel_type: @post_channel_type, channel_id: @course.id).order('created_at DESC')
+    @messages = Message.includes(:user).where(channel_type: @chat_channel_type, channel_id: @course.id).last(30)
+    @posts = Post.includes(:user).where(channel_type: @post_channel_type, channel_id: @course.id).order('created_at DESC')
   end
 
   def course_members

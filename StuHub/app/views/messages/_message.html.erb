@@ -1,4 +1,4 @@
-<% user = (User.exists?(id: message.user_id) ? User.find(message.user_id) : nil) %>
+<% user = (message.user.present? ? message.user : nil) %>
 
 <div class="row" id="message_<%= message.id %>">
   <div class="col-xs-12">

@@ -38,8 +38,8 @@ class GroupsController < ApplicationController
 
     @chat_channel_type = 2;
     @post_channel_type = 2;
-    @messages = Message.where(channel_type: @chat_channel_type, channel_id: @group.id).last(30)
-    @posts = Post.where(channel_type: @post_channel_type, channel_id: @group.id).order('created_at DESC')
+    @messages = Message.includes(:user).where(channel_type: @chat_channel_type, channel_id: @group.id).last(30)
+    @posts = Post.includes(:user).where(channel_type: @post_channel_type, channel_id: @group.id).order('created_at DESC')
   end
 
   def group_members

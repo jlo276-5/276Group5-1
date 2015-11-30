@@ -1,4 +1,4 @@
-<% user = (User.exists?(id: post.user_id) ? User.find(post.user_id) : nil) %>
+<% user = (post.user.present? ? post.user : nil) %>
 
 <div class="row" id="post_<%= post.id %>">
   <div class="col-xs-12">

@@ -225,8 +225,9 @@ class User < ActiveRecord::Base
 
   def current_courses
     current = []
-    self.courses.each do |c|
-      if c.term == self.institution.current_term
+    c_t = self.institution.current_term
+    self.courses.includes(department: :term).each do |c|
+      if c.term == c_t
         current << c
       end
     end
@@ -235,8 +236,9 @@ class User < ActiveRecord::Base
 
   def next_courses
     nextcourses = []
-    self.courses.each do |c|
-      if c.term == self.institution.next_term
+    n_t = self.institution.next_term
+    self.courses.includes(department: :term).each do |c|
+      if c.term == n_t
         nextcourses << c
       end
     end
