@@ -5,7 +5,8 @@
 
   <div class="row">
     <div class="col-xs-12 col-sm-8 col-md-9">
-      <%= f.text_field :content, class: 'form-control' %>
+      <%= f.text_field :content, class: 'form-control', maxlength: 256; %>
+      <span id="helpBlock" class="help-block">Keep messages short.<br>Want Longer? Make a post.</span>
     </div>
     <div class="hidden-xs col-sm-4 col-md-3">
       <%= f.submit "Send", class: "btn btn-primary btn-block" %>

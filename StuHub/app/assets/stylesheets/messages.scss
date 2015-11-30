@@ -5,7 +5,7 @@
 .message_panel > div.panel-body {
   padding: 8px;
 }
-.message_content {
+.message_body {
   // http://stackoverflow.com/questions/3058866/how-to-force-a-line-break-in-a-loooooong-word-in-a-div
   -ms-word-break: break-all;
   word-break: break-all;
@@ -16,7 +16,7 @@
       -ms-hyphens: auto;
           hyphens: auto;
 }
-.message_content img {
+.message_body img {
   width: 100%;
 }
 .messenger_column {

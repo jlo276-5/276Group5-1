@@ -185,6 +185,8 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     rdoc (4.2.0)
+    readmorejs-rails (0.0.12)
+      railties (>= 3.2, < 5.0)
     recaptcha (0.6.0)
       json
     redcarpet (3.3.3)
@@ -275,6 +277,7 @@ DEPENDENCIES
   rails (= 4.2.4)
   rails-settings-cached (~> 0.5.0)
   rails_12factor
+  readmorejs-rails
   recaptcha
   redcarpet (~> 3.3.1)
   resque (~> 1.22.0)

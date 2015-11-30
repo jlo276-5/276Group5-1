@@ -18,4 +18,5 @@
 //= require moment
 //= require qtip2-jquery-rails
 //= require fullcalendar
+//= require readmore
 //= require bootstrap-sprockets

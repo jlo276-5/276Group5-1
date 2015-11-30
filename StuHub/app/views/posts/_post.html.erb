@@ -3,7 +3,7 @@
 <div class="row" id="post_<%= post.id %>">
   <div class="col-xs-12">
     <div class="panel panel-default post_panel">
-      <div class="panel-body" id="post_<%= post.id %>_body">
+      <div class="panel-body" id="post_<%= post.id %>_content">
         <div class="media">
           <div class="media-left media-top">
             <% if user.nil? %>
@@ -12,7 +12,7 @@
               <%= link_to user, target: '_blank' do %><%= gravatar_for user, size: 54, class: 'media-object media-middle img-rounded' %><% end %>
             <% end %>
           </div>
-          <div class="media-body post_body">
+          <div class="media-body">
             <h4 class="media-heading">
               <span class="post_user"><%= user.nil? ? "Unknown" : (link_to user.name, user, target: '_blank') %></span>
               <small>
@@ -22,13 +22,10 @@
                 </span>
               </small>
             </h4>
-            <span class="post_body">
+            <div class="post_body" id="post_<%= post.id %>_body">
               <% unless post.title.blank? %><h5><%= post.title %></h5><% end %>
               <%= markdown(post.body) %>
-            </span>
-            <span class="post_functions">
-
-            </span>
+            </div>
           </div>
         </div>
       </div>
