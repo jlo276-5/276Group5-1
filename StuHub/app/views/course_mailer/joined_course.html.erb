@@ -1,7 +1,7 @@
-<% provide(:email_title, "Joined Course : #{@course.department.name} #{@course.number} (#{@course.department.term.term_name})") %>
+<% provide(:email_title, "Joined Course : #{@course.course_number} (#{@course.department.term.term_name})") %>
 
-<p>You have joined the course <%= "#{@course.department.name} #{@course.number} - #{@course.name}" %> for the term <%= @course.department.term.term_name %>.</p>
+<p>You have joined the course <%= "#{@course.course_number} - #{@course.name}" %> for the term <%= @course.department.term.term_name %>.</p>
 
-<p>You can view the course at: <%= link_to "#{@course.department.name} #{@course.number}", @course %></p>
+<p>You can view the course at: <%= link_to "#{@course.course_number}", @course %></p>
 
-<p>You can view the course's info and set up your schedule at: <%= link_to "#{@course.department.name} #{@course.number} Info", get_info_course_url(@course) %></p>
+<p>You can view the course's info and set up your schedule at: <%= link_to "#{@course.course_number} Info", get_info_course_url(@course) %></p>

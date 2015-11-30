@@ -14,7 +14,7 @@
   <li><%= link_to @course.department.term.term_name, courses_path %></li>
   <li><%= @course.department.name %></li>
   <% end %>
-  <li class="active"><%= "#{@course.department.name} #{@course.number}" %></li>
+  <li class="active"><%= "#{@course.course_number}" %></li>
 </ol>
 
 <h1><%= yield(:main_title) %> <small><%= yield(:sub_title) %></small></h1>

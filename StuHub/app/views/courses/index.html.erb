@@ -41,7 +41,7 @@
           <% else %>
             <% @courses.each do |course| %>
               <tr>
-                <td><%= link_to "#{course.department.name} #{course.number}", get_info_course_url(course) %></td>
+                <td><%= link_to course.course_number, get_info_course_url(course) %></td>
                 <td><%= link_to get_info_course_url(course) do %><%= course.name.blank? ? "[Click to add this Course to StuHub]" : course.name %><% end %></td>
                 <% if current_user.memberOfCourse?(course) %>
                   <td><%= link_to "Drop", course_membership_path(current_user.course_memberships.find_by(course_id: course.id)), method: "delete", class: "btn btn-danger btn-block", role: "button", data: { confirm: "Are you sure you want to drop this course?" } %></td>

@@ -14,14 +14,14 @@
               <%= link_to cm.course, class: 'list-group-item' do %>
                 <% cmnn = cm.newNotifications %>
                 <% if cmnn > 0 %><span class="badge"><%= cmnn %></span><% end %>
-                <%= "#{cm.course.department.name} #{cm.course.number}" %> <small style="white-space:pre;"><%= cm.course.department.term.term_name %></small>
+                <%= cm.course.course_number %> <small style="white-space:pre;"><%= cm.course.department.term.term_name %></small>
               <% end %>
             <% end %>
             <% @current_course_memberships.each do |cm| %>
               <%= link_to cm.course, class: 'list-group-item' do %>
               <% cmnn = cm.newNotifications %>
               <% if cmnn > 0 %><span class="badge"><%= cmnn %></span><% end %>
-                <%= "#{cm.course.department.name} #{cm.course.number}" %> <small style="white-space:pre;"><%= cm.course.department.term.term_name %></small>
+                <%= cm.course.course_number %> <small style="white-space:pre;"><%= cm.course.department.term.term_name %></small>
               <% end %>
             <% end %>
             <%= link_to courses_url, class: 'list-group-item' do %>
@@ -96,7 +96,7 @@
                 <% if cm.sections.count == 0 %>
                   <% course = cm.course %>
                   <li class="list-group-item">
-                    <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number}", get_info_course_path(course) %><br><small><%= course.department.term.term_name %></small></h4>
+                    <h4 class="list-group-item-heading"><%= link_to course.course_number, get_info_course_path(course) %><br><small><%= course.department.term.term_name %></small></h4>
                     <p class="list-group-item-text">
                       No Schedules
                     </p>
@@ -105,7 +105,7 @@
                   <% cm.sections.each do |s| %>
                     <li class="list-group-item">
                       <% course = s.associated_class.course %>
-                      <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %><br><small><%= course.department.term.term_name %></small></h4>
+                      <h4 class="list-group-item-heading"><%= link_to "#{course.course_number} - #{s.key}", get_info_course_path(course) %><br><small><%= course.department.term.term_name %></small></h4>
                       <p class="list-group-item-text">
                         <% if course.term.in_exam_period %>
                           <% if s.exams.count == 0 %>

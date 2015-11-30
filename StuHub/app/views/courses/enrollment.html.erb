@@ -1,5 +1,5 @@
-<% provide(:title, "Enrollment - #{@course.department.name}#{@course.number}") %>
-<% provide(:main_title, "#{@course.department.name}#{@course.number} - #{@course.name}") %>
+<% provide(:title, "Enrollment - #{@course.course_number}") %>
+<% provide(:main_title, "#{@course.course_number} - #{@course.name}") %>
 <% provide(:sub_title, @course.department.term.term_name) %>
 
 <% if @datasets.size > 0 %>
