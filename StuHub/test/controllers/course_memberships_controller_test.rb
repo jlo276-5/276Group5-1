@@ -90,7 +90,7 @@ class CourseMembershipsControllerTest < ActionController::TestCase
     log_in_as(@superuser)
 
     delete :destroy, id: @cm.id
-    assert_redirected_to @superuser
+    assert_redirected_to courses_path
     assert flash[:success]
   end
 

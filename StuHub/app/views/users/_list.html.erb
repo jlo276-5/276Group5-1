@@ -1,7 +1,9 @@
 <div class="row">
   <div class="col-xs-10 col-xs-offset-1" style="text-align: center; margin-bottom: 20px;">
-    <%= will_paginate @users %><br>
-    <%= page_entries_info @users, model: "User" %>
+    <div class="pagination">
+      <%= will_paginate @users %><br>
+      <%= page_entries_info @users, model: "User" %>
+    </div>
   </div>
 </div>
 <div class="row">

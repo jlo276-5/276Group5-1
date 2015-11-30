@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :correct_user_limited, only: :accounts
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
-  before_action :check_privacy,  only: [:show, :edit, :customize, :courses, :groups]
+  before_action :check_privacy,  only: [:show, :edit, :customize, :accounts, :courses, :groups]
   layout 'application', only: [:index, :new, :create]
 
   ## Use 'find' method to show certain user
@@ -188,7 +188,7 @@ class UsersController < ApplicationController
         render 'customize'
       end
     else
-      render 'show'
+      render 'edit'
     end
   end
 
@@ -267,6 +267,7 @@ class UsersController < ApplicationController
       @user = User.find_by id:params[:id]
       if @user and @user.privacy_setting.nil?
         @user.privacy_setting = PrivacySetting.new
+        @user.privacy_setting.save
       end
     end
 end

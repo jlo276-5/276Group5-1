@@ -1,6 +1,7 @@
 class ContactRequestsController < ApplicationController
   skip_before_filter :require_login, only: [:new, :create]
   skip_before_filter :maintenance_mode, only: [:new, :create]
+  before_filter :admin_user, only: [:index, :show, :destroy, :resolve]
   before_filter :valid_cr, only: [:show, :destroy, :resolve]
   layout 'admin', except: [:new, :create]
 
@@ -52,6 +53,14 @@ class ContactRequestsController < ApplicationController
   end
 
   private
+
+  # ensure admin or superuser
+  def admin_user
+    unless current_user.admin?
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to home_path
+    end
+  end
 
   def cr_params
     params.require(:contact_request).permit(:name, :email, :contact_type, :title, :body, :reply)
