@@ -39,7 +39,9 @@ $(document).on 'ready page:load', ->
     ##  alert event.title
     ##  alert event.title
 ## Attributes
+    
     events: '/events.json'
+    
     editable: true
     selectable: true
     selectHelper: true
