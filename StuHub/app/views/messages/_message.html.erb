@@ -15,7 +15,7 @@
           <div class="media-body">
             <h4 class="media-heading">
               <span class="message_created_at"><%= user.nil? ? "Unknown" : (link_to user.name, user, target: '_blank') %></span>
-              <small><span style="float: right" class="message_created_at"><%= "#{message.created_at.in_time_zone.strftime("%x") if message.created_at.to_date != Date.today} #{message.created_at.in_time_zone.strftime("%l:%M:%S %p")}" %></span></small>
+              <small><span style="float: right" class="message_created_at"><%= "#{message.created_at.in_time_zone.strftime("%x") if message.created_at.to_date != Date.today} #{message.created_at.in_time_zone.strftime("%I:%M:%S %p")}" %></span></small>
             </h4>
             <div class="message_body" id="message_<%= message.id %>_body">
               <%= markdown(message.content) %>

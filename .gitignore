@@ -3,3 +3,4 @@ StuHub/SFU_API_EXAMPLES
 StuHub/test/html_reports
 master_lock
 backup.db
+dump.rdb
