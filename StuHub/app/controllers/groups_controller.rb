@@ -284,9 +284,8 @@ class GroupsController < ApplicationController
 
   def valid_dropbox
     @group = Group.find_by(id: params[:id])
-    client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)
 
-    unless !client.nil?
+    unless !(current_user.dropbox_token.blank? or current_user.dropbox_secret.blank? or (client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)).nil?)
       flash[:warning] = "You must connect your account to Dropbox to upload files."
       redirect_to resources_group_path(@group)
     end
