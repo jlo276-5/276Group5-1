@@ -85,7 +85,7 @@ $standard_border : 1px solid gray;
       -webkit-scroll-snap-destination: 0% 0%;
       scroll-snap-type: mandatory;
       -webkit-scroll-snap-type: mandatory;
-    }  
+    }
     .slide {
       transform-origin-x: 100%;
     }
@@ -109,13 +109,13 @@ $standard_border : 1px solid gray;
     }
 
     #slide1 {
-      z-index: 3; /* slide over slide 2 */
+      z-index: 5; /* slide over slide 2 */
     }
     #slide2 {
-      z-index: 2; /* slide under slide 1 and 3 */
+      z-index: 3; /* slide under slide 1 and 3 */
     }
     #slide3 {
-      z-index: 3; /* slide over slide 2 and 4 */
+      z-index: 4; /* slide over slide 2 and 4 */
     }
     #slide4 {
       z-index: 2; /* slide under slide 3 and 5 */
