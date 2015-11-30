@@ -3,9 +3,9 @@
     if ($("#post_<%= @post.id %>").length == 0) {
       $("#posts").prepend("<%= j render(@post) %>");
       $("#posts").animate({scrollTop:0}, 500);
+      $("#post_<%= @post.id %>_body").readmore();
     }
   <% end %>
-  $("#post_<%= @post.id %>_body").readmore();
   $(".new_post")[0].reset();
 <% else %>
   errorString = "The following errors occured:<br><br><ul>"
