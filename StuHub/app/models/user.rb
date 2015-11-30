@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
   validates :name, length: { maximum: 50 }
   validates :tos_agree, acceptance: true
   validates :role, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2}
+  validates :cas_identifier, allow_blank: true, uniqueness: true
 
   def name
     read_attribute(:name) || read_attribute(:email).partition('@').first
@@ -214,10 +215,12 @@ class User < ActiveRecord::Base
 
   def current_course_memberships
     ccm = []
-    c_t = self.institution.current_term
-    self.course_memberships.includes(course: [{department: :term}]).each do |cm|
-      if cm.course.term == c_t
-        ccm << cm
+    unless self.institution.nil? or self.institution.current_term.nil?
+      c_t = self.institution.current_term
+      self.course_memberships.includes(course: [{department: :term}]).each do |cm|
+        if cm.course.term == c_t
+          ccm << cm
+        end
       end
     end
     return ccm
@@ -225,10 +228,12 @@ class User < ActiveRecord::Base
 
   def next_course_memberships
     ccm = []
-    n_t = self.institution.next_term
-    self.course_memberships.includes(course: [{department: :term}]).each do |cm|
-      if cm.course.term == n_t
-        ccm << cm
+    unless self.institution.nil? or self.institution.next_term.nil?
+      n_t = self.institution.next_term
+      self.course_memberships.includes(course: [{department: :term}]).each do |cm|
+        if cm.course.term == n_t
+          ccm << cm
+        end
       end
     end
     return ccm
@@ -236,10 +241,12 @@ class User < ActiveRecord::Base
 
   def current_courses
     current = []
-    c_t = self.institution.current_term
-    self.courses.includes(department: :term).each do |c|
-      if c.term == c_t
-        current << c
+    unless self.institution.nil? or self.institution.current_term.nil?
+      c_t = self.institution.current_term
+      self.courses.includes(department: :term).each do |c|
+        if c.term == c_t
+          current << c
+        end
       end
     end
     return current
@@ -247,10 +254,12 @@ class User < ActiveRecord::Base
 
   def next_courses
     nextcourses = []
-    n_t = self.institution.next_term
-    self.courses.includes(department: :term).each do |c|
-      if c.term == n_t
-        nextcourses << c
+    unless self.institution.nil? or self.institution.next_term.nil?
+      n_t = self.institution.next_term
+      self.courses.includes(department: :term).each do |c|
+        if c.term == n_t
+          nextcourses << c
+        end
       end
     end
     return nextcourses

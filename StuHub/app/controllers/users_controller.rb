@@ -16,10 +16,10 @@ class UsersController < ApplicationController
   end
 
   def index
-    if current_user.admin?
+    if current_user.admin? || current_user.institution.nil?
       @users = User.paginate(page: params[:page], per_page: 25).order('created_at ASC')
     else
-      @users = User.where(institution_id: current_user.id).paginate(page: params[:page], per_page: 25).order('created_at ASC')
+      @users = User.where(institution_id: current_user.institution.id).paginate(page: params[:page], per_page: 25).order('created_at ASC')
     end
   end
 
