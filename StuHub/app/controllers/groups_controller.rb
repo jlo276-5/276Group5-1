@@ -171,7 +171,7 @@ class GroupsController < ApplicationController
     elsif params[:group_resource][:file].blank?
       @resource.errors.add(:base, "You must attach a file.")
       render 'new_resource'
-    elsif !Resource.permitted_types.include?(params[:course_resource][:file].content_type)
+    elsif !Resource.permitted_types.include?(params[:group_resource][:file].content_type)
       @resource.errors.add(:base, 'Files of this type are not permitted')
       render 'new_resource'
     else
