@@ -214,9 +214,20 @@ class User < ActiveRecord::Base
 
   def current_course_memberships
     ccm = []
-    self.course_memberships.each do |cm|
-      t = cm.course.term
-      if t == self.institution.current_term
+    c_t = self.institution.current_term
+    self.course_memberships.includes(course: [{department: :term}]).each do |cm|
+      if cm.course.term == c_t
+        ccm << cm
+      end
+    end
+    return ccm
+  end
+
+  def next_course_memberships
+    ccm = []
+    n_t = self.institution.next_term
+    self.course_memberships.includes(course: [{department: :term}]).each do |cm|
+      if cm.course.term == n_t
         ccm << cm
       end
     end

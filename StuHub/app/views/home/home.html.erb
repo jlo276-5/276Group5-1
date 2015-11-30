@@ -10,11 +10,14 @@
             <h1 class="panel-title">Courses</h1>
           </div>
           <div class="list-group">
-            <% (current_user.courses.sort_by {|x| [-(x.term.year), -(x.term.term_order), x.department.name, x.number]}).each do |course| %>
-              <% if course.term == current_user.institution.current_term or course.term == current_user.institution.next_term %>
-                <%= link_to course, class: 'list-group-item' do %>
-                  <%= "#{course.department.name} #{course.number}" %> <small style="white-space:pre;"><%= course.department.term.term_name %></small>
-                <% end %>
+            <% @next_course_memberships.each do |cm| %>
+              <%= link_to cm.course, class: 'list-group-item' do %>
+                <%= "#{cm.course.department.name} #{cm.course.number}" %> <small style="white-space:pre;"><%= cm.course.department.term.term_name %></small>
+              <% end %>
+            <% end %>
+            <% @current_course_memberships.each do |cm| %>
+              <%= link_to cm.course, class: 'list-group-item' do %>
+                <%= "#{cm.course.department.name} #{cm.course.number}" %> <small style="white-space:pre;"><%= cm.course.department.term.term_name %></small>
               <% end %>
             <% end %>
             <%= link_to courses_url, class: 'list-group-item' do %>
@@ -78,10 +81,10 @@
             <h1 class="panel-title"><%= link_to 'Schedule', schedule_path %></h1>
           </div>
           <ul class="list-group">
-            <% if current_user.course_memberships.size == 0 %>
+            <% if @current_course_memberships.size == 0 %>
               <li class="list-group-item">No Schedules</li>
             <% else %>
-              <% (current_user.current_course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
+              <% @current_course_memberships.each do |cm| %>
                 <% if cm.sections.count == 0 %>
                   <% course = cm.course %>
                   <li class="list-group-item">
@@ -125,4 +128,3 @@
     </div>
   </div>
 </div>
-
