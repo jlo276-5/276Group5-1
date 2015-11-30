@@ -12,6 +12,7 @@ class AdminController < ApplicationController
     StuHubSettings.maintenance_message = params[:stu_hub_settings][:maintenance_message]
     StuHubSettings.compact_header = params[:stu_hub_settings][:compact_header] == "1" ? true : false
     StuHubSettings.compact_navbar = params[:stu_hub_settings][:compact_navbar] == "1" ? true : false
+    StuHubSettings.new_landing_page = params[:stu_hub_settings][:new_landing_page] == "1" ? true : false
 
     flash[:success] = "Successfully applied settings."
     if params[:stu_hub_settings][:maintenance_mode] != mm_o
