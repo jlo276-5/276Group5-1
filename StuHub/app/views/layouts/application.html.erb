@@ -20,7 +20,10 @@
   <div class="container" id="main_container">
 
     <% flash.each do |message_type, message| %>
-      <% if message_type != "recaptcha_error" %><div class="alert alert-<%= message_type %>"><%= message.html_safe %></div><% end %>
+      <% message_type = "danger" if message_type == "recaptcha_error" %>
+      <% message_type = "info" if message_type == "notice" %>
+      <% message_type = "danger" if message_type == "error" %>
+      <div class="alert alert-<%= message_type %>"><%= message.html_safe %></div>
     <% end %>
 
     <%= content_for?(:content) ? yield(:content) : yield %>
