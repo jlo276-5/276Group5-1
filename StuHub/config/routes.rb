@@ -130,6 +130,7 @@ Rails.application.routes.draw do
 
   # Home page for logged in Users
   get 'home' => 'home#home'
+  get 'new_index', to: 'index#new_index'
 
   # You can have the root of your site routed with "root"
   root 'index#index'

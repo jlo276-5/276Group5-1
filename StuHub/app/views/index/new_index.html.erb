@@ -1,0 +1,142 @@
+<%= render partial: "shared/nav", locals: { fixment: 'navbar-fixed-top' } %>
+
+<footer class="footer" style="position: fixed; bottom: 0; width:100%; z-index:100; background-color: white;">
+  <%= render 'shared/footer' %>
+</footer>
+
+<% provide(:save_button_title, 'Register') %>
+
+<div class="slides" id="slides">
+  <div class="slide-group" id="slide1">
+    <div class="slide slide_front">
+      <div class="container">
+        <% flash.each do |message_type, message| %>
+          <% if message_type != "recaptcha_error" %><div class="alert alert-<%= message_type %>"><%= message.html_safe %></div><% end %>
+        <% end %>
+
+        <div class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+          <div class="panel panel-default">
+            <div class="panel-body" style="text-align: center;">
+              <%= image_tag "logo-2-01.png", style: 'max-width: 100%;' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-group hidden-xs" id="slide2">
+    <div class="slide slide_front">
+      <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="jumbotron" style="background-color: transparent;">
+              <h1>Welcome to your Student Hub</h1>
+
+              <h2><p>StuHub connects you to your academic life.</p></h2>
+
+              <h2><p>Chat with classmates, join personal study groups, and create your own course schedule. All in an easy-to-use interface. </p></h2>
+
+              <h2><p>Your peers are waiting for you! Click below to get started.</p></h2>
+
+              <%= link_to "Register Now!", '#', class: "btn btn-lg btn-primary", onclick: '$("#slides").animate({ scrollTop: $("#slide7").offset().top });' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide slide_back">
+    </div>
+  </div>
+  <div class="slide-group hidden-xs" id="slide3">
+    <div class="slide slide_front">
+      <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="jumbotron" style="background-color: transparent; margin: 0;">
+              Derp
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide slide_back">
+    </div>
+    <div class="slide slide_deep">
+    </div>
+  </div>
+  <div class="slide-group hidden-xs" id="slide4">
+    <div class="slide slide_front">
+      <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="jumbotron" style="background-color: transparent; margin: 0;">
+              Derp
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide slide_back">
+    </div>
+    <div class="slide slide_deep">
+    </div>
+  </div>
+  <div class="slide-group hidden-xs" id="slide5">
+    <div class="slide slide_front">
+      <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="jumbotron" style="background-color: transparent; margin: 0;">
+              Derp
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide slide_back">
+    </div>
+    <div class="slide slide_deep">
+    </div>
+  </div>
+  <div class="slide-group" id="slide6">
+    <div class="slide slide_front">
+      <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h1 style="text-align: center;">Login</h1>
+            <%= render 'users/login' %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide slide_back">
+    </div>
+  </div>
+  <div class="slide-group" id="slide7">
+    <div class="slide slide_front">
+      <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="hidden-xs">
+            <h1 style="text-align: center;">Register</h1>
+              <%= render 'users/create' %>
+            </div>
+            <div class="hidden-sm hidden-md hidden-lg">
+              <div class="jumbotron" style="background-color: transparent;">
+                <h1>Welcome to your Student Hub</h1>
+
+                <h2><p>StuHub connects you to your academic life.</p></h2>
+
+                <h2><p>Chat with classmates, join personal study groups, and create your own course schedule. All in an easy-to-use interface. </p></h2>
+
+                <h2><p>Your peers are waiting for you! Click below to get started.</p></h2>
+
+                <%= link_to "Register Now!", register_path, class: "btn btn-lg btn-primary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

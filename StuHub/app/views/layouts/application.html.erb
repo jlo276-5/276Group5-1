@@ -15,7 +15,7 @@
   <%= link_to "", root_path, class: "banner_image" %>
   <% end %>
 
-  <%= render "shared/nav" %>
+  <%= render partial: "shared/nav", locals: {fixment: 'navbar-static-top'} %>
 
   <div class="container" id="main_container">
 
@@ -27,7 +27,9 @@
 
   </div>
 
-  <%= render "shared/footer" %>
+  <footer class="footer">
+    <%= render "shared/footer" %>
+  </footer>
 
   <%# debug information show on development pages %>
   <%= debug(params) if Rails.env.development? %>
