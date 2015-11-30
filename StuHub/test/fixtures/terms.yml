@@ -7,7 +7,23 @@
 fifteenfall:
   name: FALL
   year: 2015
-#
+  term_reference: 1157
+  institution: institution
+  enrollment_start_date: 2015-11-09 20:50:50
+  start_date: 2015-11-09 20:50:50
+  end_date: 2015-11-09 20:50:50
+  exams_end_date: 2015-11-09 20:50:50
+  data_mode: 0
+  data_url: http://www.example.com
+  term_order: 3
+
 sixteenspring:
   name: SPRING
   year: 2016
+  term_reference: 1161
+  institution: institution
+  enrollment_start_date: 2015-11-09 20:50:50
+  start_date: 2015-11-09 20:50:50
+  end_date: 2015-11-09 20:50:50
+  exams_end_date: 2015-11-09 20:50:50
+  term_order: 1

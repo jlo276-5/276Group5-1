@@ -11,7 +11,7 @@ class UserMailer < ApplicationMailer
 
   def password_reset(user)
     @user = user
-    mail to: user.email, subject: "[StuHub] Account Password Reset Request"
+    mail to: user.email, subject: "[StuHub] Password Reset Request"
   end
 
   def welcome_email(user)

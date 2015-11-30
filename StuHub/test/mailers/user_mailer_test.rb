@@ -28,7 +28,7 @@ class UserMailerTest < ActionMailer::TestCase
   test "check password reset request email" do
     @user.reset_token = User.new_token
     mail = UserMailer.password_reset(@user)
-    assert_equal "[StuHub] Account Password Reset Request", mail.subject
+    assert_equal "[StuHub] Password Reset Request", mail.subject
     assert_equal [@user.email], mail.to
     assert_equal ["noreply@example.com"], mail.from
     assert_match @user.reset_token,        mail.body.encoded
@@ -37,7 +37,7 @@ class UserMailerTest < ActionMailer::TestCase
 
   test "check password reset success email" do
     mail = UserMailer.password_reset_success(@user)
-    assert_equal "[StuHub] Account Password Reset Successful", mail.subject
+    assert_equal "[StuHub] Password Reset Successful", mail.subject
     assert_equal [@user.email], mail.to
     assert_equal ["noreply@example.com"], mail.from
   end
