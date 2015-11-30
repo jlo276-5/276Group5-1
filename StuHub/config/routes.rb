@@ -21,7 +21,15 @@ Rails.application.routes.draw do
   post 'cas_disable', to: 'cas_auth#disable'
 
   # Routes for events
-  resources :events
+  resources :events do
+    collection do
+      get :get_events
+    end
+    member do
+      post:move
+      post:resize
+    end
+  end
 
   # Routes for groups
   resources :group_membership_requests, as: 'gm_request', only: [:new, :create] do

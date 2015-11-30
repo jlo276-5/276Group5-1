@@ -277,6 +277,7 @@ ActiveRecord::Schema.define(version: 20151129083935) do
     t.datetime "updated_at",                                   null: false
     t.integer  "year"
     t.string   "term_reference"
+    t.integer  "data_mode",                    default: 0
     t.string   "data_url"
     t.datetime "data_last_updated"
     t.integer  "institution_id"
@@ -284,7 +285,6 @@ ActiveRecord::Schema.define(version: 20151129083935) do
     t.date     "start_date"
     t.date     "end_date"
     t.date     "exams_end_date"
-    t.integer  "data_mode",                    default: 0
     t.string   "database_url"
     t.boolean  "database_contains_enrollment", default: false
     t.boolean  "updating",                     default: false

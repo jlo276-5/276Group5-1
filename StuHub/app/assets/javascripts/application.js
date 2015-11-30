@@ -16,5 +16,6 @@
 //= require turbolinks
 //= require_tree .
 //= require moment
+//= require qtip2-jquery-rails
 //= require fullcalendar
 //= require bootstrap-sprockets
