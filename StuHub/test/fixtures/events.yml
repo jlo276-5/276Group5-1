@@ -3,11 +3,11 @@
 one:
   title: MyString
   description: MyText
-  strat_time: 2015-11-09 20:50:50
+  start_time: 2015-11-09 20:50:50
   end_time: 2015-11-09 20:50:50
 
 two:
   title: MyString
   description: MyText
-  strat_time: 2015-11-09 20:50:50
+  start_time: 2015-11-09 20:50:50
   end_time: 2015-11-09 20:50:50

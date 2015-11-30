@@ -3,13 +3,13 @@
 one:
   title: MyString
   body: MyText
-  channel_type: 
+  channel_type: 1
   channel_id: 1
-  author: 
+  user: superman
 
 two:
   title: MyString
   body: MyText
-  channel_type: 
+  channel_type: 1
   channel_id: 1
-  author: 
+  user: superwoman
