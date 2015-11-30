@@ -44,7 +44,9 @@ class PostsController < ApplicationController
     if post.channel_type == 1 # Course Post
       channel = "/courses/#{post.channel_id}/posts"
     elsif post.channel_type == 2 # Group Post
-      channel = "/groups/#{@post.channel_id}/posts"
+      channel = "/groups/#{post.channel_id}/posts"
+    elsif post.channel_type == 3 # Institution Post
+      channel = "/institutions/#{post.channel_id}/posts"
     else
       channel = "/posts/new"
     end

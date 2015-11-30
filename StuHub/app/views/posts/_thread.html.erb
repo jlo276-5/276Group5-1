@@ -1,5 +1,12 @@
-<div class="row posts_view">
-  <div class="col-xs-12" style="height: 100%; overflow: auto;" id="posts">
-    <%= render @posts %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">Posts<%= " in #{classification}" unless classification.blank? %></h4>
+  </div>
+  <div class="panel-body">
+    <div class="row posts_view">
+      <div class="col-xs-12" style="height: 100vh; overflow: auto;" id="posts">
+        <%= render @posts %>
+      </div>
+    </div>
   </div>
 </div>

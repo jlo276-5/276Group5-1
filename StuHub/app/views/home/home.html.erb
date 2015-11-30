@@ -58,6 +58,11 @@
     <div class="panel panel-default">
       <div id="calendar2" style="height: 600px;"></div>
     </div>
+    <% if current_user.institution %>
+    <%= render partial: 'posts/interface', locals: {post_channel_type: 3,
+                                                           channel_id: current_user.institution.id, nav: false, obj: nil, obj_name: '', classification: current_user.institution.name} %>
+    <%= subscribe_to "/institutions/#{current_user.institution.id}/posts" %>
+    <% end %>
   </div>
   <div class="col-sm-3" id="home_right_sidebar">
     <!-- Right Sidebar, order bottom on mobile -->

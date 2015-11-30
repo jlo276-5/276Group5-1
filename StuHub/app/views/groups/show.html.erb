@@ -9,9 +9,9 @@
     <% end %>
 
     <hr>
-    
+
     <%= render partial: 'posts/interface', locals: {post_channel_type: @post_channel_type,
-                                                           channel_id: @group.id, nav: false, obj: nil, obj_name: ''} %>
+                                                           channel_id: @group.id, nav: false, obj: nil, obj_name: '', classification: @group.name} %>
   </div>
   <div class="col-sm-5">
     <%= render partial: 'messages/interface', locals: {chat_channel_type: @chat_channel_type,
