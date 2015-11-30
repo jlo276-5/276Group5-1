@@ -1,3 +1,9 @@
+<style>
+  strong{
+    color:#B22222;
+    font-size:15px;
+  }
+</style>
 <%= form_for(@event) do |f| %>
   <% if @event.errors.any? %>
     <div id="error_explanation">
@@ -12,22 +18,24 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :title %><br>
+    <strong><%= f.label :title %><br></strong>
     <%= f.text_field :title %>
+    <p></p>
   </div>
   <div class="field">
-    <%= f.label :description %><br>
+     <strong><%= f.label :description %><br></strong>
     <%= f.text_area :description %>
   </div>
   <div class="field">
-    <%= f.label :strat_time %><br>
+     <strong><%= f.label :strat_time %><br></strong>
     <%= f.datetime_select :strat_time %>
+     <p></p>
   </div>
   <div class="field">
-    <%= f.label :end_time %><br>
+     <strong><%= f.label :end_time %><br></strong>
     <%= f.datetime_select :end_time %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="col-xs-11" style = "margin-top:20px">
+    <%= f.submit "Update" ,class: "btn btn-primary btn-block"%>
   </div>
 <% end %>

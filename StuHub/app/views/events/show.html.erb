@@ -1,29 +1,37 @@
 <p id="notice"><%= notice %></p>
-
-
-
-<div>
+<style>
+  strong{
+    color:#B22222;
+    font-size:20px;
+  }
+</style>
+<div class="col-sm-4 col-sm-push-0" id="form_render"  style = "margin-top:50px">
 <p>
-  <strong>Title:</strong>
-  <%= @event.title %>
+  Title:
+  <strong><%= @event.title %></strong>
 </p>
 
 <p>
-  <strong>Description:</strong>
-  <%= @event.description %>
+  Description:
+  <strong><%= @event.description %></strong>
 </p>
 
 <p>
-  <strong>Strat time:</strong>
-  <%= @event.strat_time %>
+  Strat time:
+  <strong><%= @event.strat_time %></strong>
 </p>
-
 <p>
-  <strong>End time:</strong>
-  <%= @event.end_time %>
+  End time:
+  <strong><%= @event.end_time %></strong>
 </p>
+  <div class="col-xs-6" style="margin-top: 15px;">
+        <%= link_to 'Edit', edit_event_path(@event), class: "btn btn-primary btn-block", role: "button" %>
+  </div>
+  <div class="col-xs-6" style="margin-top: 15px;">
+        <%= link_to 'Back', events_path, class: "btn btn-primary btn-block", role: "button" %>
+  </div>
 </div>
-<div class="col-sm-4" id="show_calendar" style='position:absolute;top:150px;right:0' >
+<div class="col-sm-6 col-sm-push-2" id="show_calendar"  >
     <!-- Main Content, order top on mobile -->
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -36,7 +44,6 @@
 </div>
 
 
-<%= link_to 'Edit', edit_event_path(@event) %> |
-<%= link_to 'Back', events_path %>
 
-<div style="min-height: 300px;"></div>
+
+
