@@ -47,11 +47,10 @@ $(document).on 'ready page:load', ->
     eventColor:'#B22222'
     slotEventOverlap: false
 ## Hover Show Details
-  eventRender: (event, element)-> 
+  eventRender: (event, element)->
         t = event.start
         element.qtip({
-            content: "Title: " + event.title + ' Description: ' + event.description
-            
+            content: "Title: " + event.title + "   Description: " + event.description + "  ",
         })
     
   })
