@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151129083935) do
+ActiveRecord::Schema.define(version: 20151130072401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,11 +40,12 @@ ActiveRecord::Schema.define(version: 20151129083935) do
 
   create_table "course_memberships", force: :cascade do |t|
     t.datetime "join_date"
-    t.integer  "role",       default: 0
+    t.integer  "role",            default: 0
     t.integer  "user_id"
     t.integer  "course_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.datetime "last_visited_at"
   end
 
   add_index "course_memberships", ["course_id"], name: "index_course_memberships_on_course_id", using: :btree
@@ -118,11 +119,12 @@ ActiveRecord::Schema.define(version: 20151129083935) do
   add_index "group_membership_requests", ["user_id"], name: "index_group_membership_requests_on_user_id", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
-    t.integer  "role",       default: 0
+    t.integer  "role",            default: 0
     t.integer  "user_id"
     t.integer  "group_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.datetime "last_visited_at"
   end
 
   add_index "group_memberships", ["group_id"], name: "index_group_memberships_on_group_id", using: :btree
@@ -172,6 +174,59 @@ ActiveRecord::Schema.define(version: 20151129083935) do
   end
 
   add_index "instructors", ["section_id"], name: "index_instructors_on_section_id", using: :btree
+
+  create_table "mailboxer_conversation_opt_outs", force: :cascade do |t|
+    t.integer "unsubscriber_id"
+    t.string  "unsubscriber_type"
+    t.integer "conversation_id"
+  end
+
+  add_index "mailboxer_conversation_opt_outs", ["conversation_id"], name: "index_mailboxer_conversation_opt_outs_on_conversation_id", using: :btree
+  add_index "mailboxer_conversation_opt_outs", ["unsubscriber_id", "unsubscriber_type"], name: "index_mailboxer_conversation_opt_outs_on_unsubscriber_id_type", using: :btree
+
+  create_table "mailboxer_conversations", force: :cascade do |t|
+    t.string   "subject",    default: ""
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  create_table "mailboxer_notifications", force: :cascade do |t|
+    t.string   "type"
+    t.text     "body"
+    t.string   "subject",              default: ""
+    t.integer  "sender_id"
+    t.string   "sender_type"
+    t.integer  "conversation_id"
+    t.boolean  "draft",                default: false
+    t.string   "notification_code"
+    t.integer  "notified_object_id"
+    t.string   "notified_object_type"
+    t.string   "attachment"
+    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                           null: false
+    t.boolean  "global",               default: false
+    t.datetime "expires"
+  end
+
+  add_index "mailboxer_notifications", ["conversation_id"], name: "index_mailboxer_notifications_on_conversation_id", using: :btree
+  add_index "mailboxer_notifications", ["notified_object_id", "notified_object_type"], name: "index_mailboxer_notifications_on_notified_object_id_and_type", using: :btree
+  add_index "mailboxer_notifications", ["sender_id", "sender_type"], name: "index_mailboxer_notifications_on_sender_id_and_sender_type", using: :btree
+  add_index "mailboxer_notifications", ["type"], name: "index_mailboxer_notifications_on_type", using: :btree
+
+  create_table "mailboxer_receipts", force: :cascade do |t|
+    t.integer  "receiver_id"
+    t.string   "receiver_type"
+    t.integer  "notification_id",                            null: false
+    t.boolean  "is_read",                    default: false
+    t.boolean  "trashed",                    default: false
+    t.boolean  "deleted",                    default: false
+    t.string   "mailbox_type",    limit: 25
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+  end
+
+  add_index "mailboxer_receipts", ["notification_id"], name: "index_mailboxer_receipts_on_notification_id", using: :btree
+  add_index "mailboxer_receipts", ["receiver_id", "receiver_type"], name: "index_mailboxer_receipts_on_receiver_id_and_receiver_type", using: :btree
 
   create_table "messages", force: :cascade do |t|
     t.text     "content"
@@ -360,6 +415,9 @@ ActiveRecord::Schema.define(version: 20151129083935) do
   add_foreign_key "group_memberships", "users"
   add_foreign_key "groups", "institutions"
   add_foreign_key "instructors", "sections"
+  add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
+  add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
+  add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
   add_foreign_key "privacy_settings", "users"
   add_foreign_key "resources", "courses"
   add_foreign_key "resources", "groups"

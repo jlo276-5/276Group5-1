@@ -7,6 +7,7 @@ class CoursesController < ApplicationController
   before_action :valid_dropbox, only: [:new_resource, :create_resource]
   before_action :valid_resource, only: [:get_resource, :edit_resource, :update_resource, :destroy_resource]
   before_action :can_edit_resource, only: [:edit_resource, :update_resource, :destroy_resource]
+  after_action :update_last_visited, only: [:show, :course_members, :resources, :new_resource, :get_resource, :edit_resource]
   layout 'course', only: [:show, :info, :enrollment, :course_members, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
   require 'rest-client'
   require 'date'
@@ -468,7 +469,6 @@ class CoursesController < ApplicationController
   def valid_dropbox
     @course = Course.find_by(id: params[:id])
 
-
     unless !(current_user.dropbox_token.blank? or current_user.dropbox_secret.blank? or (client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)).nil?)
       flash[:warning] = "You must connect your account to Dropbox to upload files."
       redirect_to resources_course_path(@course)
@@ -498,6 +498,13 @@ class CoursesController < ApplicationController
     if @course and !current_user.memberOfCourse?(@course)
       flash[:warning] = "You are not a member of this course yet."
       redirect_to get_info_course_path(@course)
+    end
+  end
+
+  def update_last_visited
+    gm = CourseMembership.find_by(course_id: params[:id], user_id: current_user.id)
+    unless gm.nil?
+      gm.touch :last_visited_at
     end
   end
 end

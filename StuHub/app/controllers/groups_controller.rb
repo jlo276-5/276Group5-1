@@ -1,12 +1,13 @@
 class GroupsController < ApplicationController
   include ActionView::Helpers::NumberHelper
 
-  before_action :verify_membership, only: [:show, :edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member, :resources, :new_resource, :create_resource, :get_resource, :edit_resource, :update_resource, :destroy_resource]
+  before_action :verify_membership, only: [:show, :edit, :update, :destroy, :group_members, :group_requests, :promote_member, :demote_member, :kick_member, :resources, :new_resource, :create_resource, :get_resource, :edit_resource, :update_resource, :destroy_resource]
   before_action :group_admin, only: [:edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
   before_action :valid_membership, only: [:promote_member, :demote_member, :kick_member]
   before_action :valid_dropbox, only: [:new_resource, :create_resource]
   before_action :valid_resource, only: [:get_resource, :edit_resource, :update_resource, :destroy_resource]
   before_action :can_edit_resource, only: [:edit_resource, :update_resource, :destroy_resource]
+  after_action :update_last_visited, only: [:show, :edit, :group_members, :group_requests, :resources, :new_resource, :get_resource, :edit_resource]
   layout 'group', only: [:show, :edit, :group_members, :group_requests, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
 
   def new
@@ -316,6 +317,13 @@ class GroupsController < ApplicationController
     elsif !current_user.memberOfGroup?(group)
       flash[:danger] = "You are not a member of this group yet."
       redirect_to groups_path
+    end
+  end
+
+  def update_last_visited
+    gm = GroupMembership.find_by(group_id: params[:id], user_id: current_user.id)
+    unless gm.nil?
+      gm.touch :last_visited_at
     end
   end
 

@@ -12,11 +12,15 @@
           <div class="list-group">
             <% @next_course_memberships.each do |cm| %>
               <%= link_to cm.course, class: 'list-group-item' do %>
+                <% cmnn = cm.newNotifications %>
+                <% if cmnn > 0 %><span class="badge"><%= cmnn %></span><% end %>
                 <%= "#{cm.course.department.name} #{cm.course.number}" %> <small style="white-space:pre;"><%= cm.course.department.term.term_name %></small>
               <% end %>
             <% end %>
             <% @current_course_memberships.each do |cm| %>
               <%= link_to cm.course, class: 'list-group-item' do %>
+              <% cmnn = cm.newNotifications %>
+              <% if cmnn > 0 %><span class="badge"><%= cmnn %></span><% end %>
                 <%= "#{cm.course.department.name} #{cm.course.number}" %> <small style="white-space:pre;"><%= cm.course.department.term.term_name %></small>
               <% end %>
             <% end %>
@@ -33,8 +37,12 @@
             <h1 class="panel-title">Groups</h1>
           </div>
           <div class="list-group">
-            <% current_user.groups.each do |group| %>
-              <%= link_to group.name, group, class: 'list-group-item' %>
+            <% current_user.group_memberships.includes(:group).each do |gm| %>
+              <%= link_to gm.group, class: 'list-group-item' do %>
+                <% gmnn = gm.newNotifications %>
+                <% if gmnn > 0 %><span class="badge"><%= gmnn %></span><% end %>
+                <%= gm.group.name %>
+              <% end %>
             <% end %>
             <%= link_to groups_url, class: 'list-group-item' do %>
               <span class="badge"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></span>
