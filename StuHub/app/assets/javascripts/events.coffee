@@ -53,10 +53,17 @@ $(document).on 'ready page:load', ->
     eventColor:'#B22222'
     slotEventOverlap: false
 ## Hover Show Details
-  eventRender: (event, element)->
-        t = event.start
-        element.qtip({
-            content:  event.title ,
-        })
-
+    ## http://stackoverflow.com/questions/15161654/recurring-events-in-fullcalendar via http://js2.coffee
+    eventRender: (event, element)->
+      element.qtip({
+          content:  event.title
+      })
+      if event.ranges?
+        event.ranges.filter((range) ->
+          # test event against all the ranges
+          event.start.isBefore(range.end) and event.end.isAfter(range.start)
+        ).length > 0
+        #if it isn't in one of the ranges, don't render it (by returning false)
+      else
+        true
   })

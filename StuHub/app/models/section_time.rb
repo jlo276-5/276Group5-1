@@ -1,7 +1,7 @@
 class SectionTime < ActiveRecord::Base
   belongs_to :section
 
-  @@weekdays = ["Su", "M", "Tu", "W", "Th", "Fr", "Sa"]
+  @@weekdays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
 
   validates :section_id, :start_date, :end_date, :start_time, :end_time, :days, presence: true
 
@@ -12,6 +12,7 @@ class SectionTime < ActiveRecord::Base
         arr << i
       end
     end
+    p arr
     return arr
   end
 end
