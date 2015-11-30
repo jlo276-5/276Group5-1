@@ -86,3 +86,37 @@
 * Various Fixes
 
 ### 2015.11.22
+* Display fixes in Messaging
+* Markdown-based pages
+
+### 2015.11.23
+* Resque - Background Jobs System
+* Reworked entire Institution/Term system.
+
+### 2015.11.24  - 2015.11.25
+* Introduce more emails about Account, optional emails for Course and Groups
+* Schedule listing on Home improved
+
+### 2015.11.26
+* Reworked Posts system to be separate from Messages, support editing
+* Faster Term database file loading
+* Framework for new Help System
+
+## 2015.11.27
+* Contact System
+
+## 2015.11.28
+* Resources for Group and Course, can share links
+* Changes to navigation bar
+
+## 2015.11.29
+* Fix message/post duplication
+* Application-Wide Settings : maintenance mode, appearance of header/navigation
+* Concept for new welcome/landing page
+* Prevent long posts from taking over the page
+
+## 2015.11.30
+* DB Query optimizations
+* Indicators for new Messages/Posts
+* Show User's schedule on calendar
+* Institution-wide Posts
