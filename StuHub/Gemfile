@@ -35,7 +35,7 @@ gem 'puma'
 
 # Calendar support
 gem 'momentjs-rails'
-gem 'fullcalendar-rails','~> 2.1.0'
+gem 'fullcalendar-rails','~> 2.2.0'
 gem 'qtip2-jquery-rails'
 
 # Bootstrap and Pagination

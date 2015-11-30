@@ -20,7 +20,6 @@ $(document).on 'ready page:load', ->
     eventColor:'#B22222'
     slotEventOverlap: false
     weekNumbers:true
-    businessHours:true
   })
   
   #######################################################
@@ -33,15 +32,8 @@ $(document).on 'ready page:load', ->
         right: ''
     },
     height: 350
-## Actions
-    ##theme:tru
-    ##eventClick: (event) ->
-    ##  alert event.title
-    ##  alert event.title
 ## Attributes
-    
     events: '/events.json'
-    
     editable: true
     selectable: true
     selectHelper: true
