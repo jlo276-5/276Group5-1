@@ -1,4 +1,4 @@
-<% provide(:title, "Members - #{@course.department.name}#{@course.number}") %>
-<% provide(:main_title, "#{@course.department.name}#{@course.number} - #{@course.name}") %>
+<% provide(:title, "Members - #{@course.course_number}") %>
+<% provide(:main_title, "#{@course.course_number} - #{@course.name}") %>
 
 <%= render partial: 'users/list' %>

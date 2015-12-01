@@ -1,8 +1,16 @@
 class GroupsController < ApplicationController
-  before_action :verify_membership, only: [:show, :edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
+  include ActionView::Helpers::NumberHelper
+
+  before_action :verify_membership, only: [:show, :edit, :update, :destroy, :group_members, :group_requests, :promote_member, :demote_member, :kick_member, :resources, :new_resource, :create_resource, :get_resource, :edit_resource, :update_resource, :destroy_resource]
   before_action :group_admin, only: [:edit, :update, :destroy, :group_requests, :promote_member, :demote_member, :kick_member]
   before_action :valid_membership, only: [:promote_member, :demote_member, :kick_member]
-  layout 'group', only: [:show, :edit, :group_members, :group_requests]
+  before_action :valid_dropbox, only: [:new_resource, :create_resource]
+  before_action :valid_resource, only: [:get_resource, :edit_resource, :update_resource, :destroy_resource]
+  before_action :can_edit_resource, only: [:edit_resource, :update_resource, :destroy_resource]
+  after_action :update_last_visited, only: [:show, :edit, :group_members, :group_requests, :resources, :new_resource, :get_resource, :edit_resource]
+  layout 'group', only: [:show, :edit, :update, :group_members, :group_requests, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
+
+  require 'rest_client'
 
   def new
     @group = Group.new
@@ -10,20 +18,20 @@ class GroupsController < ApplicationController
 
   def index
     if params[:sort_by] == "NAME"
-      @groups = Group.paginate(page: params[:page], per_page: 25).order('name ASC')
+      @groups = current_user.institution.groups.paginate(page: params[:page], per_page: 25).order('name ASC')
     elsif params[:sort_by] == "NAME_DESC"
-      @groups = Group.paginate(page: params[:page], per_page: 25).order('name DESC')
+      @groups = current_user.institution.groups.paginate(page: params[:page], per_page: 25).order('name DESC')
     else
-      @groups = Group.paginate(page: params[:page], per_page: 25).order('created_at DESC')
+      @groups = current_user.institution.groups.paginate(page: params[:page], per_page: 25).order('created_at DESC')
     end
     @paginate = true
   end
 
   def search
     if !params[:search].blank?
-      @groups = Group.where("lower(name) LIKE ?", "%#{params[:search].downcase}%").paginate(page: params[:page], per_page: 25).order('created_at ASC')
+      @groups = current_user.institution.groups.where("lower(name) LIKE ?", "%#{params[:search].downcase}%").paginate(page: params[:page], per_page: 25).order('created_at ASC')
     else
-      @groups = Group.paginate(page: params[:page], per_page: 25).order('created_at ASC')
+      @groups = current_user.institution.groups.paginate(page: params[:page], per_page: 25).order('created_at ASC')
     end
     render 'index'
   end
@@ -33,8 +41,8 @@ class GroupsController < ApplicationController
 
     @chat_channel_type = 2;
     @post_channel_type = 2;
-    @messages = Message.where(channel_type: @chat_channel_type, channel_id: @group.id).last(30)
-    @posts = Post.where(channel_type: @post_channel_type, channel_id: @group.id).order('created_at DESC')
+    @messages = Message.includes(:user).where(channel_type: @chat_channel_type, channel_id: @group.id).last(30)
+    @posts = Post.includes(:user).where(channel_type: @post_channel_type, channel_id: @group.id).order('created_at DESC')
   end
 
   def group_members
@@ -106,6 +114,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.creator = current_user.name
+    @group.institution = current_user.institution
     if @group.save
       @gm = GroupMembership.new(group: @group, user: current_user)
       @gm.role = 1
@@ -144,10 +153,157 @@ class GroupsController < ApplicationController
     end
   end
 
+  def resources
+    @group = Group.find_by(id: params[:id])
+    @resources = GroupResource.where(group_id: params[:id])
+  end
+
+  def new_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = GroupResource.new
+  end
+
+  def create_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = GroupResource.new(resource_params)
+    client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)
+
+    if client.nil?
+      flash[:danger] = "Invalid Connection to Dropbox. Please relink your account."
+      redirect_to accounts_user_path(current_user)
+    elsif params[:group_resource][:file].blank?
+      @resource.errors.add(:base, "You must attach a file.")
+      render 'new_resource'
+    elsif !Resource.permitted_types.include?(params[:group_resource][:file].content_type)
+      @resource.errors.add(:base, 'Files of this type are not permitted')
+      render 'new_resource'
+    else
+      @resource.file_name = "#{@group.name}-#{params[:group_resource][:file].original_filename}"
+      @resource.content_type = params[:group_resource][:file].content_type
+      @resource.group = @group
+      @resource.user = current_user
+      existing = nil
+      begin
+        client.find("GroupResources")
+      rescue Dropbox::API::Error::NotFound
+        client.mkdir("GroupResources")
+      end
+      begin
+        existing = client.find("GroupResources/#{@resource.file_name}")
+      rescue Dropbox::API::Error::NotFound
+        existing = nil
+      end
+      begin
+        if existing.nil? && (file = client.chunked_upload("GroupResources/#{@resource.file_name}", params[:group_resource][:file].tempfile)) && @resource.save
+          @resource.update_attribute(:cached_url, file.share_url.url)
+          flash[:success] = "New Group Resource Created: File \"#{@resource.file_name}\", Size #{number_to_human_size(file.bytes)}"
+          redirect_to resources_group_path(@group)
+        elsif !existing.nil?
+          @resource.errors.add(:base, "There is already a file named #{@resource.file_name} in your Dropbox. Please name it something different.")
+          render 'new_resource'
+        else
+          render 'new_resource'
+        end
+      rescue Dropbox::API::Error => e
+        @resource.errors.add(:base, "Could not upload to Dropbox: #{e.message}.")
+        render 'new_resource'
+      end
+    end
+  end
+
+  def get_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = GroupResource.find_by(id: params[:resource_id])
+
+    if @resource.cached_url and (code = RestClient.head(@resource.cached_url).code[0]) != 4 and code != 5
+      redirect_to @resource.cached_url
+    else
+      if current_user.dropbox_token.blank? or current_user.dropbox_secret.blank? or (client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)).nil?
+        flash[:danger] = "That Resource is no longer available."
+        @resource.destroy
+        redirect_to resources_group_path(@group)
+      else
+        begin
+          file = client.find("GroupResources/#{@resource.file_name}")
+          @resource.update_attribute(:cached_url, file.share_url.url)
+          redirect_to @resource.cached_url
+        rescue Dropbox::API::Error => e
+          flash[:danger] = "That Resource is no longer available."
+          @resource.destroy
+          redirect_to resources_group_path(@group)
+        end
+      end
+    end
+  end
+
+  def edit_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = GroupResource.find_by(id: params[:resource_id])
+  end
+
+  def update_resource
+    @group = Group.find_by(id: params[:id])
+    resource = GroupResource.find_by(id: params[:resource_id])
+    if !params[:group_resource][:file].blank?
+      @resource.errors.add(:base, "You cannot change the file that the Resource points to. Please create a new Resource.")
+      render 'edit_resource'
+    elsif resource.update_attributes(resource_params)
+      flash[:success] = "Resource Updated"
+      redirect_to resources_group_path(@group)
+    else
+      render 'edit_resource'
+    end
+  end
+
+  def destroy_resource
+    @group = Group.find_by(id: params[:id])
+    resource = GroupResource.find_by(id: params[:resource_id])
+    client = Dropbox::API::Client.new(token: resource.user.dropbox_token, secret: resource.user.dropbox_secret)
+    if resource.destroy
+      if resource.file_name.blank? or client.nil?
+        flash[:warning] = "Resource Deleted, but could not delete file from Dropbox."
+      else
+        begin
+          client.destroy("GroupResources/#{@resource.file_name}")
+          flash[:success] = "Resource Deleted"
+        rescue Dropbox::API::Error::NotFound
+          flash[:success] = "Resource Deleted"
+        rescue Dropbox::API::Error => e
+          flash[:warning] = "Resource Deleted, but could not delete the file from Dropbox: #{e.message}."
+        end
+      end
+    else
+      flash[:danger] = "Could not delete Resource"
+    end
+    redirect_to resources_group_path(@group)
+  end
+
   private
+
+  def resource_params
+    params.require(:group_resource).permit(:name, :description, :category)
+  end
 
   def group_params
     params.require(:group).permit(:name, :creator, :limited, :description)
+  end
+
+  def valid_dropbox
+    @group = Group.find_by(id: params[:id])
+
+    unless !(current_user.dropbox_token.blank? or current_user.dropbox_secret.blank? or (client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)).nil?)
+      flash[:warning] = "You must connect your account to Dropbox to upload files."
+      redirect_to resources_group_path(@group)
+    end
+  end
+
+  def valid_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = GroupResource.find_by(id: params[:resource_id])
+    if @resource.nil? or @resource.group != @group
+      flash[:danger] = "No such resource exists with an id #{params[:resource_id]}"
+      redirect_to resources_group_path(@group)
+    end
   end
 
   def valid_membership
@@ -166,6 +322,22 @@ class GroupsController < ApplicationController
     elsif !current_user.memberOfGroup?(group)
       flash[:danger] = "You are not a member of this group yet."
       redirect_to groups_path
+    end
+  end
+
+  def update_last_visited
+    gm = GroupMembership.find_by(group_id: params[:id], user_id: current_user.id)
+    unless gm.nil?
+      gm.touch :last_visited_at
+    end
+  end
+
+  def can_edit_resource
+    @group = Group.find_by(id: params[:id])
+    @resource = CourseResource.find_by(id: params[:resource_id])
+    unless (!@resource.user.nil? and current_user?(@resource.user)) or current_user.adminOfGroup?(@group) or current_user.admin?
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to resources_group_path(@group)
     end
   end
 

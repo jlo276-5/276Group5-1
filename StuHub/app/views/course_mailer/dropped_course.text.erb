@@ -1,6 +1,6 @@
-<% provide(:email_title, "Dropped Course : #{@course.department.name} #{@course.number} (#{@course.department.term.term_name})") %>
+<% provide(:email_title, "Dropped Course : #{@course.course_number} (#{@course.department.term.term_name})") %>
 
-You have dropped the course <%= "#{@course.department.name} #{@course.number} - #{@course.name}" %> for the term <%= @course.department.term.term_name %>.
+You have dropped the course <%= "#{@course.course_number} - #{@course.name}" %> for the term <%= @course.department.term.term_name %>.
 
 You can readd the course at:
 

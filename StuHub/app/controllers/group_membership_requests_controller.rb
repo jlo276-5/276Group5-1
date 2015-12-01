@@ -6,6 +6,9 @@ class GroupMembershipRequestsController < ApplicationController
     if @group.nil?
       flash[:danger] = "Invalid Group ID Specified: #{params[:group_id]}"
       redirect_to groups_path
+    elsif @group.institution != current_user.institution
+      flash[:danger] = "You do not belong to that Group's Institution."
+      redirect_to groups_path
     elsif !@group.limited
       flash[:warning] = "The specified Group does not require Join Approvals"
       redirect_to groups_path
@@ -17,7 +20,10 @@ class GroupMembershipRequestsController < ApplicationController
   def create
     @gmr = GroupMembershipRequest.new(gmr_params)
     @gmr.user = current_user
-    if @gmr.save
+    if @gmr.group.institution != current_user.institution
+      flash[:danger] = "You do not belong to that Group's Institution."
+      redirect_to groups_path
+    elsif @gmr.save
       flash[:success] = "New Group Membership Request Created. It will be in review until approved by an Administrator."
       redirect_to groups_path
     else

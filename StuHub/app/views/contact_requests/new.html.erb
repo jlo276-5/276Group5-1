@@ -1,0 +1,73 @@
+<% provide(:title, "Contact Us") %>
+
+<div class="page-header" style="text-align: center;">
+  <h1>Contact Us</h1>
+</div>
+
+<%= form_for(@cr, url: contact_path, html: {class: 'form-horizontal'}) do |f| %>
+<%= render partial: 'shared/error_messages', locals: {obj: @cr} %>
+
+  <div class="form-group">
+    <%= f.label :name, class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.text_field :name, class: 'form-control', placeholder: 'Name' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email, class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.email_field :email, class: 'form-control', placeholder: 'Email (Please use your registered email if you use StuHub)' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :contact_type, 'Type of Contact', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <label class="radio-inline">
+        <%= f.radio_button :contact_type, 0 %> Feedback
+      </label>
+      <label class="radio-inline">
+        <%= f.radio_button :contact_type, 1 %> Complaint
+      </label>
+      <label class="radio-inline">
+        <%= f.radio_button :contact_type, 2 %> Bug Report
+      </label>
+      <label class="radio-inline">
+        <%= f.radio_button :contact_type, 3 %> Other
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-xs-12">
+      <%= f.text_field :title, class: 'form-control', placeholder: 'Title' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-xs-12">
+      <%= f.text_area :body, class: 'form-control', placeholder: 'Body', rows: 6, style: 'max-width: 100%;' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-xs-12" style="text-align: center;">
+      <div class="checkbox">
+        <label>
+          <%= f.check_box :reply %> I would like to be contacted about this.
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= recaptcha_tags %>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+      <%= f.submit 'Submit', class: "btn btn-primary btn-block", id: 'submit_btn' %>
+    </div>
+  </div>
+<% end %>

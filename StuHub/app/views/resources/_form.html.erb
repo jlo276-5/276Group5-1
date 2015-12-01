@@ -1,0 +1,42 @@
+<%= form_for @resource, url: dest, multipart: true, html: {class: 'form-horizontal'} do |f| %>
+<%= render partial: 'shared/error_messages', locals: {obj: @resource} %>
+
+  <div class="form-group">
+    <%= f.label :name, class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.text_field :name, class: 'form-control', placeholder: 'Name' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :description, class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.text_area :description, class: 'form-control', placeholder: 'Description', style: 'max-width: 100%;' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :category, 'Type of Resource', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <label class="radio-inline">
+        <%= f.radio_button :category, 0 %> Other
+      </label>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="form-group">
+    <%= label_tag :file, 'Resource File', class: 'col-sm-4 col-md-3 control-label' %>
+    <div class="col-sm-8 col-md-9">
+      <%= f.file_field :file, accept: Resource.permitted_types.join(","), class: 'form-control' %>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3">
+      <%= f.submit "Submit", class: "btn btn-primary btn-block" %>
+    </div>
+  </div>
+<% end %>

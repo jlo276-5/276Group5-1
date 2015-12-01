@@ -8,9 +8,11 @@ groupone:
   name: Hello, world
   creator: Superman
   limited: true
+  institution: institution
 
 grouptwo:
   name: Dingling Wells
   creator: Superwoman
   limited: false
   description: Nerfing all the way
+  institution: institution

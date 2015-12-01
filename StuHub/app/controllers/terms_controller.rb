@@ -14,10 +14,6 @@ class TermsController < ApplicationController
     @term = Term.new(term_params)
     @term.institution = @institution
     if @term.save
-      if @institution.current_term == nil
-        @institution.current_term_id = @term.id
-        @institution.save
-      end
       flash[:info] = "Term Created. If you enabled database seeding, click Update."
       redirect_to institution_path(id: @institution.id)
     else

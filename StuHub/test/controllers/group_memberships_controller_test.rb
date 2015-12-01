@@ -46,7 +46,7 @@ class GroupMembershipsControllerTest < ActionController::TestCase
     end
     assert_redirected_to group_path(@unlimitgroup)
     assert_not flash.empty?
-    assert_equal "Group Membership Created", flash[:success]
+    assert_equal "Joined Group #{@unlimitgroup.name}", flash[:success]
   end
 
   test "should redirect destroy if invalid group membership" do

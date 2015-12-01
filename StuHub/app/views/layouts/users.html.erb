@@ -1,20 +1,22 @@
+<% content_for :content do %>
+
 <div class="row">
   <div class="col-sm-9 col-sm-push-3" id="profile_content">
     <div class="row">
       <div class="col-xs-12">
-        <h1><%= gravatar_for @user, size: 50, class: 'img-responsive img-rounded center-block visible-xs-inline-block' %> <%= @user.name %> <small><%= @user.role_string_long %></small></h1>
+        <h1><%= avatar_for @user, size: 50, class: 'img-responsive img-rounded center-block visible-xs-inline-block' %> <%= @user.name %> <small><%= @user.role_string_long %></small></h1>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <%= yield :page_content %>
+        <%= yield %>
       </div>
     </div>
   </div>
   <div class="col-sm-3 col-sm-pull-9" id="profile_sidebar">
     <div class="row">
       <div class="col-sm-12 hidden-xs" id="profile_avatar_container">
-        <%= gravatar_for @user, size: 200, class: 'img-responsive img-rounded center-block' %>
+        <%= avatar_for @user, size: 200, class: 'img-responsive img-rounded center-block' %>
       </div>
     </div>
     <div class="row" style="margin-top: 20px;">
@@ -27,12 +29,14 @@
             <%= link_to 'Profile', @user, class: "list-group-item #{'active' if current_page?(@user)}" %>
             <%= link_to 'Courses', courses_user_path(@user), class: "list-group-item #{'active' if current_page?(courses_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) || @user.privacy_setting.display_courses %>
             <%= link_to 'Groups', groups_user_path(@user), class: "list-group-item #{'active' if current_page?(groups_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) || @user.privacy_setting.display_groups %>
-            <%= link_to 'Edit Profile', customize_user_path(@user), class: "list-group-item #{'active' if current_page?(customize_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
-            <%= link_to 'Connected Accounts', accounts_user_path(@user), class: "list-group-item #{'active' if current_page?(accounts_user_path(@user))}" if (current_user?(@user) || current_user.superuser?) %>
-            <%= link_to 'Account Settings', edit_user_path(@user), class: "list-group-item #{'active' if current_page?(edit_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
+            <%= link_to 'Calendar/Schedule', schedule_user_path(@user), class: "list-group-item #{'active' if current_page?(schedule_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) || @user.privacy_setting.display_schedule %>
+            <%= link_to 'Settings', customize_user_path(@user), class: "list-group-item #{'active' if current_page?(customize_user_path(@user)) or current_page?(accounts_user_path(@user)) or current_page?(edit_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
             </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<% end %>
+<%= render template: "layouts/application" %>

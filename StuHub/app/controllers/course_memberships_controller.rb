@@ -59,7 +59,7 @@ class CourseMembershipsController < ApplicationController
     if cm.user.notification_emails
       CourseMailer.dropped_course(cm.user, cm.course).deliver_now
     end
-    flash[:success] = "Dropped Course #{cm.course.department.name} #{cm.course.number}"
+    flash[:success] = "Dropped Course #{cm.course.course_number}"
     redirect_to courses_path
   end
 

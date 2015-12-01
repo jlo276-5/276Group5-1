@@ -1,3 +1,9 @@
+<script type="text/javascript">
+$(document).ready(function() {
+  $(".post_body").readmore();
+});
+</script>
+
 <div class="panel panel-default">
   <div class="panel-body">
     <%= render partial: 'posts/entry', locals: {post_channel_type: post_channel_type,
@@ -5,10 +11,4 @@
   </div>
 </div>
 
-<%= render partial: 'posts/thread' %>
-
-<!-- <script type="text/javascript">
-// $(document).ready(function() {
-//   $("#posts").scrollTop($("#posts")[0].scrollHeight)
-// });
-</script> -->
+<%= render partial: 'posts/thread', locals: {classification: classification} %>

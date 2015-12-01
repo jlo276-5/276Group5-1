@@ -1,7 +1,9 @@
 <div class="row">
   <div class="col-xs-10 col-xs-offset-1" style="text-align: center; margin-bottom: 20px;">
-    <%= will_paginate @users %><br>
-    <%= page_entries_info @users, model: "User" %>
+    <div class="pagination">
+      <%= will_paginate @users %><br>
+      <%= page_entries_info @users, model: "User" %>
+    </div>
   </div>
 </div>
 <div class="row">
@@ -11,7 +13,7 @@
         <div class="panel-body">
           <div class="media">
             <div class="media-left media-middle">
-              <%= link_to user do %><%= gravatar_for user, size: 64, class: 'media-object img-rounded' %><% end %>
+              <%= link_to user do %><%= avatar_for user, size: 64, class: 'media-object img-rounded' %><% end %>
             </div>
             <div class="media-body">
               <h4 class="media-heading"><%= link_to user.name, user %> <small><%= user.role_string_long %><% if current_user.admin? %><%= ", #{user.email}" %><% end %></small></h4>

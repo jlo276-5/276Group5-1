@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151130102508) do
+ActiveRecord::Schema.define(version: 20151201110131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,13 +26,26 @@ ActiveRecord::Schema.define(version: 20151130102508) do
   add_index "associated_classes", ["course_id"], name: "index_associated_classes_on_course_id", using: :btree
   add_index "associated_classes", ["number", "course_id"], name: "index_associated_classes_on_number_and_course_id", unique: true, using: :btree
 
+  create_table "contact_requests", force: :cascade do |t|
+    t.string   "name",                         null: false
+    t.string   "email",                        null: false
+    t.string   "title",        default: ""
+    t.text     "body"
+    t.integer  "contact_type", default: 0
+    t.boolean  "reply",        default: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.boolean  "resolved",     default: false
+  end
+
   create_table "course_memberships", force: :cascade do |t|
     t.datetime "join_date"
-    t.integer  "role",       default: 0
+    t.integer  "role",            default: 0
     t.integer  "user_id"
     t.integer  "course_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.datetime "last_visited_at"
   end
 
   add_index "course_memberships", ["course_id"], name: "index_course_memberships_on_course_id", using: :btree
@@ -71,12 +84,15 @@ ActiveRecord::Schema.define(version: 20151130102508) do
   create_table "events", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
-    t.datetime "strat_time"
+    t.datetime "start_time"
     t.datetime "end_time"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "user_id"
     t.boolean  "if_background"
+    t.text     "dow",           default: [],              array: true
+    t.datetime "start_date"
+    t.datetime "end_date"
   end
 
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
@@ -107,11 +123,12 @@ ActiveRecord::Schema.define(version: 20151130102508) do
   add_index "group_membership_requests", ["user_id"], name: "index_group_membership_requests_on_user_id", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
-    t.integer  "role",       default: 0
+    t.integer  "role",            default: 0
     t.integer  "user_id"
     t.integer  "group_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.datetime "last_visited_at"
   end
 
   add_index "group_memberships", ["group_id"], name: "index_group_memberships_on_group_id", using: :btree
@@ -121,12 +138,14 @@ ActiveRecord::Schema.define(version: 20151130102508) do
   create_table "groups", force: :cascade do |t|
     t.string   "name"
     t.string   "creator"
-    t.boolean  "limited",     default: false
+    t.boolean  "limited",        default: false
     t.text     "description"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "institution_id"
   end
 
+  add_index "groups", ["institution_id"], name: "index_groups_on_institution_id", using: :btree
   add_index "groups", ["name"], name: "index_groups_on_name", using: :btree
 
   create_table "institutions", force: :cascade do |t|
@@ -159,6 +178,59 @@ ActiveRecord::Schema.define(version: 20151130102508) do
   end
 
   add_index "instructors", ["section_id"], name: "index_instructors_on_section_id", using: :btree
+
+  create_table "mailboxer_conversation_opt_outs", force: :cascade do |t|
+    t.integer "unsubscriber_id"
+    t.string  "unsubscriber_type"
+    t.integer "conversation_id"
+  end
+
+  add_index "mailboxer_conversation_opt_outs", ["conversation_id"], name: "index_mailboxer_conversation_opt_outs_on_conversation_id", using: :btree
+  add_index "mailboxer_conversation_opt_outs", ["unsubscriber_id", "unsubscriber_type"], name: "index_mailboxer_conversation_opt_outs_on_unsubscriber_id_type", using: :btree
+
+  create_table "mailboxer_conversations", force: :cascade do |t|
+    t.string   "subject",    default: ""
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  create_table "mailboxer_notifications", force: :cascade do |t|
+    t.string   "type"
+    t.text     "body"
+    t.string   "subject",              default: ""
+    t.integer  "sender_id"
+    t.string   "sender_type"
+    t.integer  "conversation_id"
+    t.boolean  "draft",                default: false
+    t.string   "notification_code"
+    t.integer  "notified_object_id"
+    t.string   "notified_object_type"
+    t.string   "attachment"
+    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                           null: false
+    t.boolean  "global",               default: false
+    t.datetime "expires"
+  end
+
+  add_index "mailboxer_notifications", ["conversation_id"], name: "index_mailboxer_notifications_on_conversation_id", using: :btree
+  add_index "mailboxer_notifications", ["notified_object_id", "notified_object_type"], name: "index_mailboxer_notifications_on_notified_object_id_and_type", using: :btree
+  add_index "mailboxer_notifications", ["sender_id", "sender_type"], name: "index_mailboxer_notifications_on_sender_id_and_sender_type", using: :btree
+  add_index "mailboxer_notifications", ["type"], name: "index_mailboxer_notifications_on_type", using: :btree
+
+  create_table "mailboxer_receipts", force: :cascade do |t|
+    t.integer  "receiver_id"
+    t.string   "receiver_type"
+    t.integer  "notification_id",                            null: false
+    t.boolean  "is_read",                    default: false
+    t.boolean  "trashed",                    default: false
+    t.boolean  "deleted",                    default: false
+    t.string   "mailbox_type",    limit: 25
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+  end
+
+  add_index "mailboxer_receipts", ["notification_id"], name: "index_mailboxer_receipts_on_notification_id", using: :btree
+  add_index "mailboxer_receipts", ["receiver_id", "receiver_type"], name: "index_mailboxer_receipts_on_receiver_id_and_receiver_type", using: :btree
 
   create_table "messages", force: :cascade do |t|
     t.text     "content"
@@ -197,9 +269,29 @@ ActiveRecord::Schema.define(version: 20151130102508) do
     t.integer  "user_id"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.boolean  "display_schedule",    default: false
   end
 
   add_index "privacy_settings", ["user_id"], name: "index_privacy_settings_on_user_id", using: :btree
+
+  create_table "resources", force: :cascade do |t|
+    t.string   "name",                      null: false
+    t.text     "description",  default: ""
+    t.integer  "group_id"
+    t.integer  "course_id"
+    t.integer  "user_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "type"
+    t.integer  "category",     default: 0
+    t.string   "file_name",                 null: false
+    t.string   "content_type",              null: false
+    t.string   "cached_url"
+  end
+
+  add_index "resources", ["course_id"], name: "index_resources_on_course_id", using: :btree
+  add_index "resources", ["group_id"], name: "index_resources_on_group_id", using: :btree
+  add_index "resources", ["user_id"], name: "index_resources_on_user_id", using: :btree
 
   create_table "section_times", force: :cascade do |t|
     t.string   "building"
@@ -229,13 +321,23 @@ ActiveRecord::Schema.define(version: 20151130102508) do
   add_index "sections", ["associated_class_id"], name: "index_sections_on_associated_class_id", using: :btree
   add_index "sections", ["key", "associated_class_id"], name: "index_sections_on_key_and_associated_class_id", unique: true, using: :btree
 
+  create_table "settings", force: :cascade do |t|
+    t.string   "var",                   null: false
+    t.text     "value"
+    t.integer  "thing_id"
+    t.string   "thing_type", limit: 30
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "settings", ["thing_type", "thing_id", "var"], name: "index_settings_on_thing_type_and_thing_id_and_var", unique: true, using: :btree
+
   create_table "terms", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
-    t.string   "year"
+    t.integer  "year"
     t.string   "term_reference"
-    t.integer  "data_mode",                    default: 0
     t.string   "data_url"
     t.datetime "data_last_updated"
     t.integer  "institution_id"
@@ -243,6 +345,7 @@ ActiveRecord::Schema.define(version: 20151130102508) do
     t.date     "start_date"
     t.date     "end_date"
     t.date     "exams_end_date"
+    t.integer  "data_mode",                    default: 0
     t.string   "database_url"
     t.boolean  "database_contains_enrollment", default: false
     t.boolean  "updating",                     default: false
@@ -299,6 +402,7 @@ ActiveRecord::Schema.define(version: 20151130102508) do
     t.boolean  "notification_emails",          default: false
     t.integer  "failed_login_attempts",        default: 0
     t.boolean  "account_locked",               default: false
+    t.string   "avatar_url"
   end
 
   add_index "users", ["cas_identifier"], name: "index_users_on_cas_identifier", unique: true, using: :btree
@@ -316,8 +420,15 @@ ActiveRecord::Schema.define(version: 20151130102508) do
   add_foreign_key "group_membership_requests", "users"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
+  add_foreign_key "groups", "institutions"
   add_foreign_key "instructors", "sections"
+  add_foreign_key "mailboxer_conversation_opt_outs", "mailboxer_conversations", column: "conversation_id", name: "mb_opt_outs_on_conversations_id"
+  add_foreign_key "mailboxer_notifications", "mailboxer_conversations", column: "conversation_id", name: "notifications_on_conversation_id"
+  add_foreign_key "mailboxer_receipts", "mailboxer_notifications", column: "notification_id", name: "receipts_on_notification_id"
   add_foreign_key "privacy_settings", "users"
+  add_foreign_key "resources", "courses"
+  add_foreign_key "resources", "groups"
+  add_foreign_key "resources", "users"
   add_foreign_key "section_times", "sections"
   add_foreign_key "sections", "associated_classes"
   add_foreign_key "terms", "institutions"

@@ -1,3 +1,9 @@
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#chat").delay(200).scrollTop($("#chat")[0].scrollHeight)
+});
+</script>
+
 <h2>Chat</h2>
 
 <hr>
@@ -6,9 +12,3 @@
 
 <%= render partial: 'messages/entry', locals: {chat_channel_type: chat_channel_type,
                                                       channel_id: channel_id, nav: false, obj: nil, obj_name: ''} %>
-
-<script type="text/javascript">
-$(document).ready(function() {
-  $("#chat").scrollTop($("#chat")[0].scrollHeight)
-});
-</script>

@@ -10,11 +10,18 @@
             <h1 class="panel-title">Courses</h1>
           </div>
           <div class="list-group">
-            <% (current_user.courses.sort_by {|x| [x.term.year, x.term.term_order, x.department.name, x.number]}).each do |course| %>
-              <% if course.term == current_user.institution.current_term or course.term == current_user.institution.next_term %>
-                <%= link_to course, class: 'list-group-item' do %>
-                  <%= "#{course.department.name} #{course.number}" %> <small style="white-space:pre;"><%= course.department.term.term_name %></small>
-                <% end %>
+            <% @next_course_memberships.each do |cm| %>
+              <%= link_to cm.course, class: 'list-group-item' do %>
+                <% cmnn = cm.newNotifications %>
+                <% if cmnn > 0 %><span class="badge"><%= cmnn %></span><% end %>
+                <%= cm.course.course_number %> <small style="white-space:pre;"><%= cm.course.department.term.term_name %></small>
+              <% end %>
+            <% end %>
+            <% @current_course_memberships.each do |cm| %>
+              <%= link_to cm.course, class: 'list-group-item' do %>
+              <% cmnn = cm.newNotifications %>
+              <% if cmnn > 0 %><span class="badge"><%= cmnn %></span><% end %>
+                <%= cm.course.course_number %> <small style="white-space:pre;"><%= cm.course.department.term.term_name %></small>
               <% end %>
             <% end %>
             <%= link_to courses_url, class: 'list-group-item' do %>
@@ -30,8 +37,12 @@
             <h1 class="panel-title">Groups</h1>
           </div>
           <div class="list-group">
-            <% current_user.groups.each do |group| %>
-              <%= link_to group.name, group, class: 'list-group-item' %>
+            <% current_user.group_memberships.includes(:group).each do |gm| %>
+              <%= link_to gm.group, class: 'list-group-item' do %>
+                <% gmnn = gm.newNotifications %>
+                <% if gmnn > 0 %><span class="badge"><%= gmnn %></span><% end %>
+                <%= gm.group.name %>
+              <% end %>
             <% end %>
             <%= link_to groups_url, class: 'list-group-item' do %>
               <span class="badge"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></span>
@@ -46,12 +57,15 @@
     <!-- Main Content, order top on mobile -->
     <div class="panel panel-default">
       <div class="panel-heading">
-            <h1 class="panel-title">Events</h1>
+        <h4 class="panel-title">Your Monthly Calendar</h4>
       </div>
-      <div class="panel-body">
-        <div id="calendar2"></div>
-      </div>
+      <div id="home_calendar" style="height: 650px;"></div>
     </div>
+    <% if current_user.institution %>
+    <%= render partial: 'posts/interface', locals: {post_channel_type: 3,
+                                                           channel_id: current_user.institution.id, nav: false, obj: nil, obj_name: '', classification: current_user.institution.name} %>
+    <%= subscribe_to "/institutions/#{current_user.institution.id}/posts" %>
+    <% end %>
   </div>
   <div class="col-sm-3" id="home_right_sidebar">
     <!-- Right Sidebar, order bottom on mobile -->
@@ -60,7 +74,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <%= link_to current_user, style: 'color: black; text-decoration: none;' do %>
-              <h3><%= gravatar_for current_user, size: 30, class: 'img-rounded hidden-xs hidden-sm' %> <%= current_user.name %></h3>
+              <h3><%= avatar_for current_user, size: 30, class: 'img-rounded hidden-xs hidden-sm' %> <%= current_user.name %></h3>
             <% end %>
           </div>
           <div class="panel-body">
@@ -70,22 +84,22 @@
         </div>
       </div>
       <div class="col-xs-12" style="margin-bottom: 20px;">
-        <%= link_to 'Calendar', events_path, class: "btn btn-primary btn-block", role: "button" %>
+        <%= link_to 'Calendar', schedule_user_path(current_user), class: "btn btn-primary btn-block", role: "button" %>
       </div>
       <div class="col-xs-12" id="home_schedule_panel">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h1 class="panel-title"><%= link_to 'Schedule', schedule_path %></h1>
+            <h1 class="panel-title"><%= link_to 'Schedule', schedule_user_path(current_user) %></h1>
           </div>
           <ul class="list-group">
-            <% if current_user.course_memberships.size == 0 %>
+            <% if @current_course_memberships.size == 0 %>
               <li class="list-group-item">No Schedules</li>
             <% else %>
-              <% (current_user.current_course_memberships.sort {|a,b| "#{a.course.department.name} #{a.course.number}" <=> "#{b.course.department.name} #{b.course.number}"}).each do |cm| %>
+              <% @current_course_memberships.each do |cm| %>
                 <% if cm.sections.count == 0 %>
                   <% course = cm.course %>
                   <li class="list-group-item">
-                    <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number}", get_info_course_path(course) %><br><small><%= course.department.term.term_name %></small></h4>
+                    <h4 class="list-group-item-heading"><%= link_to course.course_number, get_info_course_path(course) %><br><small><%= course.department.term.term_name %></small></h4>
                     <p class="list-group-item-text">
                       No Schedules
                     </p>
@@ -94,7 +108,7 @@
                   <% cm.sections.each do |s| %>
                     <li class="list-group-item">
                       <% course = s.associated_class.course %>
-                      <h4 class="list-group-item-heading"><%= link_to "#{course.department.name} #{course.number} - #{s.key}", get_info_course_path(course) %><br><small><%= course.department.term.term_name %></small></h4>
+                      <h4 class="list-group-item-heading"><%= link_to "#{course.course_number} - #{s.key}", get_info_course_path(course) %><br><small><%= course.department.term.term_name %></small></h4>
                       <p class="list-group-item-text">
                         <% if course.term.in_exam_period %>
                           <% if s.exams.count == 0 %>
@@ -125,4 +139,3 @@
     </div>
   </div>
 </div>
-

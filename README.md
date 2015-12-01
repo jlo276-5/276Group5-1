@@ -6,11 +6,18 @@ This is the repository for StuHub, an online app built using Ruby on Rails and h
 ## Running
 This cannot be run properly on a local environment without the appropriate Environment Variables. Contact the developers for those.
 
+Software required: Redis Server for Resque.
+
 Otherwise just clone it or download an archive.
 
 With an appropriate Heroku setup, run `bundle exec puma -C config/puma.rb` inside the StuHub folder.
 
+You'll also need to run `redis-server` for the Redis server and then `env QUEUE=* TERM_CHILD=1 bundle exec rake environment resque:work
+` to launch the resque server.
+
 If you need the chat server, run `bundle exec rackup private_pub.ru -s thin -E production` inside the StuHub-Faye folder as well.
+
+For more specific things, please contact the developers.
 
 ## Issues
 Please open an issue for any errors, problems, and suggestions.

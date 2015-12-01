@@ -1,8 +1,15 @@
 class CoursesController < ApplicationController
+  include ActionView::Helpers::NumberHelper
+
   before_action :valid_institution
-  before_action :valid_course, only: [:show, :info, :course_members]
-  before_action :verify_membership, only: [:show]
-  layout 'course', only: [:show, :info, :enrollment, :course_members]
+  before_action :valid_course, only: [:show, :info, :enrollment, :course_members, :resources, :new_resource, :create_resource, :get_resource, :edit_resource, :update_resource, :destroy_resource]
+  before_action :verify_membership, only: [:show, :course_members, :resources, :new_resource, :create_resource, :get_resource, :edit_resource, :update_resource, :destroy_resource]
+  before_action :valid_dropbox, only: [:new_resource, :create_resource]
+  before_action :valid_resource, only: [:get_resource, :edit_resource, :update_resource, :destroy_resource]
+  before_action :can_edit_resource, only: [:edit_resource, :update_resource, :destroy_resource]
+  after_action :update_last_visited, only: [:show, :course_members, :resources, :new_resource, :get_resource, :edit_resource]
+  layout 'course', only: [:show, :info, :enrollment, :course_members, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
+
   require 'rest-client'
   require 'date'
 
@@ -104,8 +111,8 @@ class CoursesController < ApplicationController
 
     @chat_channel_type = 1;
     @post_channel_type = 1;
-    @messages = Message.where(channel_type: @chat_channel_type, channel_id: @course.id).last(30)
-    @posts = Post.where(channel_type: @post_channel_type, channel_id: @course.id).order('created_at DESC')
+    @messages = Message.includes(:user).where(channel_type: @chat_channel_type, channel_id: @course.id).last(30)
+    @posts = Post.includes(:user).where(channel_type: @post_channel_type, channel_id: @course.id).order('created_at DESC')
   end
 
   def course_members
@@ -113,7 +120,135 @@ class CoursesController < ApplicationController
     @users = @course.users.paginate(page: params[:page], per_page: 25).order('created_at ASC')
   end
 
+  def resources
+    @course = Course.find_by(id: params[:id])
+    @resources = CourseResource.where(course_id: params[:id])
+  end
+
+  def new_resource
+    @course = Course.find_by(id: params[:id])
+    @resource = CourseResource.new
+  end
+
+  def create_resource
+    @resource = CourseResource.new(resource_params)
+    @course = Course.find_by(id: params[:id])
+    client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)
+
+    if client.nil?
+      flash[:danger] = "Invalid Connection to Dropbox. Please relink your account."
+      redirect_to accounts_user_path(current_user)
+    elsif params[:course_resource][:file].blank?
+      @resource.errors.add(:base, "You must attach a file.")
+      render 'new_resource'
+    elsif !Resource.permitted_types.include?(params[:course_resource][:file].content_type)
+      @resource.errors.add(:base, 'Files of this type are not permitted')
+      render 'new_resource'
+    else
+      @resource.file_name = "#{@course.course_number}-#{params[:course_resource][:file].original_filename}"
+      @resource.content_type = params[:course_resource][:file].content_type
+      @resource.course = @course
+      @resource.user = current_user
+      existing = nil
+      begin
+        client.find("CourseResources")
+      rescue Dropbox::API::Error::NotFound
+        client.mkdir("CourseResources")
+      end
+      begin
+        existing = client.find("CourseResources/#{@resource.file_name}")
+      rescue Dropbox::API::Error::NotFound
+        existing = nil
+      end
+      begin
+        if existing.nil? && (file = client.chunked_upload("CourseResources/#{@resource.file_name}", params[:course_resource][:file].tempfile)) && @resource.save
+          @resource.update_attribute(:cached_url, file.share_url.url)
+          flash[:success] = "New Course Resource Created: File \"#{@resource.file_name}\", Size #{number_to_human_size(file.bytes)}"
+          redirect_to resources_course_path(@course)
+        elsif !existing.nil?
+          @resource.errors.add(:base, "There is already a file named #{@resource.file_name} in your Dropbox. Please name it something different.")
+          render 'new_resource'
+        else
+          render 'new_resource'
+        end
+      rescue Dropbox::API::Error => e
+        @resource.errors.add(:base, "Could not upload to Dropbox: #{e.message}.")
+        render 'new_resource'
+      end
+    end
+  end
+
+  def get_resource
+    @course = Course.find_by(id: params[:id])
+    @resource = CourseResource.find_by(id: params[:resource_id])
+
+    if @resource.cached_url and (code = RestClient.head(@resource.cached_url).code[0]) != 4 and code != 5
+      redirect_to @resource.cached_url
+    else
+      if current_user.dropbox_token.blank? or current_user.dropbox_secret.blank? or (client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)).nil?
+        flash[:danger] = "That Resource is no longer available."
+        @resource.destroy
+        redirect_to resources_course_path(@course)
+      else
+        begin
+          file = client.find("CourseResources/#{@resource.file_name}")
+          @resource.update_attribute(:cached_url, file.share_url.url)
+          redirect_to @resource.cached_url
+        rescue Dropbox::API::Error => e
+          flash[:danger] = "That Resource is no longer available."
+          @resource.destroy
+          redirect_to resources_course_path(@course)
+        end
+      end
+    end
+  end
+
+  def edit_resource
+    @course = Course.find_by(id: params[:id])
+    @resource = CourseResource.find_by(id: params[:resource_id])
+  end
+
+  def update_resource
+    resource = CourseResource.find_by(id: params[:resource_id])
+    if !params[:course_resource][:file].blank?
+      @resource.errors.add(:base, "You cannot change the file that the Resource points to. Please create a new Resource.")
+      render 'edit_resource'
+    elsif resource.update_attributes(resource_params)
+      flash.now[:success] = "Resource Updated"
+      redirect_to resources_course_path(@course)
+    else
+      render 'edit_resource'
+    end
+  end
+
+  def destroy_resource
+    @course = Course.find_by(id: params[:id])
+    resource = CourseResource.find_by(id: params[:resource_id])
+    client = Dropbox::API::Client.new(token: resource.user.dropbox_token, secret: resource.user.dropbox_secret)
+    if resource.destroy
+      if resource.file_name.blank? or client.nil?
+        flash[:warning] = "Resource Deleted, but could not delete file from Dropbox."
+      else
+        begin
+          client.destroy("CourseResources/#{@resource.file_name}")
+          flash[:success] = "Resource Deleted"
+        rescue Dropbox::API::Error::NotFound
+          flash[:success] = "Resource Deleted"
+        rescue Dropbox::API::Error => e
+          flash[:warning] = "Resource Deleted, but could not delete the file from Dropbox: #{e.message}."
+        end
+      end
+    else
+      flash[:danger] = "Could not delete Resource"
+    end
+    redirect_to resources_course_path(@course)
+  end
+
   private
+
+  def resource_params
+    params.require(:course_resource).permit(:name, :description, :category)
+  end
 
   def get_departments_api(term)
     departments = term.departments
@@ -319,8 +454,6 @@ class CoursesController < ApplicationController
     return course
   end
 
-  private
-
   def valid_institution
     @institution = current_user.institution
     if @institution.nil?
@@ -337,11 +470,45 @@ class CoursesController < ApplicationController
     end
   end
 
+  def valid_dropbox
+    @course = Course.find_by(id: params[:id])
+
+    unless !(current_user.dropbox_token.blank? or current_user.dropbox_secret.blank? or (client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)).nil?)
+      flash[:warning] = "You must connect your account to Dropbox to upload files."
+      redirect_to resources_course_path(@course)
+    end
+  end
+
+  def valid_resource
+    @course = Course.find_by(id: params[:id])
+    @resource = CourseResource.find_by(id: params[:resource_id])
+    if @resource.nil? or @resource.course != @course
+      flash[:danger] = "No such resource exists with an id #{params[:resource_id]}"
+      redirect_to resources_course_path(@course)
+    end
+  end
+
+  def can_edit_resource
+    @course = Course.find_by(id: params[:id])
+    @resource = CourseResource.find_by(id: params[:resource_id])
+    unless (!@resource.user.nil? and current_user?(@resource.user)) or current_user.admin?
+      flash[:danger] = "You do not have the permission to do that."
+      redirect_to resources_course_path(@course)
+    end
+  end
+
   def verify_membership
     @course = Course.find_by(id: params[:id])
     if @course and !current_user.memberOfCourse?(@course)
       flash[:warning] = "You are not a member of this course yet."
       redirect_to get_info_course_path(@course)
+    end
+  end
+
+  def update_last_visited
+    gm = CourseMembership.find_by(course_id: params[:id], user_id: current_user.id)
+    unless gm.nil?
+      gm.touch :last_visited_at
     end
   end
 end

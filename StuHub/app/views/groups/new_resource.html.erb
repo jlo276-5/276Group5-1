@@ -1,0 +1,11 @@
+<% provide(:title, "New Resource - #{@group.name}") %>
+<% provide(:main_title, @group.name) %>
+
+<div class="panel panel-default post_panel">
+  <div class="panel-heading">
+    <h3 class="panel-title">New Group Resource</h3>
+  </div>
+  <div class="panel-body">
+    <%= render partial: 'resources/form', locals: {dest: resources_group_path(@group)} %>
+  </div>
+</div>

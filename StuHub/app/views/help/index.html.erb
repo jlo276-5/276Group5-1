@@ -1,0 +1,107 @@
+<% provide(:title, "Help") %>
+
+<% if logged_in? %>
+<div class="alert alert-info" role="alert">
+  NOTE: StuHub is under constant development. Please read about our <%= link_to 'latest changes', help_item_path(page: 'changes'), class: 'alert-link' %>.
+</div>
+<% end %>
+
+<div class="jumbotron" style="text-align: center;">
+  <h1>Help</h1>
+  <p>StuHub is designed to be simple to use, but sometimes things get tough.<br>Use this help guide to find your way around.</p>
+  <p>If you still can't find your way, contact us directly!</p>
+  <p><%= link_to 'Contact Us', contact_path, class: 'btn btn-primary btn-lg', role: 'button' %></p>
+</div>
+
+<div class="row">
+  <div class="col-sm-4 <%= 'col-sm-offset-4' unless logged_in? and false %>">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">General</h3>
+      </div>
+      <div class="panel-body">
+        <p>Want to find out more about StuHub?</p>
+        <p>This contains anything and everything about StuHub and its developers.</p>
+      </div>
+      <div class="list-group">
+        <%= link_to 'About StuHub', about_path, class: 'list-group-item' %>
+        <%= link_to 'Recent Changes', help_item_path(page: 'changes'), class: 'list-group-item' if logged_in? %>
+        <%= link_to 'Terms of Use', terms_path, class: 'list-group-item' %>
+        <%= link_to 'FAQ', faq_path, class: 'list-group-item' %>
+        <%= link_to 'Contact Us', contact_path, class: 'list-group-item' %>
+      </div>
+    </div>
+  </div>
+  <% if logged_in? and false %>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= link_to 'Registration', help_item_path(page: 'registration') %></h3>
+      </div>
+      <div class="list-group">
+        <%= link_to 'Coming Soon', help_item_path(page: 'registration'), class: 'list-group-item' %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= link_to 'General', help_item_path(page: 'general') %></h3>
+      </div>
+      <div class="list-group">
+        <%= link_to 'Coming Soon', help_item_path(page: 'general'), class: 'list-group-item' %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
+<% if logged_in? and false%>
+<div class="row">
+  <div class="col-sm-4 <%= 'col-sm-offset-2' unless current_user.admin? %>">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= link_to 'Courses', help_item_path(page: 'courses') %></h3>
+      </div>
+      <div class="list-group">
+        <%= link_to 'Coming Soon', help_item_path(page: 'courses'), class: 'list-group-item' %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= link_to 'Groups', help_item_path(page: 'groups') %></h3>
+      </div>
+      <div class="list-group">
+        <%= link_to 'Coming Soon', help_item_path(page: 'groups'), class: 'list-group-item' %>
+      </div>
+    </div>
+  </div>
+  <% if current_user.admin? %>
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= link_to 'Administration', help_item_path(page: 'admin') %></h3>
+      </div>
+      <div class="list-group">
+        <%= link_to 'Coming Soon', help_item_path(page: 'admin'), class: 'list-group-item' %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
+<% end %>
+<% if logged_in? and current_user.admin? and false %>
+<div class="row">
+  <div class="col-sm-4 col-sm-offset-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= link_to 'Institutions', help_item_path(page: 'institutions') %></h3>
+      </div>
+      <div class="list-group">
+        <%= link_to 'Coming Soon', help_item_path(page: 'institutions'), class: 'list-group-item' %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

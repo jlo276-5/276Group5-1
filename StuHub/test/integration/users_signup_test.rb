@@ -4,12 +4,13 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
 
   def setup
     ActionMailer::Base.deliveries.clear
+    @institution = institutions(:institution)
   end
 
   test "invalid registration" do
     get register_path
     assert_no_difference 'User.count' do
-      post users_path, user: {name: "", email: "user@invalid",
+      post users_path, user: {email: "",
                               password: "foo", password_confirmation: "bar"}
     end
     assert_template 'users/new'
@@ -18,8 +19,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   test "valid registration with activation" do
     get register_path
     assert_difference 'User.count', 1 do
-      post users_path, user: {name: "Test User", email: "tester@example.com",
-                              password: "test123", password_confirmation: "test123"}
+      post users_path, user: {email: "tester@example.com",
+                              password: "test123", password_confirmation: "test123", tos_agree: "1"}
     end
     assert_equal 1, ActionMailer::Base.deliveries.size
     user = assigns(:user)

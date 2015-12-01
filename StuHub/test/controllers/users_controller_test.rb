@@ -31,7 +31,11 @@ class UsersControllerTest < ActionController::TestCase
   test "should error when updating without current password as standard" do
     log_in_as(@user)
 
-    patch :update, id: @user, user: { name: @user.name, email: @user.email }
+    patch :update, id: @user, new_email: "#{@user.email}c"
+    assert_not flash[:danger]
+    flash.each do |m_t, m|
+      p m_t
+    end
     assert_template 'users/edit'
     assert_select 'div[id=?]', 'error_explanation'
   end

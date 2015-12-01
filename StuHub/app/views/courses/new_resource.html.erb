@@ -1,0 +1,12 @@
+<% provide(:title, "New Resource - #{@course.course_number}") %>
+<% provide(:main_title, "#{@course.course_number} - #{@course.name}") %>
+<% provide(:sub_title, @course.department.term.term_name) %>
+
+<div class="panel panel-default post_panel">
+  <div class="panel-heading">
+    <h3 class="panel-title">New Course Resource</h3>
+  </div>
+  <div class="panel-body">
+    <%= render partial: 'resources/form', locals: {dest: resources_course_path(@course)} %>
+  </div>
+</div>

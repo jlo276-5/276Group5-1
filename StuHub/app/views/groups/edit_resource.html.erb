@@ -1,0 +1,11 @@
+<% provide(:title, "Edit #{@resource.name} - #{@group.name}") %>
+<% provide(:main_title, @group.name) %>
+
+<div class="panel panel-default post_panel">
+  <div class="panel-heading">
+    <h3 class="panel-title">Edit <%= @resource.name %></h3>
+  </div>
+  <div class="panel-body">
+    <%= render partial: 'resources/form', locals: {dest: resource_group_path(@group, resource_id: @resource.id)} %>
+  </div>
+</div>

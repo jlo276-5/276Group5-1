@@ -1,0 +1,58 @@
+<% provide(:title, 'Contact Requests - Admin') %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <% if params[:resolved] == "true" %>
+    <h1 class="panel-title">Resolved Contact Requests <small><%= link_to 'See Unresolved', contact_requests_path %></small></h1>
+    <% else %>
+    <h1 class="panel-title">Unresolved Contact Requests <small><%= link_to 'See Resolved', contact_requests_path(resolved: true) %></small></h1>
+    <% end %>
+  </div>
+  <div class="panel-body" style="text-align: center;">
+    <% if params[:resolved] == "true" && @contact_requests.count <= 0 %>
+      <h4>No Resolved Contact Requests</h4>
+    <% elsif @contact_requests.count <= 0 %>
+      <h4>No Unresolved Contact Requests</h4>
+    <% else %>
+      <%= will_paginate @contact_requests, style: 'margin: 0;' %>
+    <% end %>
+  </div>
+  <% if @contact_requests.count > 0 %>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover" id="contact_requests">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Title</th>
+            <th style="min-width: 200px;">Date</th>
+            <th style="min-width: 240px;">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @contact_requests.each do |cr| %>
+            <tr class="<%= cr.table_row_type %>">
+              <td><%= "##{cr.id}" %></td>
+              <% if @user = User.find_by(email: cr.email) %>
+                <td><%= link_to @user.name, @user %><br><small><%= @user.email %></small></td>
+              <% else %>
+                <td><%= cr.name %><br><small><%= cr.email %></small></td>
+              <% end %>
+              <td><%= "[#{cr.type_string}] #{cr.title}" %></td>
+              <td><%= cr.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></td>
+              <td>
+                <div class="col-xs-6">
+                  <%= link_to "Show", contact_request_path(cr), class: "btn btn-primary btn-block btn-sm", role: "button" %>
+                </div>
+                <div class="col-xs-6">
+                  <%= link_to "Delete", contact_request_path(cr), method: "delete", class: "btn btn-danger btn-block btn-sm", role: "button", data: { confirm: "Are you sure you want to delete this Contact Request?" } %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

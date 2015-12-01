@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   belongs_to :institution
   has_one :privacy_setting, dependent: :destroy
-  has_many :events,dependent: :destroy
+  has_many :events, dependent: :destroy
   has_many :user_interests, dependent: :destroy
   has_many :course_memberships, dependent: :destroy
   has_many :courses, through: :course_memberships
@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
   validates :name, length: { maximum: 50 }
   validates :tos_agree, acceptance: true
   validates :role, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2}
+  validates :cas_identifier, allow_blank: true, uniqueness: true
 
   def name
     read_attribute(:name) || read_attribute(:email).partition('@').first
@@ -99,6 +100,7 @@ class User < ActiveRecord::Base
 
   def unlock_account
     update_attribute(:account_locked, false)
+    update_attribute(:failed_login_attempts, 0)
   end
 
   #check if password exist
@@ -213,13 +215,54 @@ class User < ActiveRecord::Base
 
   def current_course_memberships
     ccm = []
-    self.course_memberships.each do |cm|
-      t = cm.course.term
-      if t == self.institution.current_term
-        ccm << cm
+    unless self.institution.nil? or self.institution.current_term.nil?
+      c_t = self.institution.current_term
+      self.course_memberships.includes(course: [{department: :term}]).each do |cm|
+        if cm.course.term == c_t
+          ccm << cm
+        end
       end
     end
     return ccm
+  end
+
+  def next_course_memberships
+    ccm = []
+    unless self.institution.nil? or self.institution.next_term.nil?
+      n_t = self.institution.next_term
+      self.course_memberships.includes(course: [{department: :term}]).each do |cm|
+        if cm.course.term == n_t
+          ccm << cm
+        end
+      end
+    end
+    return ccm
+  end
+
+  def current_courses
+    current = []
+    unless self.institution.nil? or self.institution.current_term.nil?
+      c_t = self.institution.current_term
+      self.courses.includes(department: :term).each do |c|
+        if c.term == c_t
+          current << c
+        end
+      end
+    end
+    return current
+  end
+
+  def next_courses
+    nextcourses = []
+    unless self.institution.nil? or self.institution.next_term.nil?
+      n_t = self.institution.next_term
+      self.courses.includes(department: :term).each do |c|
+        if c.term == n_t
+          nextcourses << c
+        end
+      end
+    end
+    return nextcourses
   end
 
   private

@@ -2,6 +2,14 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
+  get 'contact', to: 'contact_requests#new'
+  post 'contact', to: 'contact_requests#create'
+  get 'faq', to: 'help#faq'
+  get 'terms', to: 'help#terms'
+  get 'about', to: 'help#about'
+  get 'help/*page', to: 'help#show', as: 'help_item'
+  get 'help', to: 'help#index'
+
   post 'dropbox_link', to: 'dropbox_auth#link'
   post 'dropbox_unlink', to: 'dropbox_auth#unlink'
   get 'dropbox_callback', to: 'dropbox_auth#callback'
@@ -15,7 +23,7 @@ Rails.application.routes.draw do
   # Routes for events
   resources :events do
     collection do
-      get :get_events
+      get 'user_events'
     end
     member do
       post:move
@@ -38,6 +46,14 @@ Rails.application.routes.draw do
       post 'demote_member', to: 'groups#demote_member'
       get 'requests', to: 'groups#group_requests'
       get 'users', to: 'groups#group_members'
+      get 'resources', to: 'groups#resources'
+      post 'resources', to: 'groups#create_resource'
+      get 'resources/new', to: 'groups#new_resource', as: 'new_resource'
+      get 'resources/:resource_id/edit', to: 'groups#edit_resource', as: 'edit_resource'
+      get 'resources/:resource_id', to: 'groups#get_resource', as: 'resource'
+      patch 'resources/:resource_id', to: 'groups#update_resource'
+      put 'resources/:resource_id', to: 'groups#update_resource'
+      delete 'resources/:resource_id', to: 'groups#destroy_resource'
     end
     collection do
       get 'search', to: 'groups#search'
@@ -61,6 +77,14 @@ Rails.application.routes.draw do
       get 'users', to: 'courses#course_members'
       get 'info', to: 'courses#info', as: 'get_info'
       get 'enrollment', to: 'courses#enrollment'
+      get 'resources', to: 'courses#resources'
+      post 'resources', to: 'courses#create_resource'
+      get 'resources/new', to: 'courses#new_resource', as: 'new_resource'
+      get 'resources/:resource_id/edit', to: 'courses#edit_resource', as: 'edit_resource'
+      get 'resources/:resource_id', to: 'courses#get_resource', as: 'resource'
+      patch 'resources/:resource_id', to: 'courses#update_resource'
+      put 'resources/:resource_id', to: 'courses#update_resource'
+      delete 'resources/:resource_id', to: 'courses#destroy_resource'
     end
     collection do
       get 'get_terms',       to: 'courses#get_terms'
@@ -71,9 +95,15 @@ Rails.application.routes.draw do
 
   # Routes for Administration
   get 'admin', to: 'admin#index'
+  post 'admin', to: 'admin#update_settings'
   get 'admin/users', to: 'admin#user_management'
   get '/institutions/:id/users', to: 'institutions#users', as: 'institution_users'
   scope '/admin' do
+    resources :contact_requests, only: [:index, :show, :destroy] do
+      member do
+        post 'resolve'
+      end
+    end
     resources :institutions do
       resources :terms, only: [:new, :create, :edit, :update, :destroy] do
         member do
@@ -94,7 +124,6 @@ Rails.application.routes.draw do
   resources :account_activations, only: [:edit]
   resources :email_changes, only: [:edit]
   get 'register' => 'users#new'
-  get 'schedule', to: 'users#schedule'
   resources :users, only: [:index, :create, :show, :edit, :update, :destroy] do
     member do
       post 'promote'
@@ -103,16 +132,13 @@ Rails.application.routes.draw do
       get 'groups'
       get 'accounts'
       get 'customize'
+      get 'schedule'
     end
   end
 
-  # Routes for Static Pages
-  get 'about' => 'static_pages#about'
-  get 'terms' => 'static_pages#terms'
-  get 'help'  => 'static_pages#help'
-
   # Home page for logged in Users
   get 'home' => 'home#home'
+  get 'new_index', to: 'index#new_index'
 
   # You can have the root of your site routed with "root"
   root 'index#index'

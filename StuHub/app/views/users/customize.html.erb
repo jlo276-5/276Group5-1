@@ -28,7 +28,7 @@
           <div class="col-sm-2 col-md-2">
             <div class="checkbox">
               <label>
-                <%= p.check_box :display_institution %> Show
+                <%= p.check_box :display_institution %> Public
               </label>
             </div>
           </div>
@@ -42,7 +42,7 @@
           <div class="col-sm-2 col-md-2">
             <div class="checkbox">
               <label>
-                <%= p.check_box :display_major %> Show
+                <%= p.check_box :display_major %> Public
               </label>
             </div>
           </div>
@@ -59,7 +59,7 @@
           <div class="col-sm-2 col-md-2">
             <div class="checkbox">
               <label>
-                <%= p.check_box :display_about_me %> Show
+                <%= p.check_box :display_about_me %> Public
               </label>
             </div>
           </div>
@@ -74,7 +74,7 @@
           <div class="col-sm-2 col-md-2">
             <div class="checkbox">
               <label>
-                <%= p.check_box :display_birthday %> Show
+                <%= p.check_box :display_birthday %> Public
               </label>
             </div>
           </div>
@@ -96,7 +96,7 @@
           <div class="col-sm-2 col-md-2">
             <div class="checkbox">
               <label>
-                <%= p.check_box :display_gender %> Show
+                <%= p.check_box :display_gender %> Public
               </label>
             </div>
           </div>
@@ -112,7 +112,7 @@
           <div class="col-sm-2 col-md-2">
             <div class="checkbox">
               <label>
-                <%= p.check_box :display_website %> Show
+                <%= p.check_box :display_website %> Public
               </label>
             </div>
           </div>
@@ -132,6 +132,12 @@
               <label>
                 <%= p.check_box :display_groups %> Make Groups List Public
               </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <%= p.check_box :display_schedule %> Make Calendar/Schedule Public
+              </label>
+              <span id="helpBlock" class="help-block"><strong>Note: </strong>Your schedule is auto-generated from your Courses. Making this public will reveal those even if your Course List is private.</span>
             </div>
           </div>
         </div>
@@ -169,8 +175,16 @@
         <hr>
 
         <div class="form-group" style="text-align: center;">
-          <h4>StuHub uses avatars from Gravatar</h4>
-          <p><a href="http://gravatar.com/emails" target="_blank">Manage your avatars directly on their site.</a></p>
+          <h4>StuHub supports avatars from Gravatar</h4>
+          <p><a href="http://gravatar.com/emails" target="_blank"><strong>Manage your avatars directly on their site.</strong></a></p>
+          <p>You can also provide a URL to your Avatar Image.<br>This takes precedence over Gravatar, which will act as a fallback.</p>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :avatar_url, 'Avatar URL', class: 'col-sm-4 col-md-3 control-label' %>
+          <div class="col-sm-8 col-md-9">
+            <%= f.url_field :avatar_url, class: 'form-control', placeholder: 'Avatar URL' %>
+          </div>
         </div>
 
         <div class="row">
@@ -184,4 +198,4 @@
   </div>
 <% end %>
 
-<%= render 'profile_template' %>
+<%= render 'settings' %>

@@ -44,7 +44,8 @@
               <tr>
                 <td><%= link_to group.name, group %></td>
                 <td><%= group.creator %></td>
-                <td><%= Message.where(channel_type: 5, channel_id: group.id).last.nil? ? "Never" : Message.where(channel_type: 5, channel_id: group.id).last.created_at.in_time_zone.strftime("%b %d, %l:%M %p") %></td>
+                <% last_post = Post.where(channel_type: 2, channel_id: group.id).last %>
+                <td><%= last_post.nil? ? "Never" : last_post.created_at.in_time_zone.strftime("%b %d %Y, %l:%M %p") %></td>
                 <td><%= group.users.size %></td>
                 <td style="min-width: 300px;">
                   <% @gm = current_user.group_memberships.find_by(group_id: group.id) %>

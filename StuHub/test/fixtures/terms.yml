@@ -7,7 +7,27 @@
 fifteenfall:
   name: FALL
   year: 2015
-#
+  term_reference: 1157
+  institution: institution
+  enrollment_start_date: 2015-09-09 20:50:50
+  start_date: 2015-11-09 20:50:50
+  end_date: 2015-12-09 20:50:50
+  exams_end_date: 2015-12-24 20:50:50
+  data_mode: 1
+  data_url: http://www.example.com
+  term_order: 3
+
 sixteenspring:
   name: SPRING
   year: 2016
+  term_reference: 1161
+  institution: institution
+  enrollment_start_date: 2015-11-09 20:50:50
+  start_date: 2016-01-09 20:50:50
+  end_date: 2016-04-09 20:50:50
+  exams_end_date: 2016-04-25 20:50:50
+  data_mode: 1
+  data_url: http://www.example.com
+  database_url: http://www.sfu.ca/content/dam/sfu/irp/courses/coursesectionavailability/1161/database.1161.xlsx
+  term_order: 1
+  database_contains_enrollment: true

@@ -1,53 +1,93 @@
-<p id="notice"><%= notice %></p>
-<style>
-  strong{
-    color:#B22222;
-    font-size:20px;
-  }
-</style>
-<div class="col-sm-4 col-sm-push-0" id="form_render"  style = "margin-top:50px">
-<p>
-  Title:
-  <strong><%= @event.title %></strong>
-</p>
+<% provide(:title, "Event \"#{@event.title}\"") %>
 
-<p>
-  Description:
-  <strong><%= @event.description %></strong>
-</p>
-
-<p>
-  Strat time:
-  <strong><%= @event.strat_time %></strong>
-</p>
-<p>
-  End time:
-  <strong><%= @event.end_time %></strong>
-</p>
-  <div class="col-xs-6" style="margin-top: 15px;">
-        <%= link_to 'Edit', edit_event_path(@event), class: "btn btn-primary btn-block", role: "button" %>
-  </div>
-  <div class="col-xs-6" style="margin-top: 15px;">
-        <%= link_to 'Back', events_path, class: "btn btn-primary btn-block", role: "button" %>
-  </div>
-  <div class="col-sm-5" style="margin-top: 10px;">
-        <%= link_to 'Delete', @event, method: :delete, data: { confirm: 'Are you sure?' } %>
-  </div>
-</div>
-
-<div class="col-sm-6 col-sm-push-2" id="show_calendar"  >
-    <!-- Main Content, order top on mobile -->
+<div class="row">
+  <div class="col-sm-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-            <h1 class="panel-title">Events</h1>
+        <h4 class="panel-title">Event Details</h4>
       </div>
       <div class="panel-body">
-        <div id="calendar2"></div>
+        <%= form_for(@event, html: {class: 'form-horizontal'}) do |f| %>
+          <div class="form-group">
+            <%= f.label :title, class: 'col-sm-4 col-md-3 control-label' %>
+            <div class="col-sm-8 col-md-9">
+              <p class="form-control-static"><%= @event.title %></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= f.label :description, class: 'col-sm-4 col-md-3 control-label' %>
+            <div class="col-sm-8 col-md-9">
+              <p class="form-control-static"><%= @event.description %></p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :start_time, 'Start Time', class: 'col-sm-4 col-md-3 control-label' %>
+            <div class="col-sm-8 col-md-9">
+              <p class="form-control-static"><%= @event.start_time.in_time_zone.strftime("%B %d, %Y at %l:%M %p") %></p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :end_time, 'End Time', class: 'col-sm-4 col-md-3 control-label' %>
+            <div class="col-sm-8 col-md-9">
+              <p class="form-control-static"><%= @event.end_time.in_time_zone.strftime("%B %d, %Y at %l:%M %p") %></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= f.label :dow, 'Recurrence', class: 'col-sm-4 col-md-3 control-label' %>
+            <div class="col-sm-8 col-md-9">
+              <p class="form-control-static">
+                <% if @event.dow.nil? or @event.dow == [] %>
+                None
+                <% else %>
+                  <% @event.dow.each do |dow| %>
+                    <%= "#{Event.weekdays[dow.to_i]}#{ ', ' unless dow == @event.dow.last }" %>
+                  <% end %>
+                <% end %>
+              </p>
+            </div>
+          </div>
+
+          <% unless @event.dow.nil? or @event.dow == [] %>
+            <div class="form-group">
+              <%= f.label :start_date, 'Recur From', class: 'col-sm-4 col-md-3 control-label' %>
+              <div class="col-sm-8 col-md-9">
+                <p class="form-control-static"><%= @event.start_date.in_time_zone.strftime("%B %d, %Y") %></p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :end_date, 'Recur Until', class: 'col-sm-4 col-md-3 control-label' %>
+              <div class="col-sm-8 col-md-9">
+                <p class="form-control-static"><%= @event.end_date.in_time_zone.strftime("%B %d, %Y") %></p>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+
+        <div class="row">
+          <div class="col-xs-4">
+            <%= link_to 'Back', schedule_user_path(@event.user), class: "btn btn-primary btn-block", role: "button" %>
+          </div>
+          <div class="col-xs-4">
+            <%= link_to 'Edit', edit_event_path(@event), class: "btn btn-primary btn-block", role: "button" %>
+          </div>
+          <div class="col-xs-4">
+            <%= link_to 'Delete', @event, method: :delete, class: "btn btn-danger btn-block", data: { confirm: 'Are you sure?' } %>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title">User Calendar</h1>
+      </div>
+      <div class="panel-body">
+        <div id="home_calendar"></div>
+      </div>
+    </div>
+  </div>
 </div>
-
-
-
-
-

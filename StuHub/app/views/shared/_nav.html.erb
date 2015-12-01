@@ -1,37 +1,62 @@
-<nav class="navbar navbar-inverse navbar-static-top navbar-mod">
+<nav class="navbar navbar-inverse <%= fixment.blank? ? 'navbar-static-top' : fixment %> <%= 'navbar-mod' if StuHubSettings.compact_navbar %>">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-content" aria-expanded="false">
         <span class="icon-bar"></span>
-        <!-- Disabled the lower two bars to make it fit on the slim nav bar -->
-        <!-- <span class="icon-bar"></span>
-        <span class="icon-bar"></span> -->
+        <% unless StuHubSettings.compact_navbar %>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <% end %>
       </button>
-      <% if logged_in? %>
-        <%= link_to 'Home', home_path, class: "navbar-brand" %>
+      <% path = logged_in? ? home_path : root_path %>
+      <% if StuHubSettings.compact_header %>
+        <% if StuHubSettings.compact_navbar %>
+        <%= link_to (image_tag("logo-2-03.png", height: '26px')), path, class: 'navbar-brand', style: 'padding: 2px 15px;' %>
+        <% else %>
+        <%= link_to (image_tag("logo-2-03.png", height: '30px')), path, class: 'navbar-brand', style: 'padding: 10px 15px;' %>
+        <% end %>
+        <%= link_to 'StuHub', path, class: "navbar-brand" %>
       <% else %>
-        <%= link_to 'Welcome', root_path, class: "navbar-brand" %>
+        <%= link_to (logged_in? ? 'Home' : 'Welcome'), path, class: "navbar-brand" %>
       <% end %>
-      <%#= link_to (image_tag("logo-2-03.png", height: '30px')), root_path, class: 'navbar-brand' %>
     </div>
     <div class="collapse navbar-collapse" id="navbar-content">
       <% if logged_in? %>
         <ul class="nav navbar-nav">
-          <li class="dropdown <%= 'active' if current_page?(current_user) %>">
+          <li class="dropdown <%= 'active' if current_page?(courses_path) %>">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               Courses <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="<%= 'active' if current_page?(courses_user_path(current_user)) %>"><%= link_to 'Your Courses', courses_user_path(current_user) %></li>
+              <% if current_user.current_courses.size > 0 %>
+                <li class="dropdown-header">Current Term</li>
+                <% (current_user.current_courses.sort_by {|x| [-(x.term.year), -(x.term.term_order), x.department.name, x.number]}).each do |c| %>
+                  <li class="<%= 'active' if current_page?(c) %>"><%= link_to "#{c.department.name} #{c.number}", c %></li>
+                <% end %>
+                <li role="separator" class="divider"></li>
+              <% end %>
+              <% if current_user.next_courses.size > 0 %>
+                <li class="dropdown-header">Next Term</li>
+                <% (current_user.next_courses.sort_by {|x| [-(x.term.year), -(x.term.term_order), x.department.name, x.number]}).each do |c| %>
+                  <li class="<%= 'active' if current_page?(c) %>"><%= link_to "#{c.department.name} #{c.number}", c %></li>
+                <% end %>
+                <li role="separator" class="divider"></li>
+              <% end %>
+              <li class="<%= 'active' if current_page?(courses_user_path(current_user)) %>"><%= link_to 'All Your Courses', courses_user_path(current_user) %></li>
               <li class="<%= 'active' if current_page?(courses_path) %>"><%= link_to 'Course Browser', courses_path %></li>
             </ul>
           </li>
-          <li class="dropdown <%= 'active' if current_page?(current_user) %>">
+          <li class="dropdown <%= 'active' if current_page?(groups_path) %>">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               Groups <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="<%= 'active' if current_page?(groups_user_path(current_user)) %>"><%= link_to 'Your Groups', groups_user_path(current_user) %></li>
+              <% if current_user.groups.size > 0 %>
+                <% current_user.groups.each do |g| %>
+                  <li class="<%= 'active' if current_page?(g) %>"><%= link_to g.name, g %></li>
+                <% end %>
+                <li role="separator" class="divider"></li>
+              <% end %>
               <li class="<%= 'active' if current_page?(groups_path) %>"><%= link_to 'All Groups', groups_path %></li>
             </ul>
           </li>
@@ -39,7 +64,6 @@
         </ul>
       <% end %>
       <ul class="nav navbar-nav navbar-right">
-        <li class="<%= 'active' if current_page?(help_path) %>"><%= link_to 'Help', help_path %></li>
         <% if logged_in? %>
           <% if current_user.admin? %>
             <li class="dropdown <%= 'active' if current_page?(admin_path) %>">
@@ -48,21 +72,26 @@
                 <li class="<%= 'active' if current_page?(admin_path) %>"><%= link_to 'General Settings', admin_path %></li>
                 <li class="<%= 'active' if current_page?(admin_users_path) %>"><%= link_to 'User Management', admin_users_path %></li>
                 <li class="<%= 'active' if current_page?(institutions_path) %>"><%= link_to 'Institutions', institutions_path %></li>
+                <li class="<%= 'active' if current_page?(contact_requests_path) %>"><%= link_to 'Contact Requests', contact_requests_path %></li>
               </ul>
             </li>
           <% end %>
           <li class="dropdown <%= 'active' if current_page?(current_user) %>">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              <%= gravatar_for current_user, size: 20, class: 'img-rounded' %>&nbsp;&nbsp;<%= current_user.name %> <span class="caret"></span>
+              <%= avatar_for current_user, size: 20, class: 'img-rounded' %>&nbsp;&nbsp;<%= current_user.name %> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Your Profile', current_user %></li>
-              <li class="<%= 'active' if current_page?(edit_user_path(current_user)) %>"><%= link_to 'Account Settings', edit_user_path(current_user) %></li>
+              <li class="<%= 'active' if current_page?(help_path) %>"><%= link_to 'Help', help_path %></li>
+              <li class="<%= 'active' if current_page?(contact_path) %>"><%= link_to 'Contact StuHub', contact_path %></li>
               <li role="separator" class="divider"></li>
-              <li><%= link_to 'Logout', logout_path, method: "delete" %></li>
+              <li class="<%= 'active' if current_page?(current_user) %>"><%= link_to 'Profile', current_user %></li>
+              <li class="<%= 'active' if current_page?(customize_user_path(current_user)) or current_page?(accounts_user_path(current_user)) or current_page?(edit_user_path(current_user)) %>"><%= link_to 'Settings', customize_user_path(current_user) %></li>
+              <li role="separator" class="divider"></li>
+              <li><%= link_to 'Logout', logout_path, method: "delete", data: {confirm: "Are you sure you want to log out?"} %></li>
             </ul>
           </li>
         <% else %>
+          <li class="<%= 'active' if current_page?(help_path) %>"><%= link_to 'Help', help_path %></li>
           <li class="<%= 'active' if current_page?(about_path) %>"><%= link_to 'About', about_path %></li>
           <li class="<%= 'active' if current_page?(register_path) %>"><%= link_to 'Register', register_path %></li>
           <li class="<%= 'active' if current_page?(login_path) %>"><%= link_to 'Login', login_path %></li>

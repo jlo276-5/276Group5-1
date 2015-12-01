@@ -1,6 +1,7 @@
 class Institution < ActiveRecord::Base
   has_many :users, dependent: :destroy
   has_many :terms, dependent: :destroy
+  has_many :groups, dependent: :destroy
 
   def current_term
     terms.order("enrollment_start_date DESC").each do |t|

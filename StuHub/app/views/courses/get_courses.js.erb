@@ -10,7 +10,7 @@ tr = document.createElement("tr")
 <% @courses.each do |course| %>
   tr = document.createElement("tr")
   td1 = document.createElement("td")
-  td1.innerHTML = '<td><%= link_to get_info_course_url(course) do %><%= course.department.name + " " + course.number %><% end %></td>'
+  td1.innerHTML = '<td><%= link_to course.course_number, get_info_course_url(course) %></td>'
   td2 = document.createElement("td")
   td2.innerHTML = '<td><%= link_to get_info_course_url(course) do %><%= course.name.blank? ? "[Click to add this Course to StuHub]" : course.name %><% end %></td>'
   td3 = document.createElement("td")

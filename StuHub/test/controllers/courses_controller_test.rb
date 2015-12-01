@@ -10,22 +10,19 @@ class CoursesControllerTest < ActionController::TestCase
     @coursetwo = courses(:coursetwo)
   end
 
-  test "should show index with years" do
+  test "should show index with departments" do
     log_in_as(@user)
     get :index
     assert_template :index
-    assert_select 'select.year_select' do |elements|
-      assert_select 'option', range: 2..5
-    end
-    assert_select 'select.term_select' do |elements|
-      assert_select 'option', 1
+    assert_select 'select.department_select' do |elements|
+      assert_select 'option', range: 1..100
     end
   end
 
   test "should show courses with provided params" do
     log_in_as(@user)
 
-    get :index, year: years(:fifteen).id, term: terms(:fifteenfall), department: departments(:cmpt)
+    get :index, department: departments(:cmpt)
     assert_template :index
     assert_select 'select.department_select' do
       assert_select 'option', range: 2..100
@@ -35,30 +32,12 @@ class CoursesControllerTest < ActionController::TestCase
     end
   end
 
-  test "get_terms" do
-    log_in_as(@user)
-
-    get :index
-    assert_template :index
-    get :get_terms, xhr: true, format: :js, year_id: years(:fifteen).id
-    assert_response :success
-  end
-
-  test "get_departments" do
-    log_in_as(@user)
-
-    get :index
-    assert_template :index
-    get :get_departments, xhr: true, format: :js, year_id: years(:fifteen).id, term_id: terms(:fifteenfall).id
-    assert_response :success
-  end
-
   test "get_courses" do
     log_in_as(@user)
 
     get :index
     assert_template :index
-    get :get_courses, xhr: true, format: :js, year_id: years(:fifteen).id, term_id: terms(:fifteenfall).id, department_id: departments(:cmpt).id
+    get :get_courses, xhr: true, format: :js, department_id: departments(:cmpt).id
     assert_response :success
   end
 

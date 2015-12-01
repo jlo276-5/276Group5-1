@@ -1,34 +1,31 @@
-<% user = (User.exists?(id: post.user_id) ? User.find(post.user_id) : nil) %>
+<% user = (post.user.present? ? post.user : nil) %>
 
 <div class="row" id="post_<%= post.id %>">
   <div class="col-xs-12">
     <div class="panel panel-default post_panel">
-      <div class="panel-body" id="post_<%= post.id %>_body">
+      <div class="panel-body" id="post_<%= post.id %>_content">
         <div class="media">
           <div class="media-left media-top">
             <% if user.nil? %>
               <%= image_tag 'https://secure.gravatar.com/avatar/?s=200', width: 54, class: 'media-object media-middle img-rounded' %>
             <% else %>
-              <%= link_to user, target: '_blank' do %><%= gravatar_for user, size: 54, class: 'media-object media-middle img-rounded' %><% end %>
+              <%= link_to user, target: '_blank' do %><%= avatar_for user, size: 54, class: 'media-object media-middle img-rounded' %><% end %>
             <% end %>
           </div>
-          <div class="media-body post_body">
+          <div class="media-body">
             <h4 class="media-heading">
               <span class="post_user"><%= user.nil? ? "Unknown" : (link_to user.name, user, target: '_blank') %></span>
               <small>
                 <span style="float: right" class="post_created_at">
-                  <%= "#{post.created_at.in_time_zone.strftime("%x") if post.created_at.to_date != Date.today} #{post.created_at.in_time_zone.strftime("%l:%M:%S %p")}" %><br>
+                  <%= "#{post.created_at.in_time_zone.strftime("%x") if post.created_at.to_date != Date.today} #{post.created_at.in_time_zone.strftime("%I:%M:%S %p")}" %><br>
                   <%= link_to 'Edit', edit_post_path(post), remote: true %> | <%= link_to 'Delete', post_path(post), remote: true, method: 'delete' %>
                 </span>
               </small>
             </h4>
-            <span class="post_body">
+            <div class="post_body" id="post_<%= post.id %>_body">
               <% unless post.title.blank? %><h5><%= post.title %></h5><% end %>
               <%= markdown(post.body) %>
-            </span>
-            <span class="post_functions">
-
-            </span>
+            </div>
           </div>
         </div>
       </div>

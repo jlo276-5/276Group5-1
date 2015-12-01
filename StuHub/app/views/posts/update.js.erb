@@ -4,6 +4,7 @@
   <% publish_to @channel do %>
     $("#post_<%= @post.id %>").replaceWith("<%= j render(@post) %>");
   <% end %>
+  $("#post_<%= @post.id %>_body").readmore();
   $("#post_<%= @post.id %>").prepend('<div id="post_<%= @post.id %>_info" class="alert alert-success" role="alert">Post Edited</div>')
   $("#post_<%= @post.id %>_info").delay(1000).fadeOut(500, function() { $("#post_<%= @post.id %>_info").remove(); });
 <% else %>

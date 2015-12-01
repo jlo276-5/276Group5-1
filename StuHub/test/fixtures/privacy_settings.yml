@@ -8,3 +8,13 @@ pstwo:
   display_courses: false
   display_groups: false
   display_major: false
+
+psthree:
+  user: archer
+  display_courses: false
+  display_groups: false
+  display_major: false
+
+psfour:
+  user: lana
+  display_institution: false
