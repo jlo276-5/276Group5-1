@@ -10,6 +10,8 @@ class GroupsController < ApplicationController
   after_action :update_last_visited, only: [:show, :edit, :group_members, :group_requests, :resources, :new_resource, :get_resource, :edit_resource]
   layout 'group', only: [:show, :edit, :group_members, :group_requests, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
 
+  require 'rest_client'
+
   def new
     @group = Group.new
   end
@@ -193,7 +195,7 @@ class GroupsController < ApplicationController
       end
       begin
         if existing.nil? && (file = client.chunked_upload("GroupResources/#{@resource.file_name}", params[:group_resource][:file].tempfile)) && @resource.save
-          p file
+          @resource.update_attribute(:cached_url, file.share_url.url)
           flash[:success] = "New Group Resource Created: File \"#{@resource.file_name}\", Size #{number_to_human_size(file.bytes)}"
           redirect_to resources_group_path(@group)
         elsif !existing.nil?
@@ -213,20 +215,23 @@ class GroupsController < ApplicationController
     @group = Group.find_by(id: params[:id])
     @resource = GroupResource.find_by(id: params[:resource_id])
 
-    client = Dropbox::API::Client.new(token: @resource.user.dropbox_token, secret: @resource.user.dropbox_secret)
-
-    if client.nil?
-      flash[:danger] = "That Resource is no longer available."
-      @resource.destroy
-      redirect_to resources_group_path(@group)
+    if @resource.cached_url and (code = RestClient.head(@resource.cached_url).code[0]) != 4 and code != 5
+      redirect_to @resource.cached_url
     else
-      begin
-        file = client.find("GroupResources/#{@resource.file_name}")
-        redirect_to file.share_url.url
-      rescue Dropbox::API::Error => e
+      if current_user.dropbox_token.blank? or current_user.dropbox_secret.blank? or (client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)).nil?
         flash[:danger] = "That Resource is no longer available."
         @resource.destroy
         redirect_to resources_group_path(@group)
+      else
+        begin
+          file = client.find("GroupResources/#{@resource.file_name}")
+          @resource.update_attribute(:cached_url, file.share_url.url)
+          redirect_to @resource.cached_url
+        rescue Dropbox::API::Error => e
+          flash[:danger] = "That Resource is no longer available."
+          @resource.destroy
+          redirect_to resources_group_path(@group)
+        end
       end
     end
   end

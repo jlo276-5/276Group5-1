@@ -9,6 +9,7 @@ class CoursesController < ApplicationController
   before_action :can_edit_resource, only: [:edit_resource, :update_resource, :destroy_resource]
   after_action :update_last_visited, only: [:show, :course_members, :resources, :new_resource, :get_resource, :edit_resource]
   layout 'course', only: [:show, :info, :enrollment, :course_members, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
+
   require 'rest-client'
   require 'date'
 
@@ -161,7 +162,7 @@ class CoursesController < ApplicationController
       end
       begin
         if existing.nil? && (file = client.chunked_upload("CourseResources/#{@resource.file_name}", params[:course_resource][:file].tempfile)) && @resource.save
-          p file
+          @resource.update_attribute(:cached_url, file.share_url.url)
           flash[:success] = "New Course Resource Created: File \"#{@resource.file_name}\", Size #{number_to_human_size(file.bytes)}"
           redirect_to resources_course_path(@course)
         elsif !existing.nil?
@@ -181,20 +182,23 @@ class CoursesController < ApplicationController
     @course = Course.find_by(id: params[:id])
     @resource = CourseResource.find_by(id: params[:resource_id])
 
-    client = Dropbox::API::Client.new(token: @resource.user.dropbox_token, secret: @resource.user.dropbox_secret)
-
-    if client.nil?
-      flash[:danger] = "That Resource is no longer available."
-      @resource.destroy
-      redirect_to resources_course_path(@course)
+    if @resource.cached_url and (code = RestClient.head(@resource.cached_url).code[0]) != 4 and code != 5
+      redirect_to @resource.cached_url
     else
-      begin
-        file = client.find("CourseResources/#{@resource.file_name}")
-        redirect_to file.share_url.url
-      rescue Dropbox::API::Error => e
+      if current_user.dropbox_token.blank? or current_user.dropbox_secret.blank? or (client = Dropbox::API::Client.new(token: current_user.dropbox_token, secret: current_user.dropbox_secret)).nil?
         flash[:danger] = "That Resource is no longer available."
         @resource.destroy
         redirect_to resources_course_path(@course)
+      else
+        begin
+          file = client.find("CourseResources/#{@resource.file_name}")
+          @resource.update_attribute(:cached_url, file.share_url.url)
+          redirect_to @resource.cached_url
+        rescue Dropbox::API::Error => e
+          flash[:danger] = "That Resource is no longer available."
+          @resource.destroy
+          redirect_to resources_course_path(@course)
+        end
       end
     end
   end

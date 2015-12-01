@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151201044223) do
+ActiveRecord::Schema.define(version: 20151201100801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -286,6 +286,7 @@ ActiveRecord::Schema.define(version: 20151201044223) do
     t.integer  "category",     default: 0
     t.string   "file_name",                 null: false
     t.string   "content_type",              null: false
+    t.string   "cached_url"
   end
 
   add_index "resources", ["course_id"], name: "index_resources_on_course_id", using: :btree
