@@ -4,3 +4,4 @@ StuHub/test/html_reports
 master_lock
 backup.db
 dump.rdb
+StuHub/coverage
