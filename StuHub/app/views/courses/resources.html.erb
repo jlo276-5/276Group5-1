@@ -23,14 +23,10 @@
             <td><%= r.file_type_string %></td>
             <td style="min-width: 400px;">
               <div class="col-xs-3">
-                <% if current_user?(r.user) or current_user.admin? %>
-                  <%= link_to "Open", resource_course_path(@course, resource_id: r), class: "btn btn-default btn-block btn-sm", target: '_blank', role: "button" %>
-                <% end %>
+                <%= link_to "Open", resource_course_path(@course, resource_id: r), class: "btn btn-default btn-block btn-sm", target: '_blank', role: "button" %>
               </div>
               <div class="col-xs-3">
-                <% if current_user?(r.user) or current_user.admin? %>
-                  <%= link_to "Share", "#", class: "btn btn-default btn-block btn-sm", target: '_blank', role: "button", onclick: "window.prompt('Copy and Paste the following where you want to share the link (Replace LINK_TITLE with the display name of the link):', '[LINK_TITLE](#{resource_course_url(@course, resource_id: r)})'); return false;"%>
-                <% end %>
+                <%= link_to "Share", "#", class: "btn btn-default btn-block btn-sm", target: '_blank', role: "button", onclick: "window.prompt('Copy and Paste the following where you want to share the link (Replace LINK_TITLE with the display name of the link):', '[LINK_TITLE](#{resource_course_url(@course, resource_id: r)})'); return false;"%>
               </div>
               <div class="col-xs-3">
                 <% if current_user?(r.user) or current_user.admin? %>
