@@ -1,7 +1,7 @@
 class ContactRequest < ActiveRecord::Base
   validates :name, :title, :body, presence: true
   validates :email, length: {minimum: 6}
-  validates :contact_type, numericality: {integer_only: true, less_than_or_equal_to: 2, greater_than_or_equal_to: 0}
+  validates :contact_type, numericality: {integer_only: true, less_than_or_equal_to: 3, greater_than_or_equal_to: 0}
 
   def type_string
     if self.contact_type == 0
