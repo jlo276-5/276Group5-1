@@ -120,3 +120,11 @@
 * Indicators for new Messages/Posts
 * Show User's schedule on calendar
 * Institution-wide Posts
+* Recurring Events
+* Test fixes
+
+## 2015.12.01
+* Finalize new-style landing page
+* Some optimizations
+
+#### **__Iteration 3 Complete__**
