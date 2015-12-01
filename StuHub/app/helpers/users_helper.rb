@@ -3,7 +3,7 @@ module UsersHelper
   # return certain user's Gravatar
   def avatar_for(user, options = { size: 150, class: '' })
     if !user.avatar_url.blank?
-      image_tag(user.avatar_url, size: "#{options[:size]}", alt: user.name, class: "#{options[:class]}")
+      image_tag(user.avatar_url, size: "#{options[:size]}", alt: user.name, class: "#{options[:class]}", style: "opacity: 1 !important;")
     else
       gravatar_id = Digest::MD5::hexdigest(user.email.downcase)
       gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?d=mm&s=#{options[:size]}}"
