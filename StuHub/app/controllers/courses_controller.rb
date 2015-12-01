@@ -145,7 +145,7 @@ class CoursesController < ApplicationController
       @resource.errors.add(:base, 'Files of this type are not permitted')
       render 'new_resource'
     else
-      @resource.file_name = params[:course_resource][:file].original_filename
+      @resource.file_name = "#{@course.course_number}-#{params[:course_resource][:file].original_filename}"
       @resource.content_type = params[:course_resource][:file].content_type
       @resource.course = @course
       @resource.user = current_user
