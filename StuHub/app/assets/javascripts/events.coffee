@@ -36,10 +36,10 @@ $(document).on 'ready page:load', ->
   #######################################################
   ## HomePage Calendar
   $(document).on 'ready page:load', ->
-  $('#calendar2').fullCalendar({
+  $('#home_calendar').fullCalendar({
     header: {
         left: '',
-        center: 'title',
+        center: '',
         right: ''
     },
     height: 600

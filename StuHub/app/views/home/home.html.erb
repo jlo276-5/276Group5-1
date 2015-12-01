@@ -56,7 +56,10 @@
   <div class="col-sm-6" id="home_main_column" style="min-height: 200px;">
     <!-- Main Content, order top on mobile -->
     <div class="panel panel-default">
-      <div id="calendar2" style="height: 600px;"></div>
+      <div class="panel-heading">
+        <h4 class="panel-title">Your Monthly Calendar</h4>
+      </div>
+      <div id="home_calendar" style="height: 600px;"></div>
     </div>
     <% if current_user.institution %>
     <%= render partial: 'posts/interface', locals: {post_channel_type: 3,

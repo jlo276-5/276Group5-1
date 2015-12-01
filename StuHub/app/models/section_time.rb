@@ -12,7 +12,6 @@ class SectionTime < ActiveRecord::Base
         arr << i
       end
     end
-    p arr
     return arr
   end
 end
