@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   # Routes for events
   resources :events do
     collection do
-      get :get_events
+      get 'user_events'
     end
     member do
       post:move
@@ -124,7 +124,6 @@ Rails.application.routes.draw do
   resources :account_activations, only: [:edit]
   resources :email_changes, only: [:edit]
   get 'register' => 'users#new'
-  get 'schedule', to: 'users#schedule'
   resources :users, only: [:index, :create, :show, :edit, :update, :destroy] do
     member do
       post 'promote'
@@ -133,6 +132,7 @@ Rails.application.routes.draw do
       get 'groups'
       get 'accounts'
       get 'customize'
+      get 'schedule'
     end
   end
 

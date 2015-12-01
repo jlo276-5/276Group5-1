@@ -19,6 +19,30 @@ class EventsController < ApplicationController
     end
   end
 
+  def user_events
+    @user = User.find_by(id:params[:user_id])
+    if @user and @user.privacy_setting and @user.privacy_setting.display_schedule
+      @events = Event.where(user_id:@user.id)
+      @schedule = []
+      @exams = []
+      @user.course_memberships.each do |cm|
+        cm.sections.each do |s|
+          s.section_times.each do |st|
+            @schedule << st
+          end
+          s.exams.each do |e|
+            @exams << e
+          end
+        end
+      end
+    else
+      @events = []
+      @schedule = []
+      @exams = []
+    end
+    render :index
+  end
+
   # GET /events/1
   # GET /events/1.json
   def show

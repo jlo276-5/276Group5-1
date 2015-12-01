@@ -215,7 +215,14 @@ class UsersController < ApplicationController
   end
 
   def schedule
-    @user = current_user
+    @user = User.find_by id:params[:id]
+    if (@user.nil?)
+      flash[:danger] = "No user exists with an id #{params[:id]}."
+      redirect_to users_url
+    elsif !current_user?(@user) and !@user.privacy_setting.display_schedule and !current_user.more_powerful(true, @user)
+      flash[:danger] = "You do not have the permission to view that."
+      redirect_to @user
+    end
   end
 
   private
@@ -225,7 +232,7 @@ class UsersController < ApplicationController
     end
 
     def customization_params
-      params.require(:user).permit(:name, :major, :about_me, :website, :birthday, :gender, :time_zone, :account_emails, :notification_emails, privacy_setting_attributes: [:id, :display_institution, :display_major, :display_about_me, :display_email, :display_website, :display_birthday, :display_gender, :display_courses, :display_groups])
+      params.require(:user).permit(:name, :major, :about_me, :website, :birthday, :gender, :time_zone, :account_emails, :notification_emails, privacy_setting_attributes: [:id, :display_institution, :display_major, :display_about_me, :display_email, :display_website, :display_birthday, :display_gender, :display_courses, :display_groups, :display_schedule])
     end
 
     # Filters

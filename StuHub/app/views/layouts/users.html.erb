@@ -29,6 +29,7 @@
             <%= link_to 'Profile', @user, class: "list-group-item #{'active' if current_page?(@user)}" %>
             <%= link_to 'Courses', courses_user_path(@user), class: "list-group-item #{'active' if current_page?(courses_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) || @user.privacy_setting.display_courses %>
             <%= link_to 'Groups', groups_user_path(@user), class: "list-group-item #{'active' if current_page?(groups_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) || @user.privacy_setting.display_groups %>
+            <%= link_to 'Schedule', schedule_user_path(@user), class: "list-group-item #{'active' if current_page?(schedule_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) || @user.privacy_setting.display_schedule %>
             <%= link_to 'Settings', customize_user_path(@user), class: "list-group-item #{'active' if current_page?(customize_user_path(@user)) or current_page?(accounts_user_path(@user)) or current_page?(edit_user_path(@user))}" if (current_user?(@user) || current_user.more_powerful(true, @user)) %>
             </div>
         </div>
