@@ -30,14 +30,14 @@
             <ul class="dropdown-menu">
               <% if current_user.current_courses.size > 0 %>
                 <li class="dropdown-header">Current Term</li>
-                <% current_user.current_courses.each do |c| %>
+                <% (current_user.current_courses.sort_by {|x| [-(x.term.year), -(x.term.term_order), x.department.name, x.number]}).each do |c| %>
                   <li class="<%= 'active' if current_page?(c) %>"><%= link_to "#{c.department.name} #{c.number}", c %></li>
                 <% end %>
                 <li role="separator" class="divider"></li>
               <% end %>
               <% if current_user.next_courses.size > 0 %>
                 <li class="dropdown-header">Next Term</li>
-                <% current_user.next_courses.each do |c| %>
+                <% (current_user.next_courses.sort_by {|x| [-(x.term.year), -(x.term.term_order), x.department.name, x.number]}).each do |c| %>
                   <li class="<%= 'active' if current_page?(c) %>"><%= link_to "#{c.department.name} #{c.number}", c %></li>
                 <% end %>
                 <li role="separator" class="divider"></li>
