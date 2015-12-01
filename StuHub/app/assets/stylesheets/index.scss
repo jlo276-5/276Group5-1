@@ -81,15 +81,16 @@ $standard_border : 1px solid gray;
       perspective-origin-x: 100%;
       scroll-behavior: smooth;
       -webkit-scroll-behavior: smooth;
+      -ms-scroll-behavior: smooth;
       scroll-snap-destination: 0% 0%;
       -webkit-scroll-snap-destination: 0% 0%;
+      -ms-scroll-snap-destination: 0% 0%;
       scroll-snap-type: mandatory;
       -webkit-scroll-snap-type: mandatory;
+      -ms-scroll-snap-type: mandatory;
     }
     .slide {
       transform-origin-x: 100%;
-      background-position: center;
-      background-size: cover;
     }
     .slide_front {
       -webkit-transform: translateZ(0);
@@ -107,8 +108,10 @@ $standard_border : 1px solid gray;
       -webkit-transform-style: preserve-3d;
       transform-style: preserve-3d;
       // transform: translate3d(700px, 0, -800px) rotateY(30deg);
-      scroll-snap-coordinate: 0% 0%; -webkit-scroll-snap-coordinate: 0% 0%;
-    }
+      scroll-snap-coordinate: 0% 0%;
+      -webkit-scroll-snap-coordinate: 0% 0%;
+      -ms-scroll-snap-coordinate: 0% 0%;
+  }
 
     // #slide1 {
     //   z-index: 5; /* slide over slide 2 */
@@ -135,25 +138,46 @@ $standard_border : 1px solid gray;
 }
 
 #slide1 .slide_front {
-  background: rgb(102, 204, 102);
+  background: rgb(102,204,102);
+  background-image: image-url('1.png');
+  background-position: center;
+  background-size: cover;
 }
 #slide2 .slide_front {
   background: rgb(123,210,102);
+  background-image: image-url('2.png');
+  background-position: center;
+  background-size: cover;
 }
 #slide3 .slide_front {
   background: rgb(153,216,101);
+  background-image: image-url('3.png');
+  background-position: center;
+  background-size: cover;
 }
 #slide4 .slide_front {
   background: rgb(184,223,101);
+  background-image: image-url('4.png');
+  background-position: center;
+  background-size: cover;
 }
 #slide5 .slide_front {
   background: rgb(214,229,100);
+  background-image: image-url('5.png');
+  background-position: center;
+  background-size: cover;
 }
 #slide6 .slide_front {
   background: rgb(245,235,100);
+  background-image: image-url('6.png');
+  background-position: center;
+  background-size: cover;
 }
 #slide7 .slide_front {
   background: rgb(255,241,100);
+  background-image: image-url('backup-2.png');
+  background-position: center;
+  background-size: cover;
 }
 
 @media (max-width: 500px) {
