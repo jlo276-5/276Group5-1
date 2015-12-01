@@ -50,9 +50,56 @@ class ContactRequestsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "should redirct destroy if not admin" do
+    log_in_as(@user)
+
+    delete :destroy, id: @cr.id
+    assert_response :redirect
+    assert_redirected_to home_path
+    assert_not_empty flash
+    assert_not_empty flash[:danger]
+  end
+
+  test "should destroy if admin" do
+    log_in_as(@admin)
+
+    delete :destroy, id: @cr.id
+    assert_response :redirect
+    assert_redirected_to contact_requests_path
+    assert_not_empty flash
+    assert_not_empty flash[:success]
+  end
+
+  test "should redirct resolve if not admin" do
+    log_in_as(@user)
+
+    post :resolve, id: @cr.id
+    assert_response :redirect
+    assert_redirected_to home_path
+    assert_not_empty flash
+    assert_not_empty flash[:danger]
+end
+
+  test "should post resolve if admin" do
+    log_in_as(@admin)
+
+    post :resolve, id: @cr.id
+    assert_response :redirect
+    assert_redirected_to contact_requests_path
+    assert_not_empty flash
+    assert_not_empty flash[:success]
+end
+
   test "should get new" do
     get :new
     assert_response :success
+  end
+
+  test "should create if valid" do
+    post :create, contact_request: {title: @cr.title, name: @cr.name, body: @cr.body, email: @cr.email, contact_type: @cr.contact_type}
+
+    assert_response :redirect
+    assert_redirected_to help_path
   end
 
 end

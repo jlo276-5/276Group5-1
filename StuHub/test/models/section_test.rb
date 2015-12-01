@@ -19,4 +19,13 @@ class SectionTest < ActiveSupport::TestCase
     @section.code = ""
     assert_not @section.valid?
   end
+
+  test "should have an associated_class" do
+    @section.associated_class = nil
+    assert_not @section.valid?
+  end
+
+  test "should have a course" do
+    assert_equal courses(:courseone), @section.course 
+  end
 end

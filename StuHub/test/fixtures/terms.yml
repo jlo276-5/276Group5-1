@@ -28,4 +28,6 @@ sixteenspring:
   exams_end_date: 2016-04-25 20:50:50
   data_mode: 1
   data_url: http://www.example.com
+  database_url: http://www.sfu.ca/content/dam/sfu/irp/courses/coursesectionavailability/1161/database.1161.xlsx
   term_order: 1
+  database_contains_enrollment: true

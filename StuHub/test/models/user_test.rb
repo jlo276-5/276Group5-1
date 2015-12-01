@@ -88,4 +88,78 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "Super", @user.role_string
   end
 
+  test "role should be valid" do
+    @user.role = 3
+    assert_not @user.valid?
+  end
+
+  test "name should always return a value" do
+    @user.name = nil
+    assert @user.valid?
+    assert_equal "test", @user.name
+    @user.name = "Test User"
+    assert @user.valid?
+    assert_equal "Test User", @user.name
+  end
+
+  test "create_reset_digest should generate digests" do
+    @user.create_reset_digest
+    assert_not_empty @user.reset_digest
+    assert_not_empty @user.reset_token
+  end
+
+  test "reset_reset_digest should clear digests" do
+    @user.create_reset_digest
+    assert_not_empty @user.reset_digest
+    @user.reset_reset_digest
+    assert_nil @user.reset_digest
+  end
+
+  test "create_email_change_digest should generate digests" do
+    @user.create_email_change_digest
+    assert_not_empty @user.email_change_digest
+  end
+
+  test "reset_email_change_digest should clear digests" do
+    @user.create_email_change_digest
+    @user.email_change_new = "derp@example.com"
+    assert @user.valid?
+    assert_not_empty @user.email_change_new
+    assert_equal "derp@example.com", @user.email_change_new
+    assert_not_empty @user.email_change_digest
+
+    @user.reset_email_change_digest
+    assert @user.valid?
+    assert_nil @user.email_change_new
+  end
+
+  test "should remember and forget" do
+    @user.remember
+    assert_not_empty @user.remember_digest
+    @user.forget
+    assert_nil @user.remember_digest
+  end
+
+  test "should expire password resets" do
+    @user.reset_sent_at = Time.zone.now-3.hours
+    assert @user.password_reset_expired?
+  end
+
+  test "should expire email changes" do
+    @user.email_change_requested_at = Time.zone.now-3.hours
+    assert @user.email_change_expired?
+  end
+
+  test "should be more powerful" do
+    @user.role = 2
+    user = users(:lana)
+    assert @user.more_powerful(true, user)
+  end
+
+  test "should be at least as powerful" do
+    @user.role = 2
+    user = users(:superman)
+    assert @user.more_powerful(false, user)
+  end
+
 end
