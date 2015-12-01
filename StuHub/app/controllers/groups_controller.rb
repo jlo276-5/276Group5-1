@@ -8,7 +8,7 @@ class GroupsController < ApplicationController
   before_action :valid_resource, only: [:get_resource, :edit_resource, :update_resource, :destroy_resource]
   before_action :can_edit_resource, only: [:edit_resource, :update_resource, :destroy_resource]
   after_action :update_last_visited, only: [:show, :edit, :group_members, :group_requests, :resources, :new_resource, :get_resource, :edit_resource]
-  layout 'group', only: [:show, :edit, :group_members, :group_requests, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
+  layout 'group', only: [:show, :edit, :update, :group_members, :group_requests, :resources, :new_resource, :create_resource, :edit_resource, :update_resource, :destroy_resource]
 
   require 'rest_client'
 

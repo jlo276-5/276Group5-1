@@ -1,12 +1,10 @@
 <% provide(:title, @group.name) %>
 <% provide(:main_title, @group.name) %>
+<% provide(:sub_title, @group.description) %>
 
 <div class="row">
   <div class="col-sm-7">
-    <% if !@group.description.blank? %>
-      <h4>Welcome Message:</h4>
-      <p><%= markdown(@group.description) %></p>
-    <% end %>
+    <h2>Posts</h2>
 
     <hr>
 
