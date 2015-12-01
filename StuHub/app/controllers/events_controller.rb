@@ -25,7 +25,7 @@ class EventsController < ApplicationController
 
   def user_events
     @user = User.find_by(id:params[:user_id])
-    if @user and @user.privacy_setting and @user.privacy_setting.display_schedule
+    if @user and @user.privacy_setting and (current_user?(@user) or @user.privacy_setting.display_schedule)
       @events = @user.events
       @schedule = []
       @exams = []
