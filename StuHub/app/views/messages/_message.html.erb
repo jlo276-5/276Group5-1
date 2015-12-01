@@ -9,7 +9,7 @@
             <% if user.nil? %>
               <%= image_tag 'https://secure.gravatar.com/avatar/?s=200', width: 24, class: 'media-object media-middle img-rounded' %>
             <% else %>
-              <%= link_to user, target: '_blank' do %><%= gravatar_for user, size: 24, class: 'media-object media-middle img-rounded' %><% end %>
+              <%= link_to user, target: '_blank' do %><%= avatar_for user, size: 24, class: 'media-object media-middle img-rounded' %><% end %>
             <% end %>
           </div>
           <div class="media-body">

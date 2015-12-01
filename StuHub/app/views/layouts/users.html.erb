@@ -4,7 +4,7 @@
   <div class="col-sm-9 col-sm-push-3" id="profile_content">
     <div class="row">
       <div class="col-xs-12">
-        <h1><%= gravatar_for @user, size: 50, class: 'img-responsive img-rounded center-block visible-xs-inline-block' %> <%= @user.name %> <small><%= @user.role_string_long %></small></h1>
+        <h1><%= avatar_for @user, size: 50, class: 'img-responsive img-rounded center-block visible-xs-inline-block' %> <%= @user.name %> <small><%= @user.role_string_long %></small></h1>
       </div>
     </div>
     <div class="row">
@@ -16,7 +16,7 @@
   <div class="col-sm-3 col-sm-pull-9" id="profile_sidebar">
     <div class="row">
       <div class="col-sm-12 hidden-xs" id="profile_avatar_container">
-        <%= gravatar_for @user, size: 200, class: 'img-responsive img-rounded center-block' %>
+        <%= avatar_for @user, size: 200, class: 'img-responsive img-rounded center-block' %>
       </div>
     </div>
     <div class="row" style="margin-top: 20px;">

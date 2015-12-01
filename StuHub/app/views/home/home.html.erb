@@ -74,7 +74,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <%= link_to current_user, style: 'color: black; text-decoration: none;' do %>
-              <h3><%= gravatar_for current_user, size: 30, class: 'img-rounded hidden-xs hidden-sm' %> <%= current_user.name %></h3>
+              <h3><%= avatar_for current_user, size: 30, class: 'img-rounded hidden-xs hidden-sm' %> <%= current_user.name %></h3>
             <% end %>
           </div>
           <div class="panel-body">

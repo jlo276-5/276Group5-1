@@ -78,7 +78,7 @@
           <% end %>
           <li class="dropdown <%= 'active' if current_page?(current_user) %>">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              <%= gravatar_for current_user, size: 20, class: 'img-rounded' %>&nbsp;&nbsp;<%= current_user.name %> <span class="caret"></span>
+              <%= avatar_for current_user, size: 20, class: 'img-rounded' %>&nbsp;&nbsp;<%= current_user.name %> <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
               <li class="<%= 'active' if current_page?(help_path) %>"><%= link_to 'Help', help_path %></li>
