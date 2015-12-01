@@ -1,8 +1,15 @@
 json.array!(@events) do |event|
   json.extract! event, :id, :title, :description
-  json.start event.start_time
-  json.end event.end_time
   json.url event_url(event, format: :html)
+  if event.dow and event.dow != [] and event.start_date and event.end_date
+    json.dow event.dow.map(&:to_i)
+    json.ranges [{start: event.start_date.strftime("%Y/%m/%d"), end: event.end_date.strftime("%Y/%m/%d")}]
+    json.start event.start_time.strftime("%H:%M")
+    json.end event.end_time.strftime("%H:%M")
+  else
+    json.start event.start_time
+    json.end event.end_time
+  end
 end
 
 json.array!(@schedule) do |schedule_item|

@@ -4,7 +4,7 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @events = Event.where(user_id:current_user.id)
+    @events = current_user.events
     @schedule = []
     @exams = []
     current_user.course_memberships.each do |cm|
@@ -22,7 +22,7 @@ class EventsController < ApplicationController
   def user_events
     @user = User.find_by(id:params[:user_id])
     if @user and @user.privacy_setting and @user.privacy_setting.display_schedule
-      @events = Event.where(user_id:@user.id)
+      @events = @user.events
       @schedule = []
       @exams = []
       @user.course_memberships.each do |cm|
@@ -105,6 +105,7 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:title, :description, :start_time, :end_time)
+      params[:event][:dow] ||= []
+      params.require(:event).permit(:title, :description, :start_time, :end_time, :start_date, :end_date, dow: [])
     end
 end
