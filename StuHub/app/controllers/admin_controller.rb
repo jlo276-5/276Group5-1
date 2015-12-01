@@ -15,8 +15,8 @@ class AdminController < ApplicationController
     StuHubSettings.new_landing_page = params[:stu_hub_settings][:new_landing_page] == "1" ? true : false
 
     flash[:success] = "Successfully applied settings."
-    if params[:stu_hub_settings][:maintenance_mode] != mm_o
-      flash[:info] = "Maintenance Mode is now #{StuHubSettings.maintenance_mode ? "ON" : "OFF"}"
+    if StuHubSettings.maintenance_mode != mm_o
+      flash[:success] += " Maintenance Mode is now #{StuHubSettings.maintenance_mode ? "ON" : "OFF"}"
     end
     redirect_to admin_path
   end
