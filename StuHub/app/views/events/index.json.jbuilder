@@ -23,6 +23,7 @@ json.array!(@schedule) do |schedule_item|
   json.ranges [{start: schedule_item.start_date.strftime("%Y/%m/%d"), end: schedule_item.end_date.strftime("%Y/%m/%d")}]
   json.dow schedule_item.day_array
   json.editable false
+  json.url get_info_course_url(schedule_item.section.course)
 end
 
 json.array!(@exams) do |exam|
@@ -32,4 +33,5 @@ json.array!(@exams) do |exam|
   json.end exam.exam_end
   json.title "EXAM #{exam.section.course.course_number} - #{exam.section.key}#{exam.room.blank? ? "" : " - #{exam.building}#{exam.room}"}"
   json.editable false
+  json.url get_info_course_url(exam.section.course)
 end

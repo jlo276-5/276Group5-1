@@ -14,7 +14,7 @@
 </div>
 
 <div class="row">
-  <div class="col-sm-4 <%= 'col-sm-offset-4' unless logged_in? %>">
+  <div class="col-sm-4 <%= 'col-sm-offset-4' unless logged_in? and false %>">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">General</h3>
@@ -32,7 +32,7 @@
       </div>
     </div>
   </div>
-  <% if logged_in? %>
+  <% if logged_in? and false %>
   <div class="col-sm-4">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -55,7 +55,7 @@
   </div>
   <% end %>
 </div>
-<% if logged_in? %>
+<% if logged_in? and false%>
 <div class="row">
   <div class="col-sm-4 <%= 'col-sm-offset-2' unless current_user.admin? %>">
     <div class="panel panel-default">
@@ -91,7 +91,7 @@
   <% end %>
 </div>
 <% end %>
-<% if logged_in? and current_user.admin? %>
+<% if logged_in? and current_user.admin? and false %>
 <div class="row">
   <div class="col-sm-4 col-sm-offset-4">
     <div class="panel panel-default">

@@ -51,7 +51,7 @@ $(document).on 'ready page:load', ->
         center: '',
         right: ''
     },
-    height: 600
+    height: 650
     events: '/events.json'
     editable: false
     selectable: false
