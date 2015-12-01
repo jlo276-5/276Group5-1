@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
+  before_action :correct_user, only: [:show, :edit, :update, :destroy]
 
-  # GET /events
   # GET /events.json
   def index
     @events = current_user.events
@@ -16,6 +16,10 @@ class EventsController < ApplicationController
           @exams << e
         end
       end
+    end
+    respond_to do |format|
+      format.json
+      format.all { redirect_to home_path }
     end
   end
 
@@ -98,9 +102,21 @@ class EventsController < ApplicationController
   end
 
   private
+
+    def correct_user
+      unless current_user?(@event.user) or current_user.more_powerful(true, @event.user)
+        params[:danger] = "You do not have the permission to do that."
+        redirect_to home_path
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_event
-      @event = Event.find(params[:id])
+      @event = Event.find_by(id: params[:id])
+      unless @event
+        params[:danger] = "No Event with ID #{params[:id]}"
+        redirect_to home_path
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

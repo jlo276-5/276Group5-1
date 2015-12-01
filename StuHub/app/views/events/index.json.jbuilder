@@ -13,6 +13,7 @@ json.array!(@events) do |event|
 end
 
 json.array!(@schedule) do |schedule_item|
+  json.color '#662222'
   json.id "st_#{schedule_item.id}"
   start_time = schedule_item.start_time.in_time_zone
   end_time = schedule_item.end_time.in_time_zone
@@ -25,6 +26,7 @@ json.array!(@schedule) do |schedule_item|
 end
 
 json.array!(@exams) do |exam|
+  json.color '#502222'
   json.id "e_#{exam.id}"
   json.start exam.exam_start
   json.end exam.exam_end

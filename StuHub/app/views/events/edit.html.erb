@@ -1,24 +1,30 @@
-<h1>Editing Event</h1>
+<% provide(:title, "Edit Event \"#{@event.title}\"") %>
 
-
-
-<div class="col-sm-4 col-sm-push-0" id="form_render"  style = "margin-top:30px">
- <div>
-   <%= render 'form' %>
- </div>
-  <div class="col-sm-5" style="margin-top: 10px;">
-        <%= link_to 'Cancel', events_path%>
-  </div>
-</div>
-
-<div class="col-sm-6 col-sm-push-2" id="show_calendar"  >
-    <!-- Main Content, order top on mobile -->
+<div class="row">
+  <div class="col-sm-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-            <h1 class="panel-title">Events</h1>
+        <h4 class="panel-title">Event Details</h4>
       </div>
       <div class="panel-body">
-        <div id="calendar2"></div>
+        <%= render 'form' %>
+
+        <div class="row" style="margin-top: 16px;">
+          <div class="col-xs-6 col-xs-offset-3 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            <%= link_to 'Back', @event, class: "btn btn-danger btn-block", role: "button" %>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+            <h1 class="panel-title">User Calendar</h1>
+      </div>
+      <div class="panel-body">
+        <div id="home_calendar"></div>
+      </div>
+    </div>
+  </div>
 </div>

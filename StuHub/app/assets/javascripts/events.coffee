@@ -4,27 +4,27 @@
 
 ## Main Calendar
 $(document).on 'ready page:load', ->
-  $('#calendar').fullCalendar({
-    header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,agendaWeek,agendaDay'
-    },
-    events: '/events.json'
-    editable: false
-    selectable: false
-    selectHelper: false
-    eventColor:'#B22222'
-    slotEventOverlap: false
-    weekNumbers:true
-    businessHours:true
-    eventRender: (event) ->
-      renderEvent(event);
-    # eventDrop: (event, dayDelta, minuteDelta, allDay, revertFunc) ->
-    #   updateEvent(event);
-    # eventResize: (event, dayDelta, minuteDelta, revertFunc) ->
-    #   updateEvent(event);
-  })
+  # $('#calendar').fullCalendar({
+  #   header: {
+  #       left: 'prev,next today',
+  #       center: 'title',
+  #       right: 'month,agendaWeek,agendaDay'
+  #   },
+  #   events: '/events.json'
+  #   editable: false
+  #   selectable: false
+  #   selectHelper: false
+  #   eventColor:'#B22222'
+  #   slotEventOverlap: false
+  #   weekNumbers:true
+  #   businessHours:true
+  #   eventRender: (event) ->
+  #     renderEvent(event);
+  #   # eventDrop: (event, dayDelta, minuteDelta, allDay, revertFunc) ->
+  #   #   updateEvent(event);
+  #   # eventResize: (event, dayDelta, minuteDelta, revertFunc) ->
+  #   #   updateEvent(event);
+  # })
 
   $('#user_calendar').fullCalendar({
     header: {
@@ -32,7 +32,7 @@ $(document).on 'ready page:load', ->
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
     },
-    height: 600
+    height: 650
     events: '/events/user_events.json?user_id=' + $('#user_calendar').data('user-id')
     editable: false
     selectable: false

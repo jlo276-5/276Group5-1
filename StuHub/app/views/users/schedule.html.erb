@@ -5,7 +5,12 @@
     <h1 class="panel-title">Calendar</h1>
   </div>
   <div class="panel-body">
-    <div id="user_calendar" style="height: 600px;" data-user-id="<%= @user.id %>"></div>
+    <% if current_user?(@user) %>
+    <div class="col-xs-12" style="margin-bottom: 20px;">
+      <a class="btn btn-primary btn-block" role="button" href="/events/new">Create an Event</a>
+    </div>
+    <% end %>
+    <div id="user_calendar" style="height: 650px;" data-user-id="<%= @user.id %>"></div>
   </div>
 </div>
 
