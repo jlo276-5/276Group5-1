@@ -3,6 +3,10 @@
 
 This is the repository for StuHub, an online app built using Ruby on Rails and hosted on Heroku.
 
+## Example App
+
+[https://stuhub.herokuapp.com](https://stuhub.herokuapp.com), use email "testuser -at- example -dot- com" (use appropriate symbols), password "testuser".
+
 ## Running
 This cannot be run properly on a local environment without the appropriate Environment Variables. Contact the developers for those.
 
